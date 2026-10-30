@@ -33,7 +33,7 @@ test('mode contains : réponse noyée dans une phrase', () => {
   assert.ok(!E.checkAnswer('saint pierre', step, 's'));
 });
 
-test('la version publiée valide les mêmes réponses sans les contenir', () => {
+test('la version publiée valide les mêmes réponses sans les contenir', async () => {
   const game = loadGame();
   const pub = E.publish(game);
   const src = game.zones[2].A[0];
@@ -41,13 +41,29 @@ test('la version publiée valide les mêmes réponses sans les contenir', () => 
   assert.strictEqual(out.answers, undefined);
   assert.ok(E.checkAnswer('Eglise Saint-Michel', out, pub.settings.salt));
   assert.ok(E.checkAnswer('Eglise Saint-Michel', src, game.settings.salt));
-  const file = E.publishedFile(game);
+  const file = await E.publishedFile(game);
   assert.ok(!file.includes('"answers"'));
   assert.ok(!file.includes('"masterCode"'));
   assert.ok(!file.includes('ccoi2026'));
+  assert.ok(!file.includes('CALANQUE"')); // masterCode
   assert.ok(E.codeMatches('calanque', undefined, pub.settings.masterHash, pub.settings.salt));
   assert.ok(E.codeMatches('ccoi2026', undefined, pub.settings.adminHash, pub.settings.salt));
   assert.ok(!E.codeMatches('autre', undefined, pub.settings.masterHash, pub.settings.salt));
+});
+
+test('carnet de réponses : chiffré dans game.js, lisible avec le code admin seulement', async () => {
+  const game = loadGame();
+  const book = JSON.parse(JSON.stringify(E.answerBook(game))); // tableaux issus de vm : autre prototype
+  assert.deepStrictEqual(book.answers['z3-A-1'], ['FOURNIL']);
+  assert.deepStrictEqual(book.answers['final-1'], ['ARRIVEE']);
+  assert.strictEqual(book.answers['z3-B-1'], undefined); // étape info : pas de réponse
+  assert.strictEqual(book.masterCode, 'CALANQUE');
+  const sandbox = { window: {} };
+  vm.runInNewContext(await E.publishedFile(game), sandbox);
+  const box = sandbox.window.GAME.answerBook;
+  // casse et espaces ignorés, comme pour la saisie du code
+  assert.deepStrictEqual(await E.decryptJSON(box, ' CCOI2026 '), book);
+  await assert.rejects(E.decryptJSON(box, 'mauvais-code'));
 });
 
 test('le contenu de démo est valide', () => {

@@ -20,5 +20,7 @@ if (errors.length) {
   process.exit(1);
 }
 
-fs.writeFileSync(path.join(root, 'game.js'), E.publishedFile(game));
-console.log('✅ game.js généré : vous pouvez l\'envoyer sur GitHub (jamais contenu.js).');
+E.publishedFile(game).then((file) => {
+  fs.writeFileSync(path.join(root, 'game.js'), file);
+  console.log('✅ game.js généré : vous pouvez l\'envoyer sur GitHub (jamais contenu.js).');
+});
