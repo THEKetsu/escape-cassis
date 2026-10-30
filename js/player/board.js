@@ -6,7 +6,7 @@
   const esc = window.Util.esc;
 
   async function loadRanking() {
-    const rows = await Sync.loadAll();
+    const rows = await Sync.teamBoard(A.state.team, A.teamKey());
     const states = {};
     rows.forEach((r) => { if (r.data && r.data.state) states[r.team] = r.data.state; });
     states[A.state.team] = A.state; // toujours la version locale la plus fraîche

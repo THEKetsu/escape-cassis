@@ -21,6 +21,7 @@
         delete step.answers;
       }
     });
+    Object.keys(out.teams || {}).forEach((t) => { delete out.teams[t].key; }); // clés d'équipe : jamais publiées
     const s = out.settings || {};
     if (s.masterCode) { s.masterHash = hash(normalize(s.masterCode), salt); delete s.masterCode; }
     if (s.adminCode) { s.adminHash = hash(normalize(s.adminCode), salt); delete s.adminCode; }
@@ -29,7 +30,7 @@
 
   // ---------- carnet de réponses pour l'organisation ----------
 
-  // Réponses en clair de chaque étape (clé = step.key de buildPath) et code organisation
+  // Réponses en clair de chaque étape (clé = step.key de buildPath), code organisation et clés des équipes (pour leurs QR codes)
   function answerBook(game) {
     const answers = {};
     Object.keys(game.zones || {}).forEach((zoneId) => {
@@ -38,7 +39,25 @@
       });
     });
     ((game.final && game.final.steps) || []).forEach((step, i) => { if (step.answers) answers[`final-${i}`] = step.answers; });
-    return { answers, masterCode: (game.settings && game.settings.masterCode) || '' };
+    const teamKeys = {};
+    Object.keys(game.teams || {}).forEach((t) => { if (game.teams[t].key) teamKeys[t] = game.teams[t].key; });
+    return { answers, masterCode: (game.settings && game.settings.masterCode) || '', teamKeys };
+  }
+
+  // SQL à exécuter dans Supabase : enregistre les clés des équipes (table team_secrets, illisible via l'API).
+  // À ne jamais publier : fichier supabase-equipes.sql, ignoré par git.
+  function teamKeysSql(game) {
+    const rows = Object.keys(game.teams || {}).filter((t) => game.teams[t].key)
+      .map((t) => `  ('${t.replace(/'/g, "''")}', '${game.teams[t].key.replace(/'/g, "''")}')`);
+    if (!rows.length) return '';
+    return [
+      '-- Généré à partir de contenu.js : ne pas publier. À coller dans Supabase : SQL Editor > New query > Run.',
+      '-- Les équipes retirées de contenu.js perdent leur accès.',
+      'delete from public.team_secrets;',
+      'insert into public.team_secrets (team, token) values',
+      rows.join(',\n') + ';',
+      '',
+    ].join('\n');
   }
 
   // Chiffrement AES-GCM, clé dérivée du code (PBKDF2) : Web Crypto, navigateur comme Node.
@@ -81,5 +100,5 @@
       'window.GAME = ' + JSON.stringify(out, null, 2) + ';\n';
   }
 
-  return { publish, answerBook, encryptJSON, decryptJSON, publishedFile };
+  return { publish, answerBook, teamKeysSql, encryptJSON, decryptJSON, publishedFile };
 });

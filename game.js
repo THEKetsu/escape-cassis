@@ -17,7 +17,7 @@ window.GAME = {
     "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
     "masterHash": "c6106b91c2340efa",
-    "adminHash": "859d059a0ce8dc26"
+    "adminHash": "6dc532fc0c62dda3"
   },
   "teams": {
     "E1": {
@@ -116,20 +116,43 @@ window.GAME = {
       "lng": 5.53606,
       "A": [
         {
-          "type": "text",
-          "title": "Message codé",
-          "text": "<p>Votre prochaine destination a été chiffrée par un vieux marin romain :</p><p class=\"big-code\">SRUW</p>",
+          "type": "number",
+          "title": "La clé de pierre · 1. La date",
+          "text": "<p>Sur la place, trouvez le monument portant une date en chiffres romains.</p><p>Convertissez cette date en chiffres arabes.</p><p class=\"big-code\">MDCCCCXI</p>",
           "hints": [
-            "Jules César décalait chaque lettre de l'alphabet.",
-            "Le décalage est de 3 lettres.",
-            "S → P, R → O… Il ne reste que deux lettres."
+            "Cherchez un monument en pierre sur la Place Baragnon.",
+            "Observez la fontaine et cherchez une date en chiffres romains.",
+            "MDCCCCXI = 1911."
+          ],
+          "h": [
+            "69dc82a50df57076"
+          ]
+        },
+        {
+          "type": "number",
+          "title": "La clé de pierre · 2. La clé",
+          "text": "<p>Additionnez les quatre chiffres de l'année trouvée.</p><p>Le résultat est votre <b>clé César</b>.</p>",
+          "hints": [
+            "1 + 9 + 1 + 1 = ?"
+          ],
+          "h": [
+            "880b2e4ec3b20ca0"
+          ]
+        },
+        {
+          "type": "text",
+          "title": "La clé de pierre · 3. Décrypter",
+          "text": "<p>Le message a été décalé vers l'avant du nombre de lettres de votre clé.</p><p>Pour le lire, <b>reculez</b> chaque lettre de cette valeur dans l'alphabet.</p><p class=\"big-code\">BADF PQ OMEEUE</p>",
+          "match": "contains",
+          "hints": [
+            "Avec une clé de 12, B → P."
           ],
           "success": {
-            "text": "<p>Direction <b>le port</b> ! Une fois sur le quai, passez à la suite.</p>"
+            "text": "<p>✅ <b>MESSAGE DÉCRYPTÉ</b></p><p>Votre prochaine destination est le <b>PORT DE CASSIS</b>.</p>"
           },
           "h": [
-            "2806ba3f9393a056",
-            "1bf224fd1f2e80b8"
+            "8d24517e0969ae5b",
+            "2806ba3f9393a056"
           ]
         },
         {
@@ -541,8 +564,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "U8FLYjVd3Z1IMQeE+6mEkg==",
-    "iv": "/3V1o6UVRUqD40kO",
-    "data": "C9HXprxo76IkqmSPaXF5OvqytsA7TaMwNu2bhkfVQkd0N9FTzmtf3z45cBm52LuE3uo15St29THcMfRBlUc60yMnClKEIEkbAD4Jey06DCYG1sBNFnOC5sP2/doVca23/Ya0GzBL0ZfBBbModxwY/z+wpJXWaJwm8dardCKL4JoRSsapztoHyimsIW4uLvW3biPjpJuTtDbICfqAEJbu6LgDITFwxeyYXBKihp2bygW8qaPFysdUe9Lha4vl9QskBrgtvYGXALJRzrypic4x7KZvodGV+dZa4XdzYclAbE2KMxkEXfuzLOg/yp6t5spIv6xbb1DccuAuYDO4ncjk5Ggmv4iRCwFoJxMoARv0lsUYdqPml1Ze5ct3N9BDXuVYDn9tHQS3NexoyNtiM7c8dk98irhRrKrRvF2b2sV6qWpyBAP9L8AszepcY5aE51X2QsDkz4oAi+aUGC4mtEc6icoW0vTxgtRBv4lQXNXJ7CX6YE1IKOyrOPCneqwaJrxRktRaBlS4viMzNkyWmacl9pzWzISn2TSOrkkJTxqvJsSZAbDjLYVZv24U+zAMnosT0XxLuqwu9tAAAuyb2ocRpTopFF1u2BALctWhx6JcQdq3uIxJTFvj8HXOit6RgEY4pwQN3ouvXg8kJhnSu0ELdwiZ2UyWw21qowihQ/dgSeCh7aqpz78QzH2e+WoMxn7bveK9W+KWnGGHfvK2abH2Pi7jJlJm3HA45mHVRO909deVAKCnCzEFLU2hDyTh0Rj1ltXGMCpVNpY5+i1PuXwfscrqgWTDsaCAXtL6ZFZ0RGbNX+brHTAHbql74kKED3cxbn1uHJFKGIpDeO/AK11KdFdbxHfff6Q4gIVzO9py7d2VsjtQU6MXpcDa+D5bYdFSR/gMhTtTZRxEU9wvZWc="
+    "salt": "HXhTj6mJIPsuhZh7yX8WBQ==",
+    "iv": "k+pYTX+uSlusTqci",
+    "data": "ANCNJthPoqm6/PswORWzfAiZClcBogoGRsD2DegVHfVUDPFJJ3M24/ecgmRBlc6X51bOCtahpN8155OVZGeCfEHErQYrleILbDut/KzDwAPath2K4+WztI8Ap9I8pVmnx3Ort9v/X/pm1jRc1OnGQGnpoBJd2/DD2RgvnyyXshJER43G0A+pPXsYmt+Un78u/kTc0LRL3qZpNl0CmPfc3AlR+AlqXsf/K271EagVn0TvX8qeSDF9/keE3lhERWgQ4T8UxatIOnctNnbDxzHvPCrLnBuumD9XIKAIxNaZ5CKOBEhahpi1J6YowuYPydZjGyyHGqiyIX5XfaxvQ9+F79etYYetffCIb8kvOrl3bzaGRMKStKq5R361gckLWhPWFq5iNVo24GQlHDUypsSpl9zQhwD8JuxKHxn87BHIXYKwVQ5z+Vs1aUFDPRgeSgyEfA5w1mGKxCd0psVIiy+sE44B8XPZhTU4At5LO/zFhleZ1XSWLLQ2OPr3/tc3AmNSlUnTBV3QRslzg59tIYqXc8PS8rY1FAGoEqxYYfTkPDd7jN747kFqpqFidks9yR9SXQ80RwtZjlXHP5w19VljYrjvtifuN2jophceE6VSn65G0H7W9hsXonRUsw5sHWIDHvQbTEMtJ7KE+Zyq8d7fa6CGcgAPMxltx4mR6Y6FBivhJnESAnldiUh3Y/HXlTkcshxJDSHlJ6PbkKQISgyteGqt9HTySOzmdDzsAmXd+CvN5vx4Qb6CvIszV4QtA7+LJGgJywGBXadGnuXooFax0qzV+KBgalv7n0iYGzkFMOjfCvytkyrPtPAH+yp7MXmURjR/sC7Sv0BUkXxlUUJ9NvJFgy7OHvLJa4czWNvd3W+G57qpS/2ukgaGMvHjsgyWTZuVPmvsKcwR4Hh/9Ws17Af8bdNXKOw67izHr+MNyjhx5sMVTVTU3M2NXYmZfdBqclSdCi1tn3BiAY2BUVAu6Ssbu/CkBw6ptZoN3j7eqIto33pELx2htZ/dxu1EpKHDAahPUoz1+o03qxVYX7QtttN9dx7+w7i6lv0apATgrQqYOzC8LAxCNvdrur55kjsW70tdp++OWAGRzggdpXxaL0qwElqA/yle8O3d4BWTTd7hITUrfs+EjuC17mkmdqPU9WxbpHnmyaRvPLoJsZu5NvBUFacojLdlT5IuCiJsY3DX4w8Ji1kG+ULZHAz77ipdYkQ/li9UuuLuwL2o5pvhjNibbxg="
   }
 };

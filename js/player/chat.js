@@ -69,7 +69,7 @@
       const team = A.state.team;
       if (chat.team !== team) chat = { team, msgs: [], lastId: 0, loaded: false };
       try {
-        const list = await Sync.loadMessages(team, chat.lastId);
+        const list = await Sync.teamMessages(team, chat.lastId, A.teamKey(team));
         if (A.state && A.state.team === team) {
           addMessages(list, true);
           chat.loaded = true;
@@ -97,10 +97,8 @@
     const err = form.querySelector('.feedback');
     button.disabled = true;
     try {
-      const msg = await Sync.sendMessage({
-        team: A.state.team, sender: 'team', body,
-        step: step ? [step.zoneName, step.title].filter(Boolean).join(' · ') : null,
-      });
+      const msg = await Sync.teamSend(A.state.team, body,
+        step ? [step.zoneName, step.title].filter(Boolean).join(' · ') : null, A.teamKey());
       input.value = '';
       err.textContent = '';
       addMessages([msg], false);

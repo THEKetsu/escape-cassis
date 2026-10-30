@@ -10,6 +10,8 @@ window.CONFIG = {
   // Project Settings > API Keys : "Project URL" et clé "publishable" (ou "anon" legacy).
   supabase: {
     url: 'https://glhrvkwmlvzawkrgwbtu.supabase.co',
-    key: 'sb_publishable_TXdp_Afs-bmaJV2w_9oC1Q_r1_XoOzD'
+    key: 'sb_publishable_TXdp_Afs-bmaJV2w_9oC1Q_r1_XoOzD',
+    // Email du compte organisateur créé dans Supabase (Authentication > Users) : son mot de passe est le code d'accès du dashboard
+    adminEmail: ''
   },
 };

@@ -117,7 +117,7 @@
         <button class="btn primary big" data-action="start">C'est parti ! 🚀</button>
       </main>`;
     if (Sync.enabled && !A.remote) {
-      Sync.loadTeam(state.team).then((row) => {
+      Sync.teamLoad(state.team, A.teamKey(state.team)).then((row) => {
         const s = row && row.data && row.data.state;
         if (s && s.startedAt && !A.state.startedAt) {
           A.remote = s;

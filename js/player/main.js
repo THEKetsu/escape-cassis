@@ -10,6 +10,7 @@
     A.setState(null);
   }
   const urlTeam = params.get('equipe');
+  if (urlTeam && params.get('k') && GAME.teams[urlTeam]) A.setTeamKey(urlTeam, params.get('k'));
   if (urlTeam) {
     if (!GAME.teams[urlTeam]) {
       alert(`Équipe « ${urlTeam} » inconnue.`);

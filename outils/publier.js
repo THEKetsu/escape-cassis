@@ -22,5 +22,10 @@ if (errors.length) {
 
 E.publishedFile(game).then((file) => {
   fs.writeFileSync(path.join(root, 'game.js'), file);
+  const sql = E.teamKeysSql(game);
+  if (sql) {
+    fs.writeFileSync(path.join(root, 'supabase-equipes.sql'), sql);
+    console.log('🔑 supabase-equipes.sql généré : à exécuter dans Supabase (SQL Editor), jamais sur GitHub.');
+  }
   console.log('✅ game.js généré : vous pouvez l\'envoyer sur GitHub (jamais contenu.js).');
 });

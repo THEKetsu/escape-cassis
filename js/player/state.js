@@ -27,12 +27,24 @@
     A.path = s ? E.buildPath(GAME, s.team) : null;
   }
 
+  // Clé secrète de l'équipe (lue dans son QR code), gardée à part de la progression : elle n'est jamais envoyée au serveur
+  // En local, contenu.js la donne directement
+  function teamKey(team) {
+    team = team || (A.state && A.state.team);
+    if (!team) return '';
+    return localStorage.getItem(STORE + ':cle:' + team) || (GAME.teams[team] && GAME.teams[team].key) || '';
+  }
+
+  function setTeamKey(team, key) {
+    localStorage.setItem(STORE + ':cle:' + team, key);
+  }
+
   function save() {
     A.state.updatedAt = Date.now();
     localStorage.setItem(STORE, JSON.stringify(A.state));
     A.push();
   }
 
-  Object.assign(A, { load, newState, setState, save });
+  Object.assign(A, { load, newState, setState, save, teamKey, setTeamKey });
   setState(load());
 })();

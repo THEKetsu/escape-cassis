@@ -21,6 +21,8 @@
 
     teamIds.forEach((t) => {
       const team = game.teams[t];
+      if (!team.key) warnings.push(`Équipe ${t} : pas de clé (key) : le téléphone ne pourra pas se synchroniser avec le dashboard`);
+      else if (!/^[A-Za-z0-9_-]{12,}$/.test(team.key)) errors.push(`Équipe ${t} : la clé (key) doit faire au moins 12 caractères parmi lettres, chiffres, - et _`);
       if (!Array.isArray(team.circuit) || !team.circuit.length) return errors.push(`Équipe ${t} : circuit vide`);
       const seen = new Set();
       team.circuit.forEach((z) => {

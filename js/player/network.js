@@ -6,10 +6,10 @@
 
   let pushTimer = null;
   function push() {
-    if (!Sync.enabled || !A.state) return;
+    if (!Sync.enabled || !A.state || !A.teamKey()) return;
     clearTimeout(pushTimer);
     pushTimer = setTimeout(() => {
-      Sync.saveState(A.state).then(() => setNet(true), () => setNet(false));
+      Sync.teamSave(A.state, A.teamKey()).then(() => setNet(true), () => setNet(false));
     }, 300);
   }
 

@@ -44,10 +44,10 @@ test('la version publiée valide les mêmes réponses sans les contenir', async 
   const file = await E.publishedFile(game);
   assert.ok(!file.includes('"answers"'));
   assert.ok(!file.includes('"masterCode"'));
-  assert.ok(!file.includes('ccoi2026'));
+  assert.ok(!file.includes(game.settings.adminCode));
   assert.ok(!file.includes('CALANQUE"')); // masterCode
   assert.ok(E.codeMatches('calanque', undefined, pub.settings.masterHash, pub.settings.salt));
-  assert.ok(E.codeMatches('ccoi2026', undefined, pub.settings.adminHash, pub.settings.salt));
+  assert.ok(E.codeMatches(game.settings.adminCode, undefined, pub.settings.adminHash, pub.settings.salt));
   assert.ok(!E.codeMatches('autre', undefined, pub.settings.masterHash, pub.settings.salt));
 });
 
@@ -62,8 +62,27 @@ test('carnet de réponses : chiffré dans game.js, lisible avec le code admin se
   vm.runInNewContext(await E.publishedFile(game), sandbox);
   const box = sandbox.window.GAME.answerBook;
   // casse et espaces ignorés, comme pour la saisie du code
-  assert.deepStrictEqual(await E.decryptJSON(box, ' CCOI2026 '), book);
+  assert.deepStrictEqual(await E.decryptJSON(box, ' ' + game.settings.adminCode.toUpperCase() + ' '), book);
   await assert.rejects(E.decryptJSON(box, 'mauvais-code'));
+});
+
+test('clés d\'équipe : jamais dans game.js, dans le carnet chiffré et le SQL à coller dans Supabase', async () => {
+  const game = loadGame();
+  const keys = Object.keys(game.teams).map((t) => game.teams[t].key);
+  assert.ok(keys.every((k) => /^[A-Za-z0-9_-]{12,}$/.test(k)));
+  assert.strictEqual(new Set(keys).size, keys.length);
+  const file = await E.publishedFile(game);
+  keys.forEach((k) => assert.ok(!file.includes(k)));
+  assert.strictEqual(E.publish(game).teams.E1.key, undefined);
+  assert.strictEqual(E.answerBook(game).teamKeys.E1, game.teams.E1.key);
+  const sql = E.teamKeysSql(game);
+  keys.forEach((k) => assert.ok(sql.includes(`'${k}'`)));
+  assert.ok(sql.includes("('E1', '" + game.teams.E1.key + "')"));
+  // clé absente ou trop courte : avertissement / erreur de validation
+  game.teams.E1.key = '';
+  assert.ok(E.validate(game).warnings.some((w) => w.includes('Équipe E1') && w.includes('clé')));
+  game.teams.E1.key = 'court';
+  assert.ok(E.validate(game).errors.some((e) => e.includes('Équipe E1') && e.includes('clé')));
 });
 
 test('le contenu de démo est valide', () => {
@@ -136,12 +155,16 @@ test('classement : arrivées au temps, puis avancement', () => {
     E5: { startedAt: null },
   }, now);
   assert.deepStrictEqual(ranked.map((r) => r.team), ['E3', 'E2', 'E4', 'E1']);
-  // E6 a une étape de plus : 8/15 (53 %) est derrière 7/13 (54 %)
+  // E5 a deux étapes de plus qu'E6 (ajoutées ici, quel que soit le contenu) : E5 est juste devant E6
+  // en proportion, mais à un index plus bas
+  game.zones[1].A.push({ type: 'info', title: 'x' }, { type: 'info', title: 'y' });
+  const len5 = E.buildPath(game, 'E5').length;
+  const len6 = E.buildPath(game, 'E6').length;
+  assert.strictEqual(len5, len6 + 2);
   const mixed = E.rankTeams(game, {
     E6: { startedAt: 1, stepIndex: 8, penalty: 0 },
-    E5: { startedAt: 1, stepIndex: 7, penalty: 0 },
+    E5: { startedAt: 1, stepIndex: Math.floor(8 / len6 * len5) + 1, penalty: 0 },
   }, now);
-  assert.strictEqual(E.buildPath(game, 'E6').length, 15);
   assert.deepStrictEqual(mixed.map((r) => r.team), ['E5', 'E6']);
 });
 

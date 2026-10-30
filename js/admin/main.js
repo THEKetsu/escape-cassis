@@ -6,8 +6,11 @@
 
   // ---------- accès ----------
 
+  // Le code d'accès sert aussi de mot de passe au compte organisateur Supabase (sous sa forme normalisée :
+  // sans casse, tirets ni espaces). Sans ce compte, les données ne sont pas lisibles : la barrière n'est plus seulement locale.
   function gate() {
-    if (sessionStorage.getItem('admin:' + GAME.id) === 'ok' || (!S.adminCode && !S.adminHash)) return start();
+    if (!Sync.enabled) return start(); // affiche « Dashboard non configuré »
+    if (sessionStorage.getItem('admin:' + GAME.id) === 'ok' && Sync.hasSession()) return start();
     $root.innerHTML = `
       <form class="gate">
         <h1>🧭 Dashboard</h1>
@@ -15,16 +18,28 @@
         <button>Entrer</button>
         <p class="err"></p>
       </form>`;
-    $root.querySelector('form').addEventListener('submit', (e) => {
+    $root.querySelector('form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const value = e.target.querySelector('input').value;
-      if (E.codeMatches(value, S.adminCode, S.adminHash, SALT)) {
-        sessionStorage.setItem('admin:' + GAME.id, 'ok');
-        sessionStorage.setItem(CODE_KEY, value); // déchiffre le carnet de réponses, le temps de l'onglet
-        start();
-      } else {
-        e.target.querySelector('.err').textContent = 'Code incorrect';
+      const form = e.target;
+      const err = form.querySelector('.err');
+      const button = form.querySelector('button');
+      const value = form.querySelector('input').value;
+      if (!E.codeMatches(value, S.adminCode, S.adminHash, SALT)) {
+        err.textContent = 'Code incorrect';
+        return;
       }
+      button.disabled = true;
+      err.textContent = '';
+      try {
+        await Sync.signIn(E.normalize(value));
+      } catch (error) {
+        err.textContent = 'Connexion au serveur impossible : ' + error.message;
+        button.disabled = false;
+        return;
+      }
+      sessionStorage.setItem('admin:' + GAME.id, 'ok');
+      sessionStorage.setItem(CODE_KEY, value); // déchiffre le carnet de réponses, le temps de l'onglet
+      start();
     });
   }
 
@@ -34,6 +49,10 @@
         <p>Renseignez <code>supabase.url</code> et <code>supabase.key</code> dans <code>config.js</code> (voir README).</p></div>`;
       return;
     }
+    Sync.onAuthLost = () => { // session expirée ou refusée : retour à la saisie du code
+      sessionStorage.removeItem('admin:' + GAME.id);
+      location.reload();
+    };
     $root.addEventListener('click', async (e) => {
       const action = e.target.closest('[data-action]');
       if (action && action.dataset.action === 'refresh') return A.refresh();
