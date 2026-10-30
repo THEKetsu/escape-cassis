@@ -1,5 +1,5 @@
 /*
- * Moteur du jeu, module publish : Publication : version hachée, carnet de réponses chiffré, fichier game.js.
+ * Moteur du jeu, module publish : Publication : version hachée, carnet de réponses, SQL des secrets, fichier game.js.
  * Logique pure, sans DOM. Module UMD : Node (require) ou navigateur (window.Engine).
  */
 (function (root, factory) {
@@ -11,7 +11,9 @@
 })(typeof self !== 'undefined' ? self : this, function (E) {
   const { hash, normalize, allSteps } = E;
 
-  // Version publiable : réponses et codes remplacés par leurs hachages
+  // Version publiable : réponses et code organisation remplacés par leurs hachages.
+  // Le code d'accès au dashboard (adminCode) et les clés d'équipe ne sont pas publiés du tout :
+  // ils vivent côté Supabase (voir secretsSql).
   function publish(game) {
     const out = JSON.parse(JSON.stringify(game));
     const salt = (out.settings && out.settings.salt) || out.id;
@@ -21,10 +23,10 @@
         delete step.answers;
       }
     });
-    Object.keys(out.teams || {}).forEach((t) => { delete out.teams[t].key; }); // clés d'équipe : jamais publiées
+    Object.keys(out.teams || {}).forEach((t) => { delete out.teams[t].key; });
     const s = out.settings || {};
     if (s.masterCode) { s.masterHash = hash(normalize(s.masterCode), salt); delete s.masterCode; }
-    if (s.adminCode) { s.adminHash = hash(normalize(s.adminCode), salt); delete s.adminCode; }
+    delete s.adminCode;
     return out;
   }
 
@@ -44,61 +46,33 @@
     return { answers, masterCode: (game.settings && game.settings.masterCode) || '', teamKeys };
   }
 
-  // SQL à exécuter dans Supabase : enregistre les clés des équipes (table team_secrets, illisible via l'API).
-  // À ne jamais publier : fichier supabase-equipes.sql, ignoré par git.
-  function teamKeysSql(game) {
+  // SQL à exécuter dans Supabase : clés des équipes (table team_secrets) et carnet de réponses (table organiser_book).
+  // Ces tables ne sont lisibles ni par la clé publique ni par les téléphones : seulement par le compte organisateur
+  // (carnet) ou par les fonctions team_* (clés). À ne jamais publier : supabase-equipes.sql est ignoré par git.
+  function secretsSql(game) {
+    const q = (v) => `'${String(v).replace(/'/g, "''")}'`;
     const rows = Object.keys(game.teams || {}).filter((t) => game.teams[t].key)
-      .map((t) => `  ('${t.replace(/'/g, "''")}', '${game.teams[t].key.replace(/'/g, "''")}')`);
-    if (!rows.length) return '';
-    return [
+      .map((t) => `  (${q(t)}, ${q(game.teams[t].key)})`);
+    const lines = [
       '-- Généré à partir de contenu.js : ne pas publier. À coller dans Supabase : SQL Editor > New query > Run.',
       '-- Les équipes retirées de contenu.js perdent leur accès.',
       'delete from public.team_secrets;',
-      'insert into public.team_secrets (team, token) values',
-      rows.join(',\n') + ';',
+    ];
+    if (rows.length) lines.push('insert into public.team_secrets (team, token) values', rows.join(',\n') + ';');
+    lines.push(
       '',
-    ].join('\n');
+      '-- Carnet de réponses du dashboard (vue « Réponses » et clés des QR codes) : lisible par l\'organisateur seulement.',
+      'insert into public.organiser_book (id, data) values (1, ' + q(JSON.stringify(answerBook(game))) + '::jsonb)',
+      'on conflict (id) do update set data = excluded.data;',
+      '');
+    return lines.join('\n');
   }
 
-  // Chiffrement AES-GCM, clé dérivée du code (PBKDF2) : Web Crypto, navigateur comme Node.
-  // Aussi solide que le code choisi : un code court se devine par essais successifs.
-  const PBKDF2_ITERATIONS = 250000;
-  const toB64 = (bytes) => (typeof btoa === 'function'
-    ? btoa(String.fromCharCode(...bytes)) : Buffer.from(bytes).toString('base64'));
-  const fromB64 = (s) => (typeof atob === 'function'
-    ? Uint8Array.from(atob(s), (c) => c.charCodeAt(0)) : new Uint8Array(Buffer.from(s, 'base64')));
-
-  async function deriveKey(code, salt) {
-    const subtle = globalThis.crypto && globalThis.crypto.subtle;
-    if (!subtle) throw new Error('Chiffrement indisponible dans ce navigateur (page à ouvrir en https ou en local)');
-    const base = await subtle.importKey('raw', new TextEncoder().encode(normalize(code)), 'PBKDF2', false, ['deriveKey']);
-    return subtle.deriveKey({ name: 'PBKDF2', salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
-      base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
-  }
-
-  async function encryptJSON(value, code) {
-    const salt = globalThis.crypto.getRandomValues(new Uint8Array(16));
-    const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
-    const key = await deriveKey(code, salt);
-    const data = await globalThis.crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(value)));
-    return { salt: toB64(salt), iv: toB64(iv), data: toB64(new Uint8Array(data)) };
-  }
-
-  // Rejette si le code est faux (AES-GCM vérifie l'intégrité)
-  async function decryptJSON(box, code) {
-    const key = await deriveKey(code, fromB64(box.salt));
-    const data = await globalThis.crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(box.iv) }, key, fromB64(box.data));
-    return JSON.parse(new TextDecoder().decode(data));
-  }
-
-  // game.js : version publiée + carnet de réponses chiffré par le code d'accès au dashboard
-  async function publishedFile(game) {
-    const out = publish(game);
-    const code = game.settings && game.settings.adminCode;
-    if (code) out.answerBook = await encryptJSON(answerBook(game), code);
+  // game.js : version publiée, sans aucun secret du dashboard
+  function publishedFile(game) {
     return '/* Fichier généré à partir de contenu.js : ne pas modifier à la main. */\n' +
-      'window.GAME = ' + JSON.stringify(out, null, 2) + ';\n';
+      'window.GAME = ' + JSON.stringify(publish(game), null, 2) + ';\n';
   }
 
-  return { publish, answerBook, teamKeysSql, encryptJSON, decryptJSON, publishedFile };
+  return { publish, answerBook, secretsSql, publishedFile };
 });

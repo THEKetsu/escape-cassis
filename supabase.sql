@@ -2,7 +2,8 @@
 -- Peut être relancé sans risque après une mise à jour : les données sont conservées.
 -- Table progress : une ligne par équipe, contenant toute sa progression (JSON).
 -- Table messages : le tchat entre chaque équipe et l'organisation.
--- Table team_secrets : la clé secrète de chaque équipe (remplie par supabase-equipes.sql, voir « Compte organisateur » en bas).
+-- Table team_secrets : la clé secrète de chaque équipe, et table organiser_book : le carnet de réponses du dashboard
+-- (remplies par supabase-equipes.sql, voir « Compte organisateur » en bas).
 --
 -- Accès :
 --   - la clé publique (rôle anon) n'a AUCUN accès direct aux tables : les téléphones passent par les
@@ -24,6 +25,17 @@ create table if not exists public.team_secrets (
 );
 alter table public.team_secrets enable row level security;
 revoke all on public.team_secrets from anon, authenticated;
+
+-- Carnet de réponses du dashboard (une ligne, remplie par supabase-equipes.sql) : lisible par l'organisateur seulement
+create table if not exists public.organiser_book (
+  id int primary key check (id = 1),
+  data jsonb not null
+);
+alter table public.organiser_book enable row level security;
+drop policy if exists "book_organiser_select" on public.organiser_book;
+create policy "book_organiser_select" on public.organiser_book for select to authenticated using (public.is_organiser());
+revoke all on public.organiser_book from anon, authenticated;
+grant select on public.organiser_book to authenticated;
 
 -- ---------- progression ----------
 
@@ -189,5 +201,6 @@ grant execute on function public.team_send(text, text, text, text) to anon;
 -- 3. Donnez-lui le rôle organisateur (remplacez l'email), puis exécutez :
 --      update auth.users set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role": "organisateur"}'
 --      where email = 'organisateur@exemple.fr';
--- 4. Clés des équipes : node outils/publier.js génère supabase-equipes.sql (ignoré par git) ; collez-le dans le SQL Editor
---    (à refaire si vous changez une clé ou une équipe dans contenu.js).
+-- 4. Clés des équipes et carnet de réponses : node outils/publier.js génère supabase-equipes.sql (ignoré par git) ;
+--    collez-le dans le SQL Editor (à refaire après chaque modification des énigmes, des équipes ou de leurs clés).
+--    Le code d'accès du dashboard n'est dans aucun fichier publié : seul Supabase le vérifie.

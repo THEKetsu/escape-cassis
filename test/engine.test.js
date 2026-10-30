@@ -33,7 +33,7 @@ test('mode contains : réponse noyée dans une phrase', () => {
   assert.ok(!E.checkAnswer('saint pierre', step, 's'));
 });
 
-test('la version publiée valide les mêmes réponses sans les contenir', async () => {
+test('la version publiée valide les mêmes réponses sans les contenir', () => {
   const game = loadGame();
   const pub = E.publish(game);
   const src = game.zones[2].A[0];
@@ -41,41 +41,42 @@ test('la version publiée valide les mêmes réponses sans les contenir', async 
   assert.strictEqual(out.answers, undefined);
   assert.ok(E.checkAnswer('Eglise Saint-Michel', out, pub.settings.salt));
   assert.ok(E.checkAnswer('Eglise Saint-Michel', src, game.settings.salt));
-  const file = await E.publishedFile(game);
+  const file = E.publishedFile(game);
   assert.ok(!file.includes('"answers"'));
   assert.ok(!file.includes('"masterCode"'));
   assert.ok(!file.includes(game.settings.adminCode));
   assert.ok(!file.includes('CALANQUE"')); // masterCode
   assert.ok(E.codeMatches('calanque', undefined, pub.settings.masterHash, pub.settings.salt));
-  assert.ok(E.codeMatches(game.settings.adminCode, undefined, pub.settings.adminHash, pub.settings.salt));
+  // le code d'accès au dashboard n'est publié ni en clair, ni haché, ni chiffré : seul Supabase le vérifie
+  assert.strictEqual(pub.settings.adminHash, undefined);
+  assert.strictEqual(pub.answerBook, undefined);
+  assert.ok(!file.includes('adminHash') && !file.includes('answerBook'));
   assert.ok(!E.codeMatches('autre', undefined, pub.settings.masterHash, pub.settings.salt));
 });
 
-test('carnet de réponses : chiffré dans game.js, lisible avec le code admin seulement', async () => {
+test('carnet de réponses : réponses en clair pour l\'organisation, hors de game.js', () => {
   const game = loadGame();
   const book = JSON.parse(JSON.stringify(E.answerBook(game))); // tableaux issus de vm : autre prototype
   assert.deepStrictEqual(book.answers['z3-A-1'], ['FOURNIL']);
   assert.deepStrictEqual(book.answers['final-1'], ['ARRIVEE']);
   assert.strictEqual(book.answers['z3-B-1'], undefined); // étape info : pas de réponse
   assert.strictEqual(book.masterCode, 'CALANQUE');
-  const sandbox = { window: {} };
-  vm.runInNewContext(await E.publishedFile(game), sandbox);
-  const box = sandbox.window.GAME.answerBook;
-  // casse et espaces ignorés, comme pour la saisie du code
-  assert.deepStrictEqual(await E.decryptJSON(box, ' ' + game.settings.adminCode.toUpperCase() + ' '), book);
-  await assert.rejects(E.decryptJSON(box, 'mauvais-code'));
+  assert.ok(!E.publishedFile(game).includes('answerBook'));
 });
 
-test('clés d\'équipe : jamais dans game.js, dans le carnet chiffré et le SQL à coller dans Supabase', async () => {
+test('clés d\'équipe : jamais dans game.js, dans le carnet et le SQL à coller dans Supabase', () => {
   const game = loadGame();
   const keys = Object.keys(game.teams).map((t) => game.teams[t].key);
   assert.ok(keys.every((k) => /^[A-Za-z0-9_-]{12,}$/.test(k)));
   assert.strictEqual(new Set(keys).size, keys.length);
-  const file = await E.publishedFile(game);
+  const file = E.publishedFile(game);
   keys.forEach((k) => assert.ok(!file.includes(k)));
   assert.strictEqual(E.publish(game).teams.E1.key, undefined);
   assert.strictEqual(E.answerBook(game).teamKeys.E1, game.teams.E1.key);
-  const sql = E.teamKeysSql(game);
+  const sql = E.secretsSql(game);
+  // le carnet complet part dans organiser_book (réponses, code organisation, clés) ; jamais le code du dashboard
+  assert.ok(sql.includes('insert into public.organiser_book') && sql.includes('FOURNIL') && sql.includes('CALANQUE'));
+  assert.ok(!sql.includes(game.settings.adminCode));
   keys.forEach((k) => assert.ok(sql.includes(`'${k}'`)));
   assert.ok(sql.includes("('E1', '" + game.teams.E1.key + "')"));
   // clé absente ou trop courte : avertissement / erreur de validation

@@ -10,6 +10,7 @@
     const el = e.target.closest('[data-action]');
     if (!el) return;
     if (el.dataset.action === 'download') T.download();
+    if (el.dataset.action === 'download-sql') T.downloadSql();
     if (el.dataset.action === 'print') {
       document.body.dataset.print = el.dataset.target;
       window.print();

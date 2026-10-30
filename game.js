@@ -16,8 +16,7 @@ window.GAME = {
     "liveLocation": true,
     "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
-    "masterHash": "c6106b91c2340efa",
-    "adminHash": "6dc532fc0c62dda3"
+    "masterHash": "c6106b91c2340efa"
   },
   "teams": {
     "E1": {
@@ -562,10 +561,5 @@ window.GAME = {
         ]
       }
     ]
-  },
-  "answerBook": {
-    "salt": "HXhTj6mJIPsuhZh7yX8WBQ==",
-    "iv": "k+pYTX+uSlusTqci",
-    "data": "ANCNJthPoqm6/PswORWzfAiZClcBogoGRsD2DegVHfVUDPFJJ3M24/ecgmRBlc6X51bOCtahpN8155OVZGeCfEHErQYrleILbDut/KzDwAPath2K4+WztI8Ap9I8pVmnx3Ort9v/X/pm1jRc1OnGQGnpoBJd2/DD2RgvnyyXshJER43G0A+pPXsYmt+Un78u/kTc0LRL3qZpNl0CmPfc3AlR+AlqXsf/K271EagVn0TvX8qeSDF9/keE3lhERWgQ4T8UxatIOnctNnbDxzHvPCrLnBuumD9XIKAIxNaZ5CKOBEhahpi1J6YowuYPydZjGyyHGqiyIX5XfaxvQ9+F79etYYetffCIb8kvOrl3bzaGRMKStKq5R361gckLWhPWFq5iNVo24GQlHDUypsSpl9zQhwD8JuxKHxn87BHIXYKwVQ5z+Vs1aUFDPRgeSgyEfA5w1mGKxCd0psVIiy+sE44B8XPZhTU4At5LO/zFhleZ1XSWLLQ2OPr3/tc3AmNSlUnTBV3QRslzg59tIYqXc8PS8rY1FAGoEqxYYfTkPDd7jN747kFqpqFidks9yR9SXQ80RwtZjlXHP5w19VljYrjvtifuN2jophceE6VSn65G0H7W9hsXonRUsw5sHWIDHvQbTEMtJ7KE+Zyq8d7fa6CGcgAPMxltx4mR6Y6FBivhJnESAnldiUh3Y/HXlTkcshxJDSHlJ6PbkKQISgyteGqt9HTySOzmdDzsAmXd+CvN5vx4Qb6CvIszV4QtA7+LJGgJywGBXadGnuXooFax0qzV+KBgalv7n0iYGzkFMOjfCvytkyrPtPAH+yp7MXmURjR/sC7Sv0BUkXxlUUJ9NvJFgy7OHvLJa4czWNvd3W+G57qpS/2ukgaGMvHjsgyWTZuVPmvsKcwR4Hh/9Ws17Af8bdNXKOw67izHr+MNyjhx5sMVTVTU3M2NXYmZfdBqclSdCi1tn3BiAY2BUVAu6Ssbu/CkBw6ptZoN3j7eqIto33pELx2htZ/dxu1EpKHDAahPUoz1+o03qxVYX7QtttN9dx7+w7i6lv0apATgrQqYOzC8LAxCNvdrur55kjsW70tdp++OWAGRzggdpXxaL0qwElqA/yle8O3d4BWTTd7hITUrfs+EjuC17mkmdqPU9WxbpHnmyaRvPLoJsZu5NvBUFacojLdlT5IuCiJsY3DX4w8Ji1kG+ULZHAz77ipdYkQ/li9UuuLuwL2o5pvhjNibbxg="
   }
 };

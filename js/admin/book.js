@@ -1,25 +1,26 @@
-/* Carnet de réponses : en clair en local, sinon déchiffré avec le code d'accès. */
+/* Carnet de réponses : en clair en local, sinon lu sur Supabase par le compte organisateur. */
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
-  const { E, GAME, S, CODE_KEY } = A;
+  const { E, Sync, GAME, S } = A;
   const { esc } = window.Util;
 
-  // En local, contenu.js donne les réponses en clair ; en ligne, game.js les contient
-  // chiffrées par le code d'accès (answerBook), déchiffrées une fois le code saisi.
+  // En local, contenu.js donne les réponses en clair ; en ligne, elles sont dans la table organiser_book de Supabase,
+  // lisible seulement une fois connecté en organisateur (jamais dans game.js).
   A.book = window.GAME_SOURCE ? E.answerBook(GAME) : null;
+  let bookError = '';
 
-  async function unlockBook(code) {
-    if (A.book || !GAME.answerBook || !code) return !!A.book;
+  async function loadBook() {
+    if (A.book) return true;
     try {
-      A.book = await E.decryptJSON(GAME.answerBook, code);
-      sessionStorage.setItem(CODE_KEY, code);
+      A.book = await Sync.loadBook();
+      bookError = A.book ? '' : 'Carnet absent du serveur : exécutez supabase-equipes.sql (généré par node outils/publier.js).';
     } catch (e) {
-      return false;
+      bookError = e.message;
     }
     A.render();
     A.renderPanel();
-    return true;
+    return !!A.book;
   }
 
   const TYPE_ICONS = { info: 'ℹ️', text: '✏️', number: '🔢', qcm: '☑️', 'image-choice': '🖼️', qr: '📷', gps: '📡', tap: '👆' };
@@ -66,10 +67,8 @@
     const overlay = document.createElement('div');
     overlay.className = 'qr-overlay';
     const fill = () => {
-      overlay.querySelector('.book-body').innerHTML = A.book ? bookHtml() : GAME.answerBook
-        ? `<form class="book-unlock"><p>Saisissez le code d'accès pour déchiffrer les réponses.</p>
-            <input type="password" placeholder="Code d'accès"><button class="primary">Afficher</button><p class="err"></p></form>`
-        : '<p class="err">Ce game.js ne contient pas les réponses : régénérez-le avec <code>node outils/publier.js</code> (adminCode renseigné).</p>';
+      overlay.querySelector('.book-body').innerHTML = A.book ? bookHtml()
+        : `<p class="err">${esc(bookError || 'Chargement…')}</p>`;
     };
     overlay.innerHTML = `
       <div class="qr-panel book">
@@ -80,15 +79,10 @@
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay || e.target.closest('[data-close]')) overlay.remove();
     });
-    overlay.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const input = overlay.querySelector('.book-unlock input');
-      if (await unlockBook(input.value)) fill();
-      else overlay.querySelector('.book-unlock .err').textContent = 'Code incorrect';
-    });
     fill();
+    if (!A.book) loadBook().then(fill);
     document.body.appendChild(overlay);
   }
 
-  Object.assign(A, { unlockBook, stepSolution, showBook });
+  Object.assign(A, { loadBook, stepSolution, showBook });
 })();

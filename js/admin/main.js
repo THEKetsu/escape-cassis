@@ -2,12 +2,12 @@
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
-  const { E, Sync, GAME, S, SALT, $root, teamIds, REFRESH_MS, CODE_KEY } = A;
+  const { E, Sync, GAME, $root, teamIds, REFRESH_MS } = A;
 
   // ---------- accès ----------
 
-  // Le code d'accès sert aussi de mot de passe au compte organisateur Supabase (sous sa forme normalisée :
-  // sans casse, tirets ni espaces). Sans ce compte, les données ne sont pas lisibles : la barrière n'est plus seulement locale.
+  // Le code d'accès est le mot de passe du compte organisateur Supabase (sous sa forme normalisée : sans casse, tirets
+  // ni espaces). Seul Supabase le vérifie : aucune empreinte du code n'est publiée dans game.js.
   function gate() {
     if (!Sync.enabled) return start(); // affiche « Dashboard non configuré »
     if (sessionStorage.getItem('admin:' + GAME.id) === 'ok' && Sync.hasSession()) return start();
@@ -24,21 +24,16 @@
       const err = form.querySelector('.err');
       const button = form.querySelector('button');
       const value = form.querySelector('input').value;
-      if (!E.codeMatches(value, S.adminCode, S.adminHash, SALT)) {
-        err.textContent = 'Code incorrect';
-        return;
-      }
       button.disabled = true;
       err.textContent = '';
       try {
         await Sync.signIn(E.normalize(value));
       } catch (error) {
-        err.textContent = 'Connexion au serveur impossible : ' + error.message;
+        err.textContent = error.invalidLogin ? 'Code incorrect' : 'Connexion au serveur impossible : ' + error.message;
         button.disabled = false;
         return;
       }
       sessionStorage.setItem('admin:' + GAME.id, 'ok');
-      sessionStorage.setItem(CODE_KEY, value); // déchiffre le carnet de réponses, le temps de l'onglet
       start();
     });
   }
@@ -94,7 +89,7 @@
     });
     A.refresh();
     A.pollChat();
-    A.unlockBook(sessionStorage.getItem(CODE_KEY));
+    A.loadBook();
     setInterval(A.refresh, REFRESH_MS);
     setInterval(A.render, 1000);
   }

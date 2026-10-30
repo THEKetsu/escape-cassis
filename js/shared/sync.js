@@ -99,7 +99,11 @@ window.Sync = (function () {
       method: 'POST', headers: headers(), body: JSON.stringify(body),
     });
     const json = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(json.error_description || json.msg || json.message || 'Connexion refusée');
+    if (!res.ok) {
+      const err = new Error(json.error_description || json.msg || json.message || 'Connexion refusée');
+      err.invalidLogin = json.error_code === 'invalid_credentials' || json.error === 'invalid_grant';
+      throw err;
+    }
     return {
       access_token: json.access_token,
       refresh_token: json.refresh_token,
@@ -151,6 +155,13 @@ window.Sync = (function () {
     }
   }
 
+  // Carnet de réponses (table organiser_book, remplie par supabase-equipes.sql) ; null s'il n'a pas été chargé
+  async function loadBook() {
+    const res = await adminRequest(rest + 'organiser_book?id=eq.1&select=data');
+    const rows = await res.json();
+    return rows[0] ? rows[0].data : null;
+  }
+
   async function loadAll() {
     const res = await adminRequest(base + '?select=team,data,updated_at');
     return res.json();
@@ -182,6 +193,6 @@ window.Sync = (function () {
 
   return Object.assign(api, {
     teamSave, teamLoad, teamBoard, teamMessages, teamSend,
-    signIn, signOut, hasSession, loadAll, deleteAll, sendMessage, loadMessages,
+    signIn, signOut, hasSession, loadBook, loadAll, deleteAll, sendMessage, loadMessages,
   });
 })();

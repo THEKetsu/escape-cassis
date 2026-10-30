@@ -21,7 +21,6 @@
     $root: document.getElementById('admin'),
     REFRESH_MS: 10000,
     OFFLINE_MS: 90000,
-    CODE_KEY: 'admin:code:' + GAME.id,
     baseTitle: document.title,
     teamIds,
     paths: Object.fromEntries(teamIds.map((t) => [t, E.buildPath(GAME, t)])),

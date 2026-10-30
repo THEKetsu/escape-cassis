@@ -86,3 +86,18 @@ test('organisateur : jeton rafraîchi avant expiration, 401 = retour à la conne
   assert.ok(!Sync.hasSession());
   assert.strictEqual(store['escape:session'], undefined);
 });
+
+test('organisateur : mauvais mot de passe signalé comme tel, carnet lu avec le jeton', async () => {
+  const { Sync, calls } = loadSync((url) => {
+    if (url.includes('grant_type=password')) {
+      return calls.filter((c) => c.url.includes('grant_type=password')).length > 1
+        ? login('organisateur') : { status: 400, json: { error_code: 'invalid_credentials', msg: 'Invalid login credentials' } };
+    }
+    return { json: [{ data: { masterCode: 'X', answers: {} } }] };
+  });
+  await assert.rejects(Sync.signIn('faux'), (e) => e.invalidLogin === true);
+  assert.ok(!Sync.hasSession());
+  await Sync.signIn('bon');
+  assert.strictEqual((await Sync.loadBook()).masterCode, 'X');
+  assert.strictEqual(calls[calls.length - 1].url, 'https://x.supabase.co/rest/v1/organiser_book?id=eq.1&select=data');
+});
