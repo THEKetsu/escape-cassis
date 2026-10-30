@@ -85,6 +85,10 @@ tr.detail td { background: #fafbfc; }
 .map-zone b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; font-size: 13px; box-shadow: 0 0 0 3px #fff; }
 .map-zone small { margin-top: 3px; padding: 0 5px; border-radius: 6px; background: rgba(255, 255, 255, .85); color: var(--navy); font-weight: 600; font-size: 11px; white-space: nowrap; }
 .map-team { position: absolute; transform: translate(-50%, -50%); padding: 3px 7px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; background: var(--sea); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .35); cursor: default; z-index: 1; }
+.map circle.acc { fill: var(--sea); fill-opacity: .15; stroke: var(--sea); stroke-opacity: .5; stroke-width: 1.5; }
+.map circle.acc.stuck { fill: var(--coral); stroke: var(--coral); }
+.map circle.acc.offline { fill: var(--amber); stroke: var(--amber); }
+.map-team.live { padding-left: 4px; }
 .map-team.stuck { background: var(--coral); }
 .map-team.offline { background: var(--amber); }
 .map-team.done { background: var(--green); }

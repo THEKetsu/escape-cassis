@@ -160,19 +160,28 @@
     return z && typeof z.lat === 'number' && typeof z.lng === 'number' ? { lat: z.lat, lng: z.lng } : null;
   }
 
-  // Position approximative d'une équipe, déduite de son avancement (aucun GPS) :
-  // sur sa zone si elle y joue, à mi-chemin depuis la zone précédente si elle cherche la suivante
-  // (la 1re étape d'une zone est l'énigme qui y mène). null si la position est inconnue.
-  function teamLocation(game, path, state) {
+  // Une position GPS envoyée par le téléphone n'est plus affichée au-delà de ce délai
+  const LIVE_MAX_AGE = 2 * 60 * 1000;
+
+  // Position d'une équipe sur la carte du dashboard :
+  // - live : dernière position GPS du téléphone (state.pos), si elle a moins de 2 min ;
+  // - sinon déduite de l'avancement : sur sa zone si elle y joue, à mi-chemin depuis la zone
+  //   précédente si elle cherche la suivante (la 1re étape d'une zone est l'énigme qui y mène).
+  // null si la position est inconnue.
+  function teamLocation(game, path, state, now) {
     if (!state || !state.startedAt) return null;
     if (state.finishedAt) {
       const end = zonePoint(game, 'final');
       return end && { lat: end.lat, lng: end.lng, zoneId: 'final', enRoute: false, from: null, to: end };
     }
     const step = path[state.stepIndex];
+    const enRoute = !!step && step.zoneStep === 0;
+    const pos = state.pos;
+    if (pos && typeof pos.lat === 'number' && typeof pos.lng === 'number' && (now || Date.now()) - pos.at < LIVE_MAX_AGE) {
+      return { lat: pos.lat, lng: pos.lng, zoneId: step ? step.zoneId : null, enRoute, from: null, to: null, live: true, acc: pos.acc || 0, at: pos.at };
+    }
     const to = step && zonePoint(game, step.zoneId);
     if (!to) return null;
-    const enRoute = step.zoneStep === 0;
     const from = enRoute && state.stepIndex > 0 ? zonePoint(game, path[state.stepIndex - 1].zoneId) : null;
     const at = from ? { lat: (from.lat + to.lat) / 2, lng: (from.lng + to.lng) / 2 } : to;
     return { lat: at.lat, lng: at.lng, zoneId: step.zoneId, enRoute, from, to };
@@ -208,7 +217,9 @@
       }
     }
     const project = (p) => { const w = world(p, zoom); return { x: w.x - x0, y: w.y - y0 }; };
-    return { zoom, width, height, tiles, project };
+    // Échelle à une latitude donnée (pour dessiner un rayon de précision GPS)
+    const metersPerPixel = (lat) => (40075016.686 * Math.cos((lat * Math.PI) / 180)) / (256 * 2 ** zoom);
+    return { zoom, width, height, tiles, project, metersPerPixel };
   }
 
   // Étape "tap" : x, y en % de l'image, r en % de la largeur ; ratio = hauteur / largeur
@@ -435,7 +446,7 @@
   return {
     STEP_TYPES, words, normalize, hash, candidates, checkAnswer, codeMatches,
     variantFor, buildPath, hintPenalty, elapsedSeconds, totalSeconds, formatDuration,
-    distance, zonePoint, teamLocation, mapView, hitTarget, BADGES, earnedBadges, rankTeams, unreadCount, allSteps, stepImages, validate, simulate, publish, publishedFile,
+    distance, zonePoint, LIVE_MAX_AGE, teamLocation, mapView, hitTarget, BADGES, earnedBadges, rankTeams, unreadCount, allSteps, stepImages, validate, simulate, publish, publishedFile,
     answerBook, encryptJSON, decryptJSON,
   };
 });

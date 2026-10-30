@@ -198,7 +198,7 @@
     const placed = [];
     const unplaced = [];
     infos.filter((i) => i.st && i.st.startedAt).forEach((i) => {
-      const loc = E.teamLocation(GAME, i.path, i.st);
+      const loc = E.teamLocation(GAME, i.path, i.st, Date.now());
       if (loc) placed.push(Object.assign({ info: i, loc }, view.project(loc)));
       else unplaced.push(i);
     });
@@ -210,7 +210,7 @@
       (groups[key] = groups[key] || []).push(p);
     });
     Object.values(groups).forEach((g) => {
-      const onZone = g.some((p) => !p.loc.from);
+      const onZone = g.some((p) => !p.loc.from && !p.loc.live);
       if (g.length < 2 && !onZone) return;
       const r = onZone ? 34 : 20;
       g.forEach((p, k) => {
@@ -224,7 +224,9 @@
       const a = view.project(p.loc.from);
       const b = view.project(p.loc.to);
       return `<line class="${STATUS[p.info.status][2]}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
-    }).join('');
+    }).join('') + placed.filter((p) => p.loc.live && p.loc.acc).map((p) =>
+      // cercle de précision du GPS, à l'échelle de la carte
+      `<circle class="acc ${STATUS[p.info.status][2]}" cx="${p.x}" cy="${p.y}" r="${(p.loc.acc / view.metersPerPixel(p.loc.lat)).toFixed(1)}"/>`).join('');
     const zones = zonePoints.map((z) => {
       const name = z.id === 'final' ? (GAME.final.name || 'Final') : GAME.zones[z.id].name;
       return `<div class="map-zone" style="${at(view.project(z.point))}" title="${esc(name)}">
@@ -232,8 +234,10 @@
     }).join('');
     const teams = placed.map((p) => {
       const where = p.loc.enRoute ? `en route vers ${p.info.step.zoneName}` : p.loc.zoneId === 'final' && p.info.st.finishedAt ? 'arrivée' : `sur place : ${p.info.step.zoneName}`;
-      return `<span class="map-team ${STATUS[p.info.status][2]} ${p.loc.enRoute ? 'route' : ''}" style="${at(p)}"
-        title="${esc((p.info.st.teamName || p.info.team.name || p.info.t) + ' · ' + where)}">${esc(p.info.t)}</span>`;
+      const gps = p.loc.live ? ` · GPS ±${p.loc.acc} m, il y a ${Math.max(0, Math.round((Date.now() - p.loc.at) / 1000))} s` : '';
+      const style = p.loc.live ? 'live' : p.loc.enRoute ? 'route' : '';
+      return `<span class="map-team ${STATUS[p.info.status][2]} ${style}" style="${at(p)}"
+        title="${esc((p.info.st.teamName || p.info.team.name || p.info.t) + ' · ' + where + gps)}">${p.loc.live ? '📍' : ''}${esc(p.info.t)}</span>`;
     }).join('');
     return `
       <div class="map" style="aspect-ratio:${MAP_W} / ${MAP_H}">
@@ -242,7 +246,8 @@
         ${zones}${teams}
         <a class="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a>
       </div>
-      <p class="muted map-legend">Position approximative, sans GPS : sur la zone où l'équipe joue, ou en pointillés à mi-chemin quand elle cherche la suivante.
+      <p class="muted map-legend">${S.liveLocation ? '📍 Position GPS du téléphone (moins de 2 min, cercle = précision). Sinon position déduite' : 'Position déduite de l\'avancement'} :
+        sur la zone où l'équipe joue, ou en pointillés à mi-chemin quand elle cherche la suivante.
         ${unplaced.length ? `<br>Non placées : ${unplaced.map((i) => esc(i.t) + (i.status === 'done' ? ' (arrivée)' : '')).join(', ')}` : ''}</p>`;
   }
 

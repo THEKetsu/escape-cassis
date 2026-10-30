@@ -82,16 +82,46 @@
   }
 
   setInterval(() => {
-    if (state && state.startedAt && !state.finishedAt) push();
+    if (state && state.startedAt && !state.finishedAt) {
+      push();
+      updatePosition();
+    }
   }, HEARTBEAT_MS);
+
+  // ---------- position en direct (carte du dashboard, si settings.liveLocation) ----------
+
+  const LIVE = !!S.liveLocation && Sync.enabled && !!navigator.geolocation;
+  let liveDenied = false;
+  let lastPositionAsk = 0;
+
+  // Relevé ponctuel plutôt qu'un suivi continu : moins gourmand en batterie, assez pour situer l'équipe
+  function updatePosition() {
+    if (!LIVE || liveDenied || !state || !state.startedAt || state.finishedAt) return;
+    if (Date.now() - lastPositionAsk < 10000) return;
+    lastPositionAsk = Date.now();
+    navigator.geolocation.getCurrentPosition((p) => {
+      if (!state || !state.startedAt || state.finishedAt) return;
+      state.pos = {
+        lat: +p.coords.latitude.toFixed(5), lng: +p.coords.longitude.toFixed(5),
+        acc: Math.round(p.coords.accuracy || 0), at: Date.now(),
+      };
+      save();
+    }, (err) => {
+      if (err.code === err.PERMISSION_DENIED) liveDenied = true; // l'équipe a refusé : position déduite de l'avancement
+    }, { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 });
+  }
 
   window.addEventListener('online', push);
 
   // Un QR code scanné ouvre un nouvel onglet : les onglets se tiennent à jour mutuellement
   window.addEventListener('storage', (e) => {
     if (e.key === STORE) {
-      setState(load());
-      render();
+      const next = load();
+      // un simple relevé de position ne doit pas redessiner l'écran (réponse en cours de saisie)
+      const progress = (s) => s && JSON.stringify(Object.assign({}, s, { pos: null, updatedAt: null }));
+      const changed = progress(next) !== progress(state);
+      setState(next);
+      if (changed) render();
     }
   });
 
@@ -350,6 +380,7 @@
         <label class="field">Nom de votre équipe
           <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express">
         </label>
+        ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
         <button class="btn primary big" data-action="start">C'est parti ! 🚀</button>
       </main>`;
     if (Sync.enabled && !remote) {
@@ -782,6 +813,7 @@
     save();
     preloadImages();
     render();
+    updatePosition(); // demande l'autorisation au moment du clic sur « C'est parti »
   }
 
   function zoom(src) {
@@ -799,7 +831,7 @@
     switch (el.dataset.action) {
       case 'pick': setState(newState(el.dataset.team)); save(); render(); break;
       case 'start': start(); break;
-      case 'resume': setState(remote); remote = null; save(); preloadImages(); render(); break;
+      case 'resume': setState(remote); remote = null; save(); preloadImages(); render(); updatePosition(); break;
       case 'continue': solve(step, false); break;
       case 'choose': if (!el.classList.contains('wrong')) submit(el.dataset.value, el); break;
       case 'tap': tap(e, el); break;
@@ -845,4 +877,5 @@
   if (state && state.startedAt) preloadImages();
   render();
   pollChat();
+  updatePosition();
 })();

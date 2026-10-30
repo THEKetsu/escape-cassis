@@ -189,6 +189,13 @@ test('carte : position d\'une équipe déduite de son avancement', () => {
   game.final.lng = 5.1;
   loc = E.teamLocation(game, path, { startedAt: 1, finishedAt: 2, stepIndex: 5 });
   assert.deepStrictEqual([loc.zoneId, loc.lat], ['final', 43.1]);
+  // position GPS du téléphone : prioritaire tant qu'elle a moins de 2 min, sinon position déduite
+  const now = 10_000_000;
+  const live = { startedAt: 1, stepIndex: 2, pos: { lat: 43.15, lng: 5.3, acc: 12, at: now - 30_000 } };
+  loc = E.teamLocation(game, path, live, now);
+  assert.deepStrictEqual([loc.live, loc.lat, loc.acc, loc.zoneId, loc.enRoute], [true, 43.15, 12, '2', true]);
+  loc = E.teamLocation(game, path, live, now + E.LIVE_MAX_AGE);
+  assert.ok(!loc.live && Math.abs(loc.lat - 43.1) < 1e-9);
   // validation : une zone sans position est signalée dès qu'une autre en a une
   delete game.zones[2].lat;
   assert.ok(E.validate(game).warnings.some((w) => w.startsWith('Zone 2 : lat/lng')));
@@ -208,4 +215,10 @@ test('carte : zoom et tuiles qui englobent tous les points', () => {
   assert.ok(Math.min(...view.tiles.map((t) => t.left)) <= 0 && Math.max(...view.tiles.map((t) => t.left + 256)) >= 800);
   assert.ok(Math.min(...view.tiles.map((t) => t.top)) <= 0 && Math.max(...view.tiles.map((t) => t.top + 256)) >= 420);
   assert.strictEqual(E.mapView([], 800, 420), null);
+  // échelle cohérente avec la distance GPS : 100 m mesurés = 100 m dessinés (à 1 % près)
+  const a = view.project({ lat: 43.2131, lng: 5.5357 });
+  const b = view.project({ lat: 43.2140, lng: 5.5357 });
+  const drawn = Math.hypot(a.x - b.x, a.y - b.y) * view.metersPerPixel(43.2135);
+  const real = E.distance(43.2131, 5.5357, 43.2140, 5.5357);
+  assert.ok(Math.abs(drawn - real) / real < 0.01, `${drawn} vs ${real}`);
 });

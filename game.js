@@ -13,6 +13,7 @@ window.GAME = {
     "stuckMinutes": 12,
     "teamPicker": false,
     "showLeaderboard": true,
+    "liveLocation": true,
     "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
     "masterHash": "c6106b91c2340efa",
@@ -540,8 +541,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "uzpAwukgKaNmsQlAon3HXA==",
-    "iv": "weGFC3vBZiVUjeph",
-    "data": "/OU1Z0PkwkHUoEMzWQXQsk87G0A61+EAU2rVWJW1r9QxGo1LFXIgvfceoYXFIPQXXe7Cpa8WlJ8ksutEnYDOhYp9XGprqtZkjHVEa+3ob5AVfwe2hvHtLPrlM6klv5rFnIuPEXWDcAE//ecuF9troYoXLaa8VysXQd2nhHvbYwKDcagBbVbE+V6BOxN8tcQ+HAYa+OlwwcVPy4EgdEe02GhFjn08z4ABbGx2XHvX9Rffd++TIKCJHMX3pgkS81ds4vuWmgv09PelDhpWcictUS1pNXF0sRiZB0ZZfMqQnaWEnBsbS9XMpJfzAOPqIu4gIV5prn733chtXiErKp+1kfseT6WD4LnayjDX5kZE9Fr/Mdkh4azkoHSdnd1/24aFa+SdFsm7lz2F1JnbrSJCfG5n53+Bi2FxqOMvI7lfHJejWj7jQK8KJFQagDZqKTVQVLU5Qmv0WPHzYWquLuancAmxMXEMLrBaz18QULW26B+sHNxuJMPMesOq15FVXuMFi+WdykXEIJK0aacWgbkQEj3KXv0JXoHnoxxu6gpKYT/hlIt7ZCsxc0H4tevQY+B+VFz6Jj61rHSuD5H/be887pxC58vxDDMXmkZviil8kknrG6u8fdBCaAtU2QRzW941LOikOsECoZjlsrNAMrGBAhjpGCWb/I8az700ar6qJRIYWCePIBoMIOTVvYIrcmFvDckNgIH2klliP8IvjTQNqtvyfYDDXSApWN3UqDc7bDXKtwjqYP/rlOUV6C4c8ROVTAG3ItB/4u8Nn8FLJeWtaQ++nAYma1e2yXby4KY6r40WRJGEWHODrEgB/hjcsC9En1xTwHq8/9kuF0cH3RAAChNgwUkYI/Bdfi6IsxFJ8d26rkTTl5a92m/2E2A7Sp4tOr3Hc7EGxO1TU/ezYBA="
+    "salt": "e0UcctYybAe/mhEdbdrEQQ==",
+    "iv": "2B4Qm44x+0zs3bBM",
+    "data": "qkkVFvXC1XrdUAi4yuJNteBC+kWDqZq0t+y9N88HSxj3vf2gsDww04zj1aCjy4BUhKj/KGvNQSHClmI7vCtGeo4aTtaemXq1EidzSge8EQfxnJ7Kw+hCEOL/D+26UIRr2TdkASc5h4vZqjBHBYVYCtuOL8e507IoytvyzP1oMMYeSGphV5kork52zktCvOMzZH5gZTu+YFl1cTtxonMF3dpc5Wqdi6O/3zFwQNL8CY/J98fOKndJoLvVl4dE271ozoByNppT+4sSDCa3bvPqbfTr4DzMSsK8c0+fr+H/KbJJlixMDVE5aLhCvfuoJ80HtOGCnvvcuKX/SyWreVuMpMmMjwvuYDuZbG1OYc9Svyby5qQiUq7FvKeNxZqVCHqREda3Dii3Ic4wcqigw2RnYA9Nj+Z1Qs4Jp2k5+fizZxN6xA6vdIT/bTw8lOABUojD6ClezyvFYkkWFVWukhMH3waNscn4MdQAW0dKXKPNP74mdQIJ0zYZf9q6wfnnfPgwZGYCZ+qcUpcF7n4hDWOdyizJ1vCmvFz5pMQzpyw2HUOo9HLkJag+D047MP1rj/osGuWIrEI8JiCYPYWOMwiigFkxtS+AYr3fQxRGeMVlUdpRGTdkIHoQY9AMp4480hzHp379RFUbgUgNjJdATRVSuJB5M7smMTBhvdGfQBkk3Wo4cVeC8UBGkQOWxbuBmMMScYz4WTn36ICAj/6/D3jW/c80SIbT1tJggkIjhGL9pThhMElBrpdU3yV+x7o7iYv+dQzSBnqlGrS/EhBVRDeDmnzm3RLFDvMq9yshk58sOJ2FKe08iF+RzjFqMo/VVPNPC0yeRkJzy8SblhM1nJK3XJoFbkj7ipUIMRZ4SzSWfS2sbzOqCUjmjgEa+Jz6RUXI3SoetabuBa9ApZ3MzX0="
   }
 };
