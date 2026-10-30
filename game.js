@@ -110,9 +110,9 @@ window.GAME = {
   },
   "zones": {
     "1": {
-      "name": "Le Port",
-      "lat": 43.21395,
-      "lng": 5.53606,
+      "name": "Place Baragnon",
+      "lat": 43.21427,
+      "lng": 5.5396,
       "A": [
         {
           "type": "number",
@@ -165,95 +165,58 @@ window.GAME = {
             "60301863596af296",
             "2806ba3f9393a056"
           ]
-        },
-        {
-          "type": "image-choice",
-          "title": "Les portes du quai",
-          "text": "<p>Face aux bateaux, observez les façades. Une seule de ces formes de porte est présente sur la maison bleue.</p><p class=\"demo\">[DÉMO : choisissez l'arc en plein cintre]</p>",
-          "options": [
-            {
-              "img": "images/porte-arc.svg",
-              "label": "Plein cintre"
-            },
-            {
-              "img": "images/porte-rect.svg",
-              "label": "Linteau droit"
-            },
-            {
-              "img": "images/porte-ogive.svg",
-              "label": "Ogive"
-            }
-          ],
-          "hints": [
-            "Cherchez une porte dont le haut est un demi-cercle parfait."
-          ],
-          "h": [
-            "10234a9fc712259c"
-          ]
-        },
-        {
-          "type": "number",
-          "title": "Amarrage",
-          "text": "<p>Comptez les bittes d'amarrage entre la fontaine et le bout du quai.</p><p class=\"demo\">[DÉMO : 12]</p>",
-          "hints": [
-            "Ce sont les gros plots en métal où l'on attache les cordages.",
-            "Il y en a entre 10 et 15."
-          ],
-          "success": {
-            "text": "<p>Ouvrez l'<b>enveloppe n°1</b> remise au départ : elle vous sera utile pour la finale.</p>"
-          },
-          "h": [
-            "880b2e4ec3b20ca0"
-          ]
         }
       ],
       "B": [
         {
           "type": "text",
-          "title": "Anagramme",
-          "text": "<p>Remettez ces lettres dans l'ordre pour trouver votre prochaine destination :</p><p class=\"big-code\">T R O P</p>",
+          "title": "Mission 1 — Le message du musée",
+          "text": "<p>Sur la <b>Place Baragnon</b> se trouve un lieu consacré à la mémoire de Cassis.</p><p>Retrouvez-le.</p><p>Observez ensuite les trois mots inscrits au-dessus de son entrée. Gardez uniquement la première lettre de chaque mot.</p><p><b>Quelles initiales obtenez-vous ?</b></p>",
+          "wrong": "❌ Ce ne sont pas les bonnes initiales.<br>Cherchez le lieu qui conserve la mémoire de Cassis et observez attentivement l'inscription située au-dessus de l'entrée.",
           "hints": [
-            "C'est là que les bateaux se reposent.",
-            "Le mot commence par P."
+            "Vous cherchez le Musée de Cassis.",
+            "L'inscription au-dessus de l'entrée est composée de trois mots :<br><b>MUSÉE DE CASSIS</b>",
+            "Gardez uniquement la première lettre de chaque mot.<br>Vous obtenez :<p class=\"big-code\">M – D – C</p>"
           ],
           "success": {
-            "text": "<p>Direction <b>le port</b> !</p>"
+            "title": "✅ INITIALES IDENTIFIÉES",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">M – D – C</p><p>Ces lettres cachent une clé.</p>"
           },
           "h": [
-            "2806ba3f9393a056",
-            "1bf224fd1f2e80b8"
-          ]
-        },
-        {
-          "type": "qcm",
-          "title": "Le bateau du pays",
-          "text": "<p>Parmi les barques amarrées, un type de bateau traditionnel provençal domine. Lequel ?</p>",
-          "options": [
-            "La gondole",
-            "Le pointu",
-            "Le drakkar",
-            "La jonque"
-          ],
-          "hints": [
-            "Sa proue et sa poupe sont effilées.",
-            "Son nom évoque sa forme…"
-          ],
-          "h": [
-            "0ab333bab73b5768"
+            "3de2bcff16faf9d0"
           ]
         },
         {
           "type": "number",
-          "title": "La date gravée",
-          "text": "<p>Une date est gravée sur la façade de la capitainerie. Laquelle ?</p><p class=\"demo\">[DÉMO : 1890]</p>",
-          "hints": [
-            "Levez les yeux, au-dessus de la porte."
-          ],
+          "title": "Transformer les lettres",
+          "text": "<p>Transformez maintenant chaque lettre selon sa position dans l'alphabet :</p><p>A = 1<br>B = 2<br>C = 3<br>…</p><p>Vous obtenez :<br>M = ?<br>D = ?<br>C = ?</p><p>Puis effectuez l'opération suivante :</p><p class=\"big-code\">M − D − C</p><p><b>Quelle clé obtenez-vous ?</b></p>",
+          "wrong": "❌ La clé n'est pas correcte.<br>Rappelez-vous :<br>M = 13<br>D = 4<br>C = 3<br>Effectuez ensuite : 13 − 4 − 3",
           "success": {
-            "text": "<p>Ouvrez l'<b>enveloppe n°1</b>.</p>"
+            "title": "✅ CLÉ TROUVÉE",
+            "text": "<p>Votre clé est :</p><p class=\"big-code\">6</p>"
           },
           "h": [
-            "b19c88906db81239"
+            "a03f6d2f77062b5c"
+          ]
+        },
+        {
+          "type": "text",
+          "title": "Le message crypté",
+          "text": "<p>Un nouveau message a été intercepté :</p><p class=\"big-code\">YGOTZ SOINKR</p><p>Il a été chiffré à l'aide d'un <b>code César</b> : chaque lettre du message original a été décalée.</p><p>Décryptez maintenant le message.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "wrong": "❌ MESSAGE NON DÉCRYPTÉ<br>Votre clé est bien 6. Pour chaque lettre du message, reculez de 6 positions dans l'alphabet.<br>Essayez de nouveau.",
+          "hints": [
+            "Commencez par la première lettre :<br>Y → S",
+            "Le premier mot décrypté est : <b>SAINT</b>",
+            "Le message complet comporte deux mots :<p class=\"big-code\">_ _ _ _ _ &nbsp; _ _ _ _ _ _</p>"
+          ],
+          "success": {
+            "title": "✅ MESSAGE DÉCRYPTÉ",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">SAINT-MICHEL</p><p>Votre prochaine destination est :<br><b>L'ÉGLISE SAINT-MICHEL</b></p><p>Rendez-vous sur place pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
+          },
+          "h": [
+            "662a402ef8d1b1c9",
+            "82f5225885538351"
           ]
         }
       ]
@@ -575,8 +538,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "Am9pfGS4Tufk0mPTb8odhw==",
-    "iv": "y7NDu99TuyXdxiDU",
-    "data": "wQpSKHe0TToKRi0tJOThcUs7fNqEdoPAOvJPOpW0Q/2Jk/nTkGJO5+Ez5o7dQdSgiLkLKurBNq7R4z9qrW2mSatcyRwmS6Ce5Vel1VE0mBpQaEHHYMa/rCLCp+sy1v2H8zQ+qrPZb/CPgVZGk1rMSclYgnjQI+OkNA5ZdQm5Jidgaxbnr9K74AmFkTOv1e7vWeEzO9NI5EX6KPdhHPsvwJmHJDOj5o2G2+3KVGHfBdZD1nc3r5N7oNoK7gNBUFyOQRtwb7PdG97RA1XbR0oULqQ7oGCJcJro5gHh9fAxUeLYeFQ4ddOwXFRTYs+TbcglU3pgXPaDUuAEuJVKLEWkBnUiYjvVZmWrQfGAILoaYYTVdV53hW7Z3bmhhy9h5gJ5XabM0wdVQZvfjxiLXiAY0a0ihs7OUa/mnIX8z1h4/Gspuvfs3f54MpRst0teUOfY8yTRyKb8G8KSxDhMTvRjHAiUH68xgbXVV84KANtnUqGqnrmOm6Wus5GUMc9odGPuRDcNrMLX40gDRl4nWwFpQbNpGNSk78XMXOs1xZNktWbDSs+YueMJgAqhipR6t8C9tY6qERMMfJiQMKHfpRU6QozckMDSSzk51kcP/F31z6YlerX5Wg28zuEMNy4Kd9Ypley26a+tLdGtEdg46SUG/bkj51rbUyC5aXiUokjEpyVWTc3fV9UEsR7elvQFjXu7bJQM8AcyoRomfcd2ereNdvSQ6XMgzNdApGAybX0AAdlspcbv1PLuE41brZVJvaC22fy67iR59rctKPZ8q/QC2TDAEy+d5Tu7tWi++GM/rAYM3I1hXXjnGgvnpJ1Si1f3lLtu7KeQdXwzmi26tn9l0t1o4/2NjkuA7ptKcfO9BUC3bTR5Dbu5WGioK2hHTsKLLJxDrE2oRgVQRF619ZdvZ19AnUFSNHNPp/0nuGScVkJOVYTmkhTUFLV/LUmVpaLxyKhkcDvnsjMU4buvUlbspHyU4OR2Y3log5h0"
+    "salt": "AlVI7jbLp1v4Fao6OF1CdQ==",
+    "iv": "6bCk9UbY5B8X8IeH",
+    "data": "R1BR4DWP3wGPOlM5ZyAOmO7AoyXRnOI9+Gi6hnqypUeXjkfKfYoJTK/8FeiWBf0mPm1I1W3XLXfBJWpYeIVWP4wY8V5znVyxXUx8F8RPXqutyBJu00/J6OKHpNh3Ecv5cLhzDZ44MYXVh+Tr2tcxGQbDNEmrUnU5WIFeYF4CZoB1aGDrE6rJxK45OhenMOIvBCJdzEOn/0iRsX1HA8g3GKgctZGwesBq7+ZTxra9mmQmauB0DM6B3AldRkSvKl9l3AA+B5ExZukYlOqJh/y9xTj0MJQSTS36YFBETNemhNl663cWyJ4iUVUsiS1jrkHpYNE87XTtABKkMPeVUAn+sdDCMnF7essr99smjxvg+CgYVCLIZyG/wO09sBtCqWnSB648T74fIk3YWErX5ammZO3yZ23DL5R6wSIlQ6gnAWxDGgJiBZjv8SKLiWkzseQQCT5a26N/0tKgWnPIEqeKEl24BFS6MJkQ/MBPrmGEVd8LNIM9l6iZfGON5Lvca1xzM7fz8xaRL6oXhcTRouq1ZNXZ7qM7QTuAev/rul5dBSFKAPEMyoF/mpJNKeMUjw9GuwLSWv/ZpEw1ta2f5Q8bcVghU8mvCkQ+TtcDCiuuK0eXRLgBNLdYrn7su5n9wzUzOY6CVXsdup+zqr9Ppf5JxWgNaRitqrOMjdHqI/AJyYNwKR+QwBfe/wBEQlQ1SUCvzP1jtU6JJmZ67UnY0T8QgjJUuW1tqqSPs6Z4eFtonGmFmvMR50mujTiWSA8HiJVMLzdOsiNOsu2BOHsJl5otMcwJ0aB7EpJ2/PRvhYsWBKHJQYKYZ5Ygn0BqaiiioCb+W9LFZPlXLcsWpCl0+cAX6D9V/euTdsiH+nUoAUSKSj8g7niCuq3pQy6HVvH7Ag7uC0PxKgJRGQn/cWn+W/ITn9b4bVRtkgdSMZYe/i0jHnvZQiG8NGPD6yxfORs="
   }
 };

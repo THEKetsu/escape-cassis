@@ -163,9 +163,11 @@ test('classement : arrivées au temps, puis avancement', () => {
   assert.deepStrictEqual(ranked.map((r) => r.team), ['E3', 'E2', 'E4', 'E1']);
   // E5 a deux étapes de plus qu'E6 (ajoutées ici, quel que soit le contenu) : E5 est juste devant E6
   // en proportion, mais à un index plus bas
-  game.zones[1].A.push({ type: 'info', title: 'x' }, { type: 'info', title: 'y' });
-  const len5 = E.buildPath(game, 'E5').length;
-  const len6 = E.buildPath(game, 'E6').length;
+  const lengths = () => [E.buildPath(game, 'E5').length, E.buildPath(game, 'E6').length];
+  const extra = lengths()[0] - lengths()[1] - 2;
+  const pad = extra < 0 ? game.zones[1].A : game.zones[1].B; // E5 joue la variante A, E6 la B
+  for (let i = 0; i < Math.abs(extra); i++) pad.push({ type: 'info', title: 'x' });
+  const [len5, len6] = lengths();
   assert.strictEqual(len5, len6 + 2);
   const mixed = E.rankTeams(game, {
     E6: { startedAt: 1, stepIndex: 8, penalty: 0 },
