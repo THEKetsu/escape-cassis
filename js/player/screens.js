@@ -84,6 +84,7 @@
         <h1 class="display">${esc(GAME.title)}</h1>
         <p class="lead">📷 Scannez le <b>QR code de votre équipe</b> pour commencer.</p>
         ${picker}
+        <a class="admin-link" href="admin.html">🧭 Espace organisateur</a>
       </main>`;
   }
 
