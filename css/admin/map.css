@@ -1,0 +1,107 @@
+/* Dashboard : carte et liste des équipes */
+
+/* ---------- carte ---------- */
+
+.map-wrap { position: relative; }
+.map {
+  position: relative; width: 100%; overflow: hidden; border-radius: 28px; background: #e8eef0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 16px 50px rgba(0, 0, 0, .12);
+}
+.map-tiles, .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-tiles img { position: absolute; max-width: none; user-select: none; }
+/* OSM adouci : couleurs atténuées et plus claires, pour faire ressortir les épingles */
+.map-tiles { filter: saturate(.45) brightness(1.06) contrast(.92); }
+.map svg { pointer-events: none; }
+.map line { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 9; stroke: var(--blue); opacity: .75; }
+.map line.stuck { stroke: var(--red); }
+.map line.offline { stroke: var(--orange); }
+.map circle.acc { fill: var(--blue); fill-opacity: .12; stroke: var(--blue); stroke-opacity: .45; stroke-width: 1.5; }
+.map circle.acc.stuck { fill: var(--red); stroke: var(--red); }
+.map circle.acc.offline { fill: var(--orange); stroke: var(--orange); }
+
+/* zones : épingles façon Plans */
+.map-zone { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; pointer-events: none; }
+.map-zone b {
+  width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  background: linear-gradient(180deg, #5e5ce6, var(--indigo)); color: #fff; font-size: 14px;
+  box-shadow: 0 0 0 3px #fff, 0 4px 12px rgba(88, 86, 214, .45);
+}
+.map-zone small {
+  margin-top: 6px; padding: 2px 8px; border-radius: 999px; color: var(--label); font-weight: 600; font-size: 11.5px; white-space: nowrap;
+  background: rgba(255, 255, 255, .8); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+}
+
+/* équipes : pastilles rondes, halo animé quand la position vient du GPS */
+.map-team {
+  position: absolute; transform: translate(-50%, -50%); z-index: 2;
+  min-width: 32px; height: 32px; padding: 0 6px; border-radius: 999px;
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff;
+  background: var(--blue); border: 2.5px solid #fff; box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+  transition: transform .2s, box-shadow .2s;
+}
+.map-team:hover { background: var(--blue); transform: translate(-50%, -50%) scale(1.12); }
+.map-team:active { transform: translate(-50%, -50%) scale(.95); }
+.map-team.stuck, .map-team.stuck:hover { background: var(--red); }
+.map-team.offline, .map-team.offline:hover { background: var(--orange); }
+.map-team.done, .map-team.done:hover { background: var(--green); }
+.map-team.route, .map-team.route:hover { background: rgba(255, 255, 255, .92); color: var(--blue); border: 2.5px dashed var(--blue); }
+.map-team.route.stuck { color: var(--red); border-color: var(--red); }
+.map-team.route.offline { color: var(--orange); border-color: var(--orange); }
+.map-team.live::after {
+  content: ""; position: absolute; inset: -3px; border-radius: inherit; border: 2px solid currentColor;
+  color: var(--blue); animation: halo 2s ease-out infinite; pointer-events: none;
+}
+.map-team.live.stuck::after { color: var(--red); }
+.map-team.live.offline::after { color: var(--orange); }
+@keyframes halo { from { transform: scale(1); opacity: .7; } to { transform: scale(1.9); opacity: 0; } }
+.map-team.sel { z-index: 3; transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 0 5px rgba(0, 122, 255, .3), 0 6px 18px rgba(0, 0, 0, .3); }
+
+/* commandes, légende et crédits posés sur la carte */
+.map-ctrl { position: absolute; top: 14px; right: 14px; z-index: 4; display: grid; border-radius: 18px; overflow: hidden; padding: 0; }
+.map-ctrl button { width: 40px; height: 40px; padding: 0; border-radius: 0; background: none; font-size: 19px; font-weight: 500; }
+.map-ctrl button:hover { background: rgba(0, 0, 0, .06); }
+.map-ctrl button + button { box-shadow: inset 0 1px 0 var(--sep); }
+.map-legend { position: absolute; left: 14px; bottom: 14px; z-index: 4; display: flex; gap: 12px; padding: 7px 14px; border-radius: 999px; font-size: 12px; color: var(--muted); }
+.map-legend span { display: flex; align-items: center; gap: 6px; }
+.lg { width: 12px; height: 12px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 2px #fff; }
+.lg.route { background: #fff; border: 2px dashed var(--blue); box-shadow: none; }
+.lg.live { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 122, 255, .35); }
+.map-credit {
+  position: absolute; right: 14px; bottom: 14px; z-index: 4; padding: 3px 9px; border-radius: 999px;
+  background: rgba(255, 255, 255, .7); color: var(--muted); font-size: 10.5px; text-decoration: none;
+}
+
+/* liste des équipes, panneau de verre à gauche de la carte (façon « Localiser ») */
+.map-list {
+  position: absolute; top: 14px; left: 14px; bottom: 60px; z-index: 4; width: 260px;
+  border-radius: 22px; padding: 8px; overflow-y: auto; display: grid; align-content: start; gap: 2px;
+}
+.map-row {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 7px 8px; border-radius: 14px; background: none;
+}
+.map-row:hover { background: rgba(0, 0, 0, .05); }
+.map-row.sel { background: rgba(0, 122, 255, .12); }
+.map-row.off { opacity: .45; }
+.row-text { flex: 1; min-width: 0; display: grid; }
+.row-text b { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-text small { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dot {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 11px; font-weight: 700; color: #fff; background: var(--blue);
+}
+.dot.idle { background: #c7c7cc; }
+.dot.stuck { background: var(--red); }
+.dot.offline { background: var(--orange); }
+.dot.done { background: var(--green); }
+.dot.live { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 122, 255, .35); }
+.row-badge { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; }
+
+/* plein écran */
+.map-wrap.full {
+  position: fixed; inset: 0; z-index: 45; padding: 16px; display: grid; place-items: center;
+  background: rgba(242, 242, 247, .7); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
+}
+.map-wrap.full .map { width: min(100%, calc((100vh - 32px) * 1500 / 900)); }
+.map-wrap.full .map-list { top: 30px; left: 30px; bottom: auto; max-height: calc(100vh - 60px); }

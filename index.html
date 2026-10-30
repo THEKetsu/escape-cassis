@@ -6,7 +6,16 @@
   <meta name="theme-color" content="#0b3954">
   <meta name="robots" content="noindex">
   <title>Les Secrets de Cassis</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/player/tokens.css">
+  <link rel="stylesheet" href="css/player/base.css">
+  <link rel="stylesheet" href="css/player/story.css">
+  <link rel="stylesheet" href="css/player/cards.css">
+  <link rel="stylesheet" href="css/player/buttons.css">
+  <link rel="stylesheet" href="css/player/hints.css">
+  <link rel="stylesheet" href="css/player/finish.css">
+  <link rel="stylesheet" href="css/player/sheet.css">
+  <link rel="stylesheet" href="css/player/chat.css">
+  <link rel="stylesheet" href="css/player/toast.css">
 </head>
 <body>
   <div id="app"><main class="card"><p>Chargement…</p></main></div>
@@ -19,8 +28,24 @@
       document.write('<script src="contenu.js"><\/script>');
     }
   </script>
-  <script src="js/engine.js"></script>
-  <script src="js/sync.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/core/text.js"></script>
+  <script src="js/core/path.js"></script>
+  <script src="js/core/time.js"></script>
+  <script src="js/core/geo.js"></script>
+  <script src="js/core/scoring.js"></script>
+  <script src="js/core/validate.js"></script>
+  <script src="js/core/publish.js"></script>
+  <script src="js/shared/util.js"></script>
+  <script src="js/shared/sync.js"></script>
+  <script src="js/player/context.js"></script>
+  <script src="js/player/state.js"></script>
+  <script src="js/player/network.js"></script>
+  <script src="js/player/ui.js"></script>
+  <script src="js/player/screens.js"></script>
+  <script src="js/player/board.js"></script>
+  <script src="js/player/chat.js"></script>
+  <script src="js/player/actions.js"></script>
+  <script src="js/player/update.js"></script>
+  <script src="js/player/main.js"></script>
 </body>
 </html>

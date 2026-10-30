@@ -1,0 +1,14 @@
+/* Jeu : variables de couleur, rayon et police */
+
+:root {
+  --zone: #0b3954;          /* couleur de la zone en cours, changée par app.js */
+  --ink: #15202b;
+  --muted: #5f6b76;
+  --line: #e4e8eb;
+  --soft: #f4f1ea;
+  --coral: #e76f51;
+  --green: #22a06b;
+  --gold: #ffcf4a;
+  --radius: 22px;
+  --display: ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

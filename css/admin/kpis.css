@@ -1,0 +1,21 @@
+/* Dashboard : indicateurs */
+
+/* ---------- indicateurs ---------- */
+
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
+.kpis div {
+  position: relative; background: var(--card); border-radius: var(--radius); padding: 16px 18px;
+  box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, .8);
+}
+.kpis b { font-size: 34px; font-weight: 700; display: block; line-height: 1.1; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.kpis b i { font-style: normal; font-size: 22px; color: var(--faint); font-weight: 600; }
+.kpis small { font-size: 14px; }
+.kpi-icon { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-size: 17px; }
+.kpi-icon.blue { background: rgba(0, 122, 255, .12); }
+.kpi-icon.red { background: rgba(255, 59, 48, .12); }
+.kpi-icon.orange { background: rgba(255, 149, 0, .14); }
+.kpi-icon.green { background: rgba(52, 199, 89, .14); }
+.kpis .alert { background: var(--red); border-color: transparent; box-shadow: 0 10px 30px rgba(255, 59, 48, .35); }
+.kpis .alert b, .kpis .alert small { color: #fff; }
+.kpis .alert .kpi-icon { background: rgba(255, 255, 255, .25); }
+.kpis .warnk { background: #fff4e0; }

@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
-const E = require('../js/engine.js');
+const E = require('../js/core/index.js');
 
 const root = path.join(__dirname, '..');
 const sandbox = { window: {} };

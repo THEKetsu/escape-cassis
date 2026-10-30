@@ -1,0 +1,27 @@
+/* Dashboard : reset, fond de page et typographie */
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 15px; letter-spacing: -.01em; color: var(--label);
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #dbe9ff 0, transparent 60%),
+    radial-gradient(900px 500px at 100% 0, #e9e3ff 0, transparent 55%),
+    radial-gradient(1000px 700px at 50% 110%, #d9f3ee 0, transparent 60%),
+    #f2f2f7;
+  background-attachment: fixed;
+}
+#admin { max-width: 1320px; margin: 0 auto; padding: 14px 20px 40px; }
+h1, h2, h3, .kpis b {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  letter-spacing: -.022em;
+}
+h1 { margin: 0; font-size: 24px; font-weight: 700; }
+h2 { font-size: 21px; font-weight: 700; margin: 30px 4px 12px; }
+h2 small { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 6px; letter-spacing: 0; }
+small { color: var(--muted); }
+code { background: var(--fill); padding: 1px 6px; border-radius: 6px; font-size: .92em; }
+.muted { color: var(--muted); }
+.err { color: var(--red); }

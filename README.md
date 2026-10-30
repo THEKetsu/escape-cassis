@@ -116,5 +116,17 @@ Le dashboard publié s'ouvre sur `https://VOTRE-PSEUDO.github.io/escape-cassis/a
 
 ## Développement
 
-- Tests du moteur : `node --test test/engine.test.js`
+- Tests : `node --test test/engine.test.js` (moteur) et `node --test test/pages.test.js` (les pages ne référencent que des fichiers existants, syntaxe des scripts)
+- Organisation du code (les trois pages restent à la racine : les QR codes imprimés pointent dessus) :
+
+| Dossier | Contenu |
+|---|---|
+| `js/core/` | Moteur pur, sans DOM : réponses, circuits, temps, GPS/carte, classement, validation, publication. Partagé avec Node (tests, `outils/publier.js`). |
+| `js/shared/` | Briques communes : `sync.js` (Supabase), `qrcode.js`, `util.js`. |
+| `js/player/` | Le jeu (`index.html`), un fichier par responsabilité : état, réseau, écrans, tchat, actions… |
+| `js/admin/` | Le dashboard (`admin.html`) : données, vues, carte, tchat, réponses, QR. |
+| `js/tools/` | La page de préparation (`outils.html`). |
+| `css/player/`, `css/admin/`, `css/tools/` | Styles de chaque page, découpés par composant. |
+| `outils/` | Script Node `publier.js`. |
+| `test/` | Tests. |
 - Aucune dépendance, aucun build : HTML + JavaScript natif.

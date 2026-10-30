@@ -1,0 +1,28 @@
+/* Dashboard : variables de couleur (style « Liquid Glass ») */
+
+/*
+ * Dashboard organisation, dans l'esprit des interfaces Apple récentes (« Liquid Glass ») :
+ * surfaces en verre dépoli, grands rayons, couleurs système, typographie SF.
+ */
+:root {
+  --blue: #007aff;
+  --green: #34c759;
+  --orange: #ff9500;
+  --red: #ff3b30;
+  --indigo: #5856d6;
+  --label: #1d1d1f;
+  --muted: #6e6e73;
+  --faint: #aeaeb2;
+  --fill: rgba(120, 120, 128, .12);   /* fond des contrôles */
+  --fill-2: rgba(120, 120, 128, .08);
+  --sep: rgba(60, 60, 67, .12);       /* filets */
+  --card: rgba(255, 255, 255, .78);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 28px rgba(0, 0, 0, .07);
+  --radius: 22px;
+  /* anciens noms, encore utilisés par quelques règles */
+  --navy: var(--label);
+  --sea: var(--blue);
+  --coral: var(--red);
+  --amber: var(--orange);
+  --sand: var(--fill);
+}

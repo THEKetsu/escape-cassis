@@ -1,0 +1,36 @@
+/* Dashboard : tchat avec les équipes */
+
+/* ---------- tchat ---------- */
+
+.chat-cell { background: none; padding: 4px 10px; white-space: nowrap; }
+.chat-cell.unread, button.unread { background: var(--red); color: #fff; font-weight: 700; animation: ping 1.4s infinite; }
+.chat-cell.unread b { color: #fff; }
+@keyframes ping { 50% { box-shadow: 0 0 0 6px rgba(255, 59, 48, .2); } }
+.chat-panel {
+  position: fixed; top: 12px; right: 12px; bottom: 12px; z-index: 48; width: min(400px, calc(100vw - 24px)); /* au-dessus de la carte plein écran */
+  display: flex; flex-direction: column; padding: 16px; border-radius: 28px;
+  background: rgba(255, 255, 255, .72); -webkit-backdrop-filter: blur(30px) saturate(180%); backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .8); box-shadow: 0 24px 70px rgba(0, 0, 0, .2);
+  animation: slide-in .3s cubic-bezier(.2, .8, .2, 1);
+}
+@keyframes slide-in { from { transform: translateX(30px); opacity: 0; } }
+.chat-panel header { align-items: flex-start; flex-wrap: nowrap; }
+.chat-panel h2 { margin: 0; font-size: 19px; }
+.chat-panel header button { width: 32px; height: 32px; padding: 0; flex: none; }
+.chat-where { display: block; margin-top: 2px; }
+.chat-where b { color: var(--blue); }
+.chat-panel .chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin: 14px -4px; padding: 4px; }
+.chat-panel form { display: grid; gap: 8px; }
+.chat-panel textarea {
+  font: inherit; padding: 11px 14px; border: 0; border-radius: 18px; resize: none; outline: none;
+  background: rgba(255, 255, 255, .9); box-shadow: inset 0 0 0 1px var(--sep);
+}
+.chat-panel textarea:focus { box-shadow: inset 0 0 0 1px var(--blue), 0 0 0 4px rgba(0, 122, 255, .15); }
+.chat-panel form button { background: var(--blue); color: #fff; font-weight: 600; padding: 10px; }
+.chat-panel .err { margin: 0; font-size: 13px; }
+/* bulles façon Messages */
+.msg { max-width: 82%; align-self: flex-start; background: #e9e9eb; border-radius: 20px; padding: 8px 13px; }
+.msg.me { align-self: flex-end; background: var(--blue); color: #fff; }
+.msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.35; }
+.msg small { display: block; font-size: 11px; margin-top: 3px; }
+.msg.me small { color: rgba(255, 255, 255, .75); text-align: right; }

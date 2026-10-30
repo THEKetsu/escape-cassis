@@ -1,0 +1,13 @@
+/* Dashboard : adaptations aux petits écrans (à charger en dernier) */
+
+@media (max-width: 900px) {
+  .map-list { position: static; width: auto; margin-top: 12px; max-height: none; border-radius: var(--radius); }
+  .map-wrap.full .map-list { display: none; }
+  .map-legend { display: none; }
+}
+@media (max-width: 800px) {
+  #admin { padding: 10px 12px 30px; }
+  .cols { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .bar { position: static; }
+}

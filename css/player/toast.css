@@ -1,0 +1,22 @@
+/* Jeu : notifications, confettis et mouvement réduit */
+
+/* ---------- notifications et confettis ---------- */
+
+#toasts { position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 0; right: 0; z-index: 40; display: grid; justify-items: center; gap: 8px; pointer-events: none; padding: 0 14px; }
+.toast {
+  display: flex; align-items: center; gap: 12px; max-width: 420px; width: 100%;
+  background: var(--ink); color: #fff; border-radius: 18px; padding: 12px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3); animation: drop .4s cubic-bezier(.3, 1.4, .5, 1);
+}
+.toast.out { animation: fade .4s reverse forwards; }
+.toast-icon { font-size: 30px; }
+.toast small { display: block; color: #b9c6d0; }
+@keyframes drop { from { transform: translateY(-120%); } }
+
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 35; overflow: hidden; }
+.confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; animation: fall linear forwards; }
+@keyframes fall { to { top: 105vh; transform: rotate(720deg) translateX(40px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+}

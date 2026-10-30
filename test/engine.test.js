@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
-const E = require('../js/engine.js');
+const E = require('../js/core/index.js');
 
 function loadGame() {
   const sandbox = { window: {} };
