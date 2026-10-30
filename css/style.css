@@ -292,6 +292,31 @@ h2 { font-family: var(--display); font-size: 18px; font-weight: 800; margin: 22p
 .bar-mini i { display: block; height: 100%; background: var(--green); border-radius: 6px; }
 .board-time { font-weight: 800; font-variant-numeric: tabular-nums; }
 
+/* ---------- tchat avec l'organisation ---------- */
+
+.chat-btn, .chat-wide { position: relative; }
+.chat-wide { margin-top: 10px; }
+.chat-badge {
+  position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 10px; background: var(--coral); color: #fff; font-size: 12px; font-weight: 800;
+  display: grid; place-items: center; box-shadow: 0 0 0 2px #fff; animation: pop .3s;
+}
+.chat-badge[hidden] { display: none; }
+.chat-wide .chat-badge { position: static; box-shadow: none; }
+.chat-list { display: grid; gap: 8px; max-height: 45vh; overflow-y: auto; margin: 10px 0 12px; padding: 2px; text-align: left; }
+.msg { max-width: 82%; justify-self: start; background: var(--soft); border-radius: 16px 16px 16px 4px; padding: 8px 12px; }
+.msg.me { justify-self: end; background: var(--ink); color: #fff; border-radius: 16px 16px 4px 16px; }
+.msg p { margin: 0; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.msg.me small { color: #b9c6d0; text-align: right; }
+.chat-form { display: grid; gap: 8px; margin-bottom: 10px; }
+.chat-form textarea {
+  font: inherit; font-size: 17px; padding: 12px 16px; border: 2px solid var(--line); border-radius: 18px;
+  resize: none; width: 100%; color: var(--ink);
+}
+.chat-form textarea:focus { outline: none; border-color: var(--zone); }
+.chat-form .feedback { margin: 0; min-height: 0; }
+
 /* ---------- notifications et confettis ---------- */
 
 #toasts { position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 0; right: 0; z-index: 40; display: grid; justify-items: center; gap: 8px; pointer-events: none; padding: 0 14px; }

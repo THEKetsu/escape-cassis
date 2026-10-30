@@ -133,3 +133,63 @@ test('distance GPS', () => {
   const d = E.distance(43.2131, 5.5357, 43.2140, 5.5357);
   assert.ok(d > 95 && d < 105);
 });
+
+test('tchat : messages non lus de l\'autre côté', () => {
+  const msgs = [
+    { id: 1, sender: 'team' }, { id: 2, sender: 'admin' }, { id: 3, sender: 'team' }, { id: 5, sender: 'team' },
+  ];
+  assert.strictEqual(E.unreadCount(msgs, 0, 'team'), 3);
+  assert.strictEqual(E.unreadCount(msgs, 3, 'team'), 1);
+  assert.strictEqual(E.unreadCount(msgs, 1, 'admin'), 1);
+  assert.strictEqual(E.unreadCount(msgs, 5, 'team'), 0);
+  assert.strictEqual(E.unreadCount(undefined, 0, 'team'), 0);
+});
+
+test('carte : position d\'une équipe déduite de son avancement', () => {
+  const step = { type: 'info' };
+  const game = {
+    teams: { T: { circuit: [1, 2], variant: 'A' } },
+    zones: {
+      1: { name: 'Un', lat: 43.0, lng: 5.0, A: [step, step] },
+      2: { name: 'Deux', lat: 43.2, lng: 5.4, A: [step, step] },
+    },
+    final: { name: 'Fin', steps: [step] },
+  };
+  const path = E.buildPath(game, 'T');
+  assert.strictEqual(E.teamLocation(game, path, { startedAt: null }), null);
+  // 1re étape : en route vers la zone 1, sans point de départ connu
+  let loc = E.teamLocation(game, path, { startedAt: 1, stepIndex: 0 });
+  assert.deepStrictEqual([loc.lat, loc.lng, loc.enRoute, loc.from], [43.0, 5.0, true, null]);
+  // sur place dans la zone 1
+  loc = E.teamLocation(game, path, { startedAt: 1, stepIndex: 1 });
+  assert.deepStrictEqual([loc.zoneId, loc.enRoute], ['1', false]);
+  // en route de la zone 1 vers la zone 2 : à mi-chemin
+  loc = E.teamLocation(game, path, { startedAt: 1, stepIndex: 2 });
+  assert.ok(loc.enRoute && Math.abs(loc.lat - 43.1) < 1e-9 && Math.abs(loc.lng - 5.2) < 1e-9);
+  // final sans position : inconnue, comme une équipe arrivée
+  assert.strictEqual(E.teamLocation(game, path, { startedAt: 1, stepIndex: 4 }), null);
+  assert.strictEqual(E.teamLocation(game, path, { startedAt: 1, finishedAt: 2, stepIndex: 5 }), null);
+  game.final.lat = 43.1;
+  game.final.lng = 5.1;
+  loc = E.teamLocation(game, path, { startedAt: 1, finishedAt: 2, stepIndex: 5 });
+  assert.deepStrictEqual([loc.zoneId, loc.lat], ['final', 43.1]);
+  // validation : une zone sans position est signalée dès qu'une autre en a une
+  delete game.zones[2].lat;
+  assert.ok(E.validate(game).warnings.some((w) => w.startsWith('Zone 2 : lat/lng')));
+});
+
+test('carte : zoom et tuiles qui englobent tous les points', () => {
+  const game = loadGame();
+  const points = Object.keys(game.zones).map((z) => E.zonePoint(game, z));
+  const view = E.mapView(points, 800, 420);
+  assert.ok(view.zoom >= 15 && view.zoom <= 18);
+  points.forEach((p) => {
+    const { x, y } = view.project(p);
+    assert.ok(x >= 40 && x <= 760 && y >= 40 && y <= 380, `${x},${y}`);
+  });
+  // les tuiles couvrent tout le cadre
+  assert.ok(view.tiles.every((t) => t.z === view.zoom));
+  assert.ok(Math.min(...view.tiles.map((t) => t.left)) <= 0 && Math.max(...view.tiles.map((t) => t.left + 256)) >= 800);
+  assert.ok(Math.min(...view.tiles.map((t) => t.top)) <= 0 && Math.max(...view.tiles.map((t) => t.top + 256)) >= 420);
+  assert.strictEqual(E.mapView([], 800, 420), null);
+});

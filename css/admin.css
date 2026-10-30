@@ -21,7 +21,7 @@ button { font: inherit; cursor: pointer; border: 0; border-radius: 8px; padding:
 .err { color: var(--coral); }
 
 header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-.meta { display: flex; gap: 12px; align-items: center; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; color: var(--muted); }
 
 .gate { max-width: 360px; margin: 15vh auto; background: #fff; padding: 24px; border-radius: 14px; display: grid; gap: 12px; text-align: center; }
 .gate input { font: inherit; font-size: 18px; padding: 10px; border: 2px solid #cfd8dd; border-radius: 10px; }
@@ -73,6 +73,47 @@ tr.detail td { background: #fafbfc; }
 .ranking li span { display: inline-block; min-width: 50%; }
 .ranking li.done b { color: var(--green); }
 .ranking li small { display: block; }
+
+.map { position: relative; width: 100%; overflow: hidden; border-radius: 12px; background: #dfe7eb; }
+.map-tiles, .map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-tiles img { position: absolute; max-width: none; user-select: none; }
+.map svg { pointer-events: none; }
+.map line { stroke-width: 3; stroke-dasharray: 6 6; stroke: var(--sea); opacity: .8; }
+.map line.stuck { stroke: var(--coral); }
+.map line.offline { stroke: var(--amber); }
+.map-zone { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; pointer-events: none; }
+.map-zone b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--navy); color: #fff; font-size: 13px; box-shadow: 0 0 0 3px #fff; }
+.map-zone small { margin-top: 3px; padding: 0 5px; border-radius: 6px; background: rgba(255, 255, 255, .85); color: var(--navy); font-weight: 600; font-size: 11px; white-space: nowrap; }
+.map-team { position: absolute; transform: translate(-50%, -50%); padding: 3px 7px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; background: var(--sea); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .35); cursor: default; z-index: 1; }
+.map-team.stuck { background: var(--coral); }
+.map-team.offline { background: var(--amber); }
+.map-team.done { background: var(--green); }
+.map-team.route { background: #fff; color: var(--sea); border: 2px dashed var(--sea); }
+.map-team.route.stuck { color: var(--coral); border-color: var(--coral); }
+.map-team.route.offline { color: var(--amber); border-color: var(--amber); }
+.map-credit { position: absolute; right: 0; bottom: 0; padding: 1px 6px; background: rgba(255, 255, 255, .8); color: #333; font-size: 11px; text-decoration: none; }
+.map-legend { font-size: 13px; margin: 6px 0 0; }
+
+.chat-cell { background: none; padding: 2px 6px; white-space: nowrap; }
+.chat-cell.unread, button.unread { background: var(--coral); color: #fff; font-weight: 700; animation: ping 1.2s infinite; }
+.chat-cell.unread b { color: #fff; }
+@keyframes ping { 50% { box-shadow: 0 0 0 5px rgba(231, 111, 81, .25); } }
+.chat-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 40; width: min(400px, 100vw);
+  background: #fff; box-shadow: -8px 0 30px rgba(0, 0, 0, .18); display: flex; flex-direction: column; padding: 14px;
+}
+.chat-panel header { align-items: flex-start; }
+.chat-panel h2 { margin: 0; }
+.chat-panel .chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin: 12px 0; padding: 2px; }
+.chat-panel form { display: grid; gap: 8px; }
+.chat-panel textarea { font: inherit; padding: 10px; border: 2px solid #cfd8dd; border-radius: 10px; resize: vertical; }
+.chat-panel textarea:focus { outline: none; border-color: var(--sea); }
+.chat-panel .err { margin: 0; font-size: 13px; }
+.msg { max-width: 85%; align-self: flex-start; background: #eef1f3; border-radius: 12px 12px 12px 3px; padding: 7px 11px; }
+.msg.me { align-self: flex-end; background: var(--navy); color: #fff; border-radius: 12px 12px 3px 12px; }
+.msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg small { display: block; font-size: 11px; margin-top: 2px; }
+.msg.me small { color: #b9c6d0; text-align: right; }
 
 footer { margin-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
 .danger { background: #fdecea; color: var(--coral); }

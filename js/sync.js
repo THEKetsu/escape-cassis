@@ -5,7 +5,10 @@
 window.Sync = (function () {
   const cfg = (window.CONFIG && window.CONFIG.supabase) || {};
   const enabled = !!(cfg.url && cfg.key);
-  const base = enabled ? cfg.url.replace(/\/+$/, '') + '/rest/v1/progress' : '';
+  const rest = enabled ? cfg.url.replace(/\/+$/, '') + '/rest/v1/' : '';
+  const base = rest + 'progress';
+  const msgBase = rest + 'messages';
+  const MSG_FIELDS = 'select=id,team,sender,body,step,created_at';
 
   function headers(extra) {
     const h = Object.assign({ apikey: cfg.key, 'Content-Type': 'application/json' }, extra);
@@ -41,8 +44,30 @@ window.Sync = (function () {
   }
 
   function deleteAll() {
-    return request(base + '?team=not.is.null', { method: 'DELETE', headers: headers() });
+    return Promise.all([
+      request(base + '?team=not.is.null', { method: 'DELETE', headers: headers() }),
+      request(msgBase + '?id=gt.0', { method: 'DELETE', headers: headers() }),
+    ]);
   }
 
-  return { enabled, saveState, loadTeam, loadAll, deleteAll };
+  // ---------- tchat (table "messages") ----------
+
+  // Renvoie le message enregistré (avec son id), pour l'afficher sans attendre la prochaine lecture
+  async function sendMessage(msg) {
+    const res = await request(msgBase + '?' + MSG_FIELDS, {
+      method: 'POST',
+      headers: headers({ Prefer: 'return=representation' }),
+      body: JSON.stringify(msg),
+    });
+    return (await res.json())[0];
+  }
+
+  // Messages postérieurs à afterId, d'une équipe ou de toutes (team omis)
+  async function loadMessages(team, afterId) {
+    const filter = (team ? `team=eq.${encodeURIComponent(team)}&` : '') + `id=gt.${afterId || 0}`;
+    const res = await request(`${msgBase}?${filter}&order=id.asc&${MSG_FIELDS}`, { headers: headers() });
+    return res.json();
+  }
+
+  return { enabled, saveState, loadTeam, loadAll, deleteAll, sendMessage, loadMessages };
 })();

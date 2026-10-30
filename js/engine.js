@@ -154,6 +154,63 @@
     return 2 * R * Math.asin(Math.sqrt(a));
   }
 
+  // Position d'une zone (lat, lng facultatifs dans contenu.js), 'final' compris
+  function zonePoint(game, zoneId) {
+    const z = zoneId === 'final' ? game.final : game.zones && game.zones[zoneId];
+    return z && typeof z.lat === 'number' && typeof z.lng === 'number' ? { lat: z.lat, lng: z.lng } : null;
+  }
+
+  // Position approximative d'une équipe, déduite de son avancement (aucun GPS) :
+  // sur sa zone si elle y joue, à mi-chemin depuis la zone précédente si elle cherche la suivante
+  // (la 1re étape d'une zone est l'énigme qui y mène). null si la position est inconnue.
+  function teamLocation(game, path, state) {
+    if (!state || !state.startedAt) return null;
+    if (state.finishedAt) {
+      const end = zonePoint(game, 'final');
+      return end && { lat: end.lat, lng: end.lng, zoneId: 'final', enRoute: false, from: null, to: end };
+    }
+    const step = path[state.stepIndex];
+    const to = step && zonePoint(game, step.zoneId);
+    if (!to) return null;
+    const enRoute = step.zoneStep === 0;
+    const from = enRoute && state.stepIndex > 0 ? zonePoint(game, path[state.stepIndex - 1].zoneId) : null;
+    const at = from ? { lat: (from.lat + to.lat) / 2, lng: (from.lng + to.lng) / 2 } : to;
+    return { lat: at.lat, lng: at.lng, zoneId: step.zoneId, enRoute, from, to };
+  }
+
+  // Carte en tuiles OpenStreetMap (projection Web Mercator, tuiles de 256 px) :
+  // choisit le zoom le plus fort qui fait tenir tous les points dans width × height,
+  // puis renvoie les tuiles à afficher et une fonction point -> pixel dans le cadre.
+  function mapView(points, width, height, opts) {
+    const o = Object.assign({ padding: 40, minZoom: 3, maxZoom: 18 }, opts);
+    if (!points.length) return null;
+    const world = (p, z) => {
+      const scale = 256 * 2 ** z;
+      const s = Math.sin((p.lat * Math.PI) / 180);
+      return { x: ((p.lng + 180) / 360) * scale, y: (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * scale };
+    };
+    let zoom = o.minZoom;
+    for (let z = o.maxZoom; z >= o.minZoom; z--) {
+      const px = points.map((p) => world(p, z));
+      const w = Math.max(...px.map((p) => p.x)) - Math.min(...px.map((p) => p.x));
+      const h = Math.max(...px.map((p) => p.y)) - Math.min(...px.map((p) => p.y));
+      if (w <= width - 2 * o.padding && h <= height - 2 * o.padding) { zoom = z; break; }
+    }
+    const px = points.map((p) => world(p, zoom));
+    const cx = (Math.max(...px.map((p) => p.x)) + Math.min(...px.map((p) => p.x))) / 2;
+    const cy = (Math.max(...px.map((p) => p.y)) + Math.min(...px.map((p) => p.y))) / 2;
+    const x0 = cx - width / 2;
+    const y0 = cy - height / 2;
+    const tiles = [];
+    for (let ty = Math.floor(y0 / 256); ty <= Math.floor((y0 + height) / 256); ty++) {
+      for (let tx = Math.floor(x0 / 256); tx <= Math.floor((x0 + width) / 256); tx++) {
+        tiles.push({ x: tx, y: ty, z: zoom, left: tx * 256 - x0, top: ty * 256 - y0 });
+      }
+    }
+    const project = (p) => { const w = world(p, zoom); return { x: w.x - x0, y: w.y - y0 }; };
+    return { zoom, width, height, tiles, project };
+  }
+
   // Étape "tap" : x, y en % de l'image, r en % de la largeur ; ratio = hauteur / largeur
   function hitTarget(x, y, target, ratio) {
     const dx = x - target.x;
@@ -204,6 +261,11 @@
       .sort((a, b) => (b.done - a.done) || (a.done ? a.total - b.total : (b.progress - a.progress) || (a.total - b.total)));
   }
 
+  // Tchat : messages de l'autre côté (sender = 'team' ou 'admin') arrivés après le dernier lu
+  function unreadCount(messages, readId, sender) {
+    return (messages || []).filter((m) => m.sender === sender && m.id > (readId || 0)).length;
+  }
+
   function allSteps(game) {
     const out = [];
     Object.keys(game.zones || {}).forEach((zoneId) => {
@@ -246,6 +308,14 @@
       const missing = zoneIds.filter((z) => !seen.has(z));
       if (missing.length) warnings.push(`Équipe ${t} ne visite pas la/les zone(s) ${missing.join(', ')}`);
     });
+
+    // Carte du dashboard : dès qu'une zone a une position, les autres devraient en avoir une
+    const located = zoneIds.filter((z) => zonePoint(game, z));
+    if (located.length) {
+      zoneIds.filter((z) => !zonePoint(game, z))
+        .forEach((z) => warnings.push(`Zone ${z} : lat/lng manquants, ses équipes n'apparaîtront pas sur la carte`));
+      if (game.final && !zonePoint(game, 'final')) warnings.push('Final : lat/lng manquants, les équipes arrivées n\'apparaîtront pas sur la carte');
+    }
 
     allSteps(game).forEach(({ step, where }) => {
       if (!STEP_TYPES.includes(step.type)) return errors.push(`${where} : type "${step.type}" inconnu`);
@@ -316,6 +386,6 @@
   return {
     STEP_TYPES, words, normalize, hash, candidates, checkAnswer, codeMatches,
     variantFor, buildPath, hintPenalty, elapsedSeconds, totalSeconds, formatDuration,
-    distance, hitTarget, BADGES, earnedBadges, rankTeams, allSteps, stepImages, validate, simulate, publish, publishedFile,
+    distance, zonePoint, teamLocation, mapView, hitTarget, BADGES, earnedBadges, rankTeams, unreadCount, allSteps, stepImages, validate, simulate, publish, publishedFile,
   };
 });

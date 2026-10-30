@@ -111,6 +111,8 @@ window.GAME = {
   "zones": {
     "1": {
       "name": "Le Port",
+      "lat": 43.21395,
+      "lng": 5.53606,
       "A": [
         {
           "type": "text",
@@ -223,6 +225,8 @@ window.GAME = {
     },
     "2": {
       "name": "Église Saint-Michel",
+      "lat": 43.21583,
+      "lng": 5.53789,
       "A": [
         {
           "type": "text",
@@ -308,6 +312,8 @@ window.GAME = {
     },
     "3": {
       "name": "Le Four Banal",
+      "lat": 43.21478,
+      "lng": 5.53776,
       "A": [
         {
           "type": "text",
@@ -377,6 +383,8 @@ window.GAME = {
     },
     "4": {
       "name": "Place Baragnon",
+      "lat": 43.21427,
+      "lng": 5.5396,
       "A": [
         {
           "type": "text",
@@ -440,6 +448,8 @@ window.GAME = {
     },
     "5": {
       "name": "Plage de la Grande Mer",
+      "lat": 43.21281,
+      "lng": 5.53782,
       "A": [
         {
           "type": "gps",
