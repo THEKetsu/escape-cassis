@@ -1,6 +1,6 @@
 /* Fichier généré à partir de contenu.js : ne pas modifier à la main. */
 window.GAME = {
-  "id": "cassis-ccoi-2026",
+  "id": "cassis-ccoi-2026-b",
   "title": "Les Secrets de Cassis",
   "settings": {
     "salt": "cassis-ccoi-2026-x7Qp",
@@ -541,8 +541,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "e0UcctYybAe/mhEdbdrEQQ==",
-    "iv": "2B4Qm44x+0zs3bBM",
-    "data": "qkkVFvXC1XrdUAi4yuJNteBC+kWDqZq0t+y9N88HSxj3vf2gsDww04zj1aCjy4BUhKj/KGvNQSHClmI7vCtGeo4aTtaemXq1EidzSge8EQfxnJ7Kw+hCEOL/D+26UIRr2TdkASc5h4vZqjBHBYVYCtuOL8e507IoytvyzP1oMMYeSGphV5kork52zktCvOMzZH5gZTu+YFl1cTtxonMF3dpc5Wqdi6O/3zFwQNL8CY/J98fOKndJoLvVl4dE271ozoByNppT+4sSDCa3bvPqbfTr4DzMSsK8c0+fr+H/KbJJlixMDVE5aLhCvfuoJ80HtOGCnvvcuKX/SyWreVuMpMmMjwvuYDuZbG1OYc9Svyby5qQiUq7FvKeNxZqVCHqREda3Dii3Ic4wcqigw2RnYA9Nj+Z1Qs4Jp2k5+fizZxN6xA6vdIT/bTw8lOABUojD6ClezyvFYkkWFVWukhMH3waNscn4MdQAW0dKXKPNP74mdQIJ0zYZf9q6wfnnfPgwZGYCZ+qcUpcF7n4hDWOdyizJ1vCmvFz5pMQzpyw2HUOo9HLkJag+D047MP1rj/osGuWIrEI8JiCYPYWOMwiigFkxtS+AYr3fQxRGeMVlUdpRGTdkIHoQY9AMp4480hzHp379RFUbgUgNjJdATRVSuJB5M7smMTBhvdGfQBkk3Wo4cVeC8UBGkQOWxbuBmMMScYz4WTn36ICAj/6/D3jW/c80SIbT1tJggkIjhGL9pThhMElBrpdU3yV+x7o7iYv+dQzSBnqlGrS/EhBVRDeDmnzm3RLFDvMq9yshk58sOJ2FKe08iF+RzjFqMo/VVPNPC0yeRkJzy8SblhM1nJK3XJoFbkj7ipUIMRZ4SzSWfS2sbzOqCUjmjgEa+Jz6RUXI3SoetabuBa9ApZ3MzX0="
+    "salt": "U8FLYjVd3Z1IMQeE+6mEkg==",
+    "iv": "/3V1o6UVRUqD40kO",
+    "data": "C9HXprxo76IkqmSPaXF5OvqytsA7TaMwNu2bhkfVQkd0N9FTzmtf3z45cBm52LuE3uo15St29THcMfRBlUc60yMnClKEIEkbAD4Jey06DCYG1sBNFnOC5sP2/doVca23/Ya0GzBL0ZfBBbModxwY/z+wpJXWaJwm8dardCKL4JoRSsapztoHyimsIW4uLvW3biPjpJuTtDbICfqAEJbu6LgDITFwxeyYXBKihp2bygW8qaPFysdUe9Lha4vl9QskBrgtvYGXALJRzrypic4x7KZvodGV+dZa4XdzYclAbE2KMxkEXfuzLOg/yp6t5spIv6xbb1DccuAuYDO4ncjk5Ggmv4iRCwFoJxMoARv0lsUYdqPml1Ze5ct3N9BDXuVYDn9tHQS3NexoyNtiM7c8dk98irhRrKrRvF2b2sV6qWpyBAP9L8AszepcY5aE51X2QsDkz4oAi+aUGC4mtEc6icoW0vTxgtRBv4lQXNXJ7CX6YE1IKOyrOPCneqwaJrxRktRaBlS4viMzNkyWmacl9pzWzISn2TSOrkkJTxqvJsSZAbDjLYVZv24U+zAMnosT0XxLuqwu9tAAAuyb2ocRpTopFF1u2BALctWhx6JcQdq3uIxJTFvj8HXOit6RgEY4pwQN3ouvXg8kJhnSu0ELdwiZ2UyWw21qowihQ/dgSeCh7aqpz78QzH2e+WoMxn7bveK9W+KWnGGHfvK2abH2Pi7jJlJm3HA45mHVRO909deVAKCnCzEFLU2hDyTh0Rj1ltXGMCpVNpY5+i1PuXwfscrqgWTDsaCAXtL6ZFZ0RGbNX+brHTAHbql74kKED3cxbn1uHJFKGIpDeO/AK11KdFdbxHfff6Q4gIVzO9py7d2VsjtQU6MXpcDa+D5bYdFSR/gMhTtTZRxEU9wvZWc="
   }
 };
