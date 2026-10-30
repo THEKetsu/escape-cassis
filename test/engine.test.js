@@ -215,6 +215,15 @@ test('carte : zoom et tuiles qui englobent tous les points', () => {
   assert.ok(Math.min(...view.tiles.map((t) => t.left)) <= 0 && Math.max(...view.tiles.map((t) => t.left + 256)) >= 800);
   assert.ok(Math.min(...view.tiles.map((t) => t.top)) <= 0 && Math.max(...view.tiles.map((t) => t.top + 256)) >= 420);
   assert.strictEqual(E.mapView([], 800, 420), null);
+  // zoom imposé (boutons + / −) : même centre, plafonné à 19
+  const closer = E.mapView(points, 800, 420, { zoom: view.zoom + 1 });
+  assert.strictEqual(closer.zoom, view.zoom + 1);
+  const c = (v) => v.project({ lat: (Math.min(...points.map((p) => p.lat)) + Math.max(...points.map((p) => p.lat))) / 2, lng: (Math.min(...points.map((p) => p.lng)) + Math.max(...points.map((p) => p.lng))) / 2 });
+  assert.ok(Math.abs(c(closer).x - 400) < 1 && Math.abs(c(closer).y - 210) < 2);
+  assert.strictEqual(E.mapView(points, 800, 420, { zoom: 25 }).zoom, 19);
+  // bande réservée à gauche : tous les points restent à sa droite
+  const side = E.mapView(points, 800, 420, { left: 250 });
+  points.forEach((p) => assert.ok(side.project(p).x >= 250 + 40 - 1));
   // échelle cohérente avec la distance GPS : 100 m mesurés = 100 m dessinés (à 1 % près)
   const a = view.project({ lat: 43.2131, lng: 5.5357 });
   const b = view.project({ lat: 43.2140, lng: 5.5357 });

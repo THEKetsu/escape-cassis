@@ -171,36 +171,59 @@
     }).join('') + '</div>';
   }
 
-  // ---------- carte (tuiles OpenStreetMap, position déduite de l'avancement) ----------
+  // ---------- carte (tuiles OpenStreetMap) ----------
 
   // Cadre en pixels de tuile : un peu plus grand que l'écran, pour zoomer au plus près sans flou
   const MAP_W = 1500;
   const MAP_H = 900;
   const zonePoints = Object.keys(GAME.zones).concat('final')
     .map((z) => ({ id: z, point: E.zonePoint(GAME, z) })).filter((z) => z.point);
-  const view = E.mapView(zonePoints.map((z) => z.point), MAP_W, MAP_H);
+  // Sur grand écran, la liste des équipes est posée sur la gauche de la carte : on centre à côté
+  const MAP_LEFT = window.innerWidth > 900 ? 340 : 0;
+  const fitView = E.mapView(zonePoints.map((z) => z.point), MAP_W, MAP_H, { left: MAP_LEFT });
+  let view = fitView;
+  let mapZoom = 0;        // décalage choisi avec les boutons + / −
+  let mapFull = false;    // carte en plein écran
+  let selected = null;    // équipe mise en avant (clic dans la liste)
   const pct = (v, total) => (v / total * 100).toFixed(3) + '%';
   let tilesEl = null;
 
-  // Les tuiles sont créées une seule fois : render() tourne chaque seconde et ne doit pas les recharger
+  function zoomMap(delta) {
+    if (!fitView) return;
+    mapZoom = delta ? Math.max(-2, Math.min(2, mapZoom + delta)) : 0;
+    view = E.mapView(zonePoints.map((z) => z.point), MAP_W, MAP_H, { zoom: fitView.zoom + mapZoom, left: MAP_LEFT });
+    render();
+  }
+
+  // Tuiles OpenStreetMap (gratuites, sans clé ; les couleurs sont adoucies en CSS).
+  // Créées une fois par niveau de zoom : render() tourne chaque seconde et ne doit pas les recharger.
   function tiles() {
-    if (!tilesEl) {
+    if (!tilesEl || tilesEl.dataset.zoom !== String(view.zoom)) {
       tilesEl = document.createElement('div');
       tilesEl.className = 'map-tiles';
+      tilesEl.dataset.zoom = view.zoom;
       tilesEl.innerHTML = view.tiles.map((t) => `<img alt="" src="https://tile.openstreetmap.org/${t.z}/${t.x}/${t.y}.png"
         style="left:${pct(t.left, MAP_W)};top:${pct(t.top, MAP_H)};width:calc(${pct(256, MAP_W)} + 1px);height:calc(${pct(256, MAP_H)} + 1px)">`).join('');
     }
     return tilesEl;
   }
 
+  // Où en est l'équipe, en une ligne (liste de la carte et infobulles)
+  function whereText(info, loc) {
+    if (!info.st || !info.st.startedAt) return info.status === 'registered' ? 'prête au départ' : 'pas encore partie';
+    if (info.st.finishedAt) return 'arrivée 🏁';
+    const where = loc && loc.enRoute ? `vers ${info.step.zoneName}` : info.step.zoneName;
+    const age = loc && loc.live ? ` · GPS ${Math.max(0, Math.round((Date.now() - loc.at) / 1000))} s` : '';
+    return where + age;
+  }
+
   function map(infos) {
     if (!view) return '<p class="muted">Ajoutez <code>lat</code> et <code>lng</code> aux zones dans contenu.js pour afficher la carte.</p>';
     const placed = [];
-    const unplaced = [];
+    const locs = {};
     infos.filter((i) => i.st && i.st.startedAt).forEach((i) => {
-      const loc = E.teamLocation(GAME, i.path, i.st, Date.now());
+      const loc = locs[i.t] = E.teamLocation(GAME, i.path, i.st, Date.now());
       if (loc) placed.push(Object.assign({ info: i, loc }, view.project(loc)));
-      else unplaced.push(i);
     });
     // équipes au même endroit : réparties en cercle autour du point,
     // et toujours décalées quand elles sont sur une zone pour ne pas cacher son numéro
@@ -233,55 +256,72 @@
         <b>${z.id === 'final' ? '🏁' : esc(z.id)}</b><small>${esc(name)}</small></div>`;
     }).join('');
     const teams = placed.map((p) => {
-      const where = p.loc.enRoute ? `en route vers ${p.info.step.zoneName}` : p.loc.zoneId === 'final' && p.info.st.finishedAt ? 'arrivée' : `sur place : ${p.info.step.zoneName}`;
-      const gps = p.loc.live ? ` · GPS ±${p.loc.acc} m, il y a ${Math.max(0, Math.round((Date.now() - p.loc.at) / 1000))} s` : '';
-      const style = p.loc.live ? 'live' : p.loc.enRoute ? 'route' : '';
-      return `<span class="map-team ${STATUS[p.info.status][2]} ${style}" style="${at(p)}"
-        title="${esc((p.info.st.teamName || p.info.team.name || p.info.t) + ' · ' + where + gps)}">${p.loc.live ? '📍' : ''}${esc(p.info.t)}</span>`;
+      const name = p.info.st.teamName || p.info.team.name || p.info.t;
+      const gps = p.loc.live ? ` · précision ±${p.loc.acc} m` : '';
+      const style = [p.loc.live ? 'live' : p.loc.enRoute ? 'route' : '', selected === p.info.t ? 'sel' : ''].join(' ');
+      return `<button class="map-team ${STATUS[p.info.status][2]} ${style}" style="${at(p)}" data-action="select" data-team="${esc(p.info.t)}"
+        title="${esc(name + ' · ' + whereText(p.info, p.loc) + gps)}">${esc(p.info.t)}</button>`;
     }).join('');
+    // liste des équipes posée sur la carte, façon « Localiser »
+    const list = infos.map((i) => `
+      <button class="map-row ${selected === i.t ? 'sel' : ''} ${i.st && i.st.startedAt ? '' : 'off'}" data-action="select" data-team="${esc(i.t)}">
+        <span class="dot ${STATUS[i.status][2]} ${locs[i.t] && locs[i.t].live ? 'live' : ''}">${esc(i.t)}</span>
+        <span class="row-text"><b>${esc((i.st && i.st.teamName) || i.team.name || i.t)}</b>
+          <small>${esc(whereText(i, locs[i.t]))}${i.st && i.st.startedAt && !locs[i.t] && !i.st.finishedAt ? ' · hors carte' : ''}</small></span>
+        ${unread(i.t) ? `<span class="row-badge">${unread(i.t)}</span>` : ''}
+      </button>`).join('');
     return `
-      <div class="map" style="aspect-ratio:${MAP_W} / ${MAP_H}">
-        <div id="map-tiles"></div>
-        <svg viewBox="0 0 ${MAP_W} ${MAP_H}" preserveAspectRatio="none">${lines}</svg>
-        ${zones}${teams}
-        <a class="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a>
-      </div>
-      <p class="muted map-legend">${S.liveLocation ? '📍 Position GPS du téléphone (moins de 2 min, cercle = précision). Sinon position déduite' : 'Position déduite de l\'avancement'} :
-        sur la zone où l'équipe joue, ou en pointillés à mi-chemin quand elle cherche la suivante.
-        ${unplaced.length ? `<br>Non placées : ${unplaced.map((i) => esc(i.t) + (i.status === 'done' ? ' (arrivée)' : '')).join(', ')}` : ''}</p>`;
+      <div class="map-wrap ${mapFull ? 'full' : ''}">
+        <div class="map" style="aspect-ratio:${MAP_W} / ${MAP_H}">
+          <div id="map-tiles"></div>
+          <svg viewBox="0 0 ${MAP_W} ${MAP_H}" preserveAspectRatio="none">${lines}</svg>
+          ${zones}${teams}
+          <div class="map-ctrl glass">
+            <button data-action="zoom-in" title="Zoomer">+</button>
+            <button data-action="zoom-out" title="Dézoomer">−</button>
+            <button data-action="zoom-fit" title="Recentrer sur les zones" ${mapZoom ? '' : 'disabled'}>◎</button>
+            <button data-action="map-full" title="${mapFull ? 'Quitter le plein écran (Échap)' : 'Plein écran'}">${mapFull ? '✕' : '⤢'}</button>
+          </div>
+          <div class="map-legend glass">${S.liveLocation ? '<span><i class="lg live"></i>GPS du téléphone</span>' : ''}
+            <span><i class="lg"></i>sur la zone</span><span><i class="lg route"></i>en chemin</span></div>
+          <a class="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© contributeurs OpenStreetMap</a>
+        </div>
+        <div class="map-list glass">${list}</div>
+      </div>`;
   }
 
   function render() {
     const infos = teamIds.map(teamInfo);
     const count = (s) => infos.filter((i) => i.status === s).length;
     $root.innerHTML = `
-      <header>
-        <h1>🧭 ${esc(GAME.title)}</h1>
+      <header class="bar glass">
+        <div class="title">
+          <h1>${esc(GAME.title)}</h1>
+          <small>${fetchError ? `<span class="err">⚠️ ${esc(fetchError)}</span>` : `<span class="live-dot"></span>En direct · mis à jour à ${lastFetch ? new Date(lastFetch).toLocaleTimeString('fr-FR') : '…'}`}</small>
+        </div>
         <div class="meta">
-          ${fetchError ? `<span class="err">⚠️ ${esc(fetchError)}</span>` : ''}
-          <span>Mise à jour : ${lastFetch ? new Date(lastFetch).toLocaleTimeString('fr-FR') : '…'}</span>
           ${unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${unreadTotal()} message${unreadTotal() > 1 ? 's' : ''}</button>` : ''}
           <button data-action="book" class="dark">🔑 Réponses</button>
           <button data-action="qr" class="primary">📱 QR codes équipes</button>
-          <button data-action="refresh">↻</button>
+          <button data-action="refresh" class="icon" title="Actualiser">↻</button>
           <button data-action="wipe" class="danger">🗑️ Effacer toutes les données</button>
         </div>
       </header>
       <div id="warn"></div>
       <section class="kpis">
-        <div><b>${count('playing') + count('stuck') + count('offline')}</b><small>en jeu</small></div>
-        <div class="${count('stuck') ? 'alert' : ''}"><b>${count('stuck')}</b><small>bloquée(s) ?</small></div>
-        <div class="${count('offline') ? 'warnk' : ''}"><b>${count('offline')}</b><small>sans signal</small></div>
-        <div><b>${count('done')}/${infos.filter((i) => i.st && i.st.startedAt).length}</b><small>arrivées</small></div>
+        <div><span class="kpi-icon blue">🏃</span><b>${count('playing') + count('stuck') + count('offline')}</b><small>en jeu</small></div>
+        <div class="${count('stuck') ? 'alert' : ''}"><span class="kpi-icon red">🆘</span><b>${count('stuck')}</b><small>bloquée(s) ?</small></div>
+        <div class="${count('offline') ? 'warnk' : ''}"><span class="kpi-icon orange">📵</span><b>${count('offline')}</b><small>sans signal</small></div>
+        <div><span class="kpi-icon green">🏁</span><b>${count('done')}<i>/${infos.filter((i) => i.st && i.st.startedAt).length}</i></b><small>arrivées</small></div>
       </section>
+      <section><h2>Carte</h2>${map(infos)}</section>
       <section>
-        <h2>Équipes <small>(cliquez une ligne pour le détail)</small></h2>
+        <h2>Équipes <small>cliquez une ligne pour le détail</small></h2>
         <div class="table-wrap"><table class="teams">
           <tr><th>Équipe</th><th>Statut</th><th>Circuit</th><th>Position</th><th>Sur l'étape</th><th>Indices</th><th>Pénalités</th><th>Total</th><th>Signal</th><th>Tchat</th></tr>
           ${infos.map(teamRow).join('')}
         </table></div>
       </section>
-      <section><h2>Carte</h2>${map(infos)}</section>
       <div class="cols">
         <section><h2>Zones en ce moment</h2>${occupancy(infos)}</section>
         <section><h2>Classement</h2>${ranking(infos)}</section>
@@ -584,6 +624,17 @@
       if (action && action.dataset.action === 'refresh') return refresh();
       if (action && action.dataset.action === 'qr') return showQr();
       if (action && action.dataset.action === 'book') return showBook();
+      if (action && action.dataset.action === 'zoom-in') return zoomMap(1);
+      if (action && action.dataset.action === 'zoom-out') return zoomMap(-1);
+      if (action && action.dataset.action === 'zoom-fit') return zoomMap(0);
+      if (action && action.dataset.action === 'map-full') {
+        mapFull = !mapFull;
+        return render();
+      }
+      if (action && action.dataset.action === 'select') {
+        selected = selected === action.dataset.team ? null : action.dataset.team;
+        return render();
+      }
       if (action && action.dataset.action === 'chat') return openChat(action.dataset.team);
       if (action && action.dataset.action === 'chat-next') return openChat(teamIds.find((t) => unread(t)));
       if (action && action.dataset.action === 'wipe') {
@@ -598,6 +649,12 @@
       if (row) {
         const t = row.dataset.team;
         open.has(t) ? open.delete(t) : open.add(t);
+        render();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mapFull) {
+        mapFull = false;
         render();
       }
     });

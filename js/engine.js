@@ -187,11 +187,12 @@
     return { lat: at.lat, lng: at.lng, zoneId: step.zoneId, enRoute, from, to };
   }
 
-  // Carte en tuiles OpenStreetMap (projection Web Mercator, tuiles de 256 px) :
-  // choisit le zoom le plus fort qui fait tenir tous les points dans width × height,
+  // Carte en tuiles (projection Web Mercator, tuiles de 256 px) : choisit le zoom le plus fort
+  // qui fait tenir tous les points dans width × height (ou opts.zoom, centré pareil),
   // puis renvoie les tuiles à afficher et une fonction point -> pixel dans le cadre.
+  // opts.left : bande réservée à gauche du cadre (panneau posé sur la carte), où rien n'est centré.
   function mapView(points, width, height, opts) {
-    const o = Object.assign({ padding: 40, minZoom: 3, maxZoom: 18 }, opts);
+    const o = Object.assign({ padding: 40, minZoom: 3, maxZoom: 18, zoom: null, left: 0 }, opts);
     if (!points.length) return null;
     const world = (p, z) => {
       const scale = 256 * 2 ** z;
@@ -199,16 +200,17 @@
       return { x: ((p.lng + 180) / 360) * scale, y: (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * scale };
     };
     let zoom = o.minZoom;
-    for (let z = o.maxZoom; z >= o.minZoom; z--) {
+    if (o.zoom != null) zoom = Math.max(o.minZoom, Math.min(19, o.zoom));
+    else for (let z = o.maxZoom; z >= o.minZoom; z--) {
       const px = points.map((p) => world(p, z));
       const w = Math.max(...px.map((p) => p.x)) - Math.min(...px.map((p) => p.x));
       const h = Math.max(...px.map((p) => p.y)) - Math.min(...px.map((p) => p.y));
-      if (w <= width - 2 * o.padding && h <= height - 2 * o.padding) { zoom = z; break; }
+      if (w <= width - o.left - 2 * o.padding && h <= height - 2 * o.padding) { zoom = z; break; }
     }
     const px = points.map((p) => world(p, zoom));
     const cx = (Math.max(...px.map((p) => p.x)) + Math.min(...px.map((p) => p.x))) / 2;
     const cy = (Math.max(...px.map((p) => p.y)) + Math.min(...px.map((p) => p.y))) / 2;
-    const x0 = cx - width / 2;
+    const x0 = cx - (o.left + (width - o.left) / 2);
     const y0 = cy - height / 2;
     const tiles = [];
     for (let ty = Math.floor(y0 / 256); ty <= Math.floor((y0 + height) / 256); ty++) {
