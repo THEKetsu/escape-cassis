@@ -11,7 +11,7 @@
     A.save();
     A.cooldownUntil = Date.now() + 2000;
     A.vibrate([60, 60, 60]);
-    A.feedback('❌ Ce n\'est pas la bonne réponse.', 'bad');
+    A.feedback(A.current().wrong || '❌ Ce n\'est pas la bonne réponse.', 'bad');
     const input = document.getElementById('answer');
     if (input) A.restartAnimation(input, 'error');
     if (el) el.classList.add('wrong');

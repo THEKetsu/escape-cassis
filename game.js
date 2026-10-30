@@ -116,41 +116,53 @@ window.GAME = {
       "A": [
         {
           "type": "number",
-          "title": "La clé de pierre · 1. La date",
-          "text": "<p>Rendez-vous sur la <b>Place Baragnon</b> et trouvez le monument portant une date en chiffres romains.</p><p>Convertissez cette date en chiffres arabes.</p>",
+          "title": "Mission 1 — La clé de pierre",
+          "text": "<p>Votre mission commence sur la <b>Place Baragnon</b>.</p><p>Quelque part autour de vous, un monument conserve une information essentielle.</p><p>Observez attentivement la place et retrouvez le monument portant une date gravée en chiffres romains. Lorsque vous l'avez trouvée, convertissez cette date en chiffres arabes.</p><p><b>Quelle année avez-vous trouvée ?</b></p>",
+          "wrong": "❌ Ce n'est pas la bonne année.<br>Observez bien les monuments présents sur la place. Vous cherchez une date gravée en chiffres romains.<br>Réessayez.",
           "hints": [
-            "Cherchez un monument en pierre sur la Place Baragnon.",
-            "Observez la fontaine et cherchez une date en chiffres romains.",
+            "Vous cherchez un monument en pierre sur la Place Baragnon.",
+            "Approchez-vous de la fontaine Baragnon.<br>Une date y est gravée.",
             "Rappel : M = 1000, D = 500, C = 100, L = 50, X = 10, V = 5, I = 1."
           ],
+          "success": {
+            "title": "✅ DATE IDENTIFIÉE",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">1911</p><p>Mais cette date n'est pas votre destination.<br>Elle cache une clé.</p>"
+          },
           "h": [
             "69dc82a50df57076"
           ]
         },
         {
           "type": "number",
-          "title": "La clé de pierre · 2. La clé",
-          "text": "<p>Additionnez les quatre chiffres de l'année trouvée.</p><p>Le résultat est votre <b>clé César</b>.</p>",
-          "hints": [
-            "1 + 9 + 1 + 1 = ?"
-          ],
+          "title": "La clé",
+          "text": "<p>Additionnez les quatre chiffres de l'année :</p><p class=\"big-code\">1 + 9 + 1 + 1 = ?</p><p>Entrez votre résultat.</p>",
+          "wrong": "❌ La clé n'est pas correcte.<br>Reprenez les quatre chiffres de l'année trouvée et additionnez-les : 1 + 9 + 1 + 1",
+          "success": {
+            "title": "✅ CLÉ TROUVÉE",
+            "text": "<p>Votre clé est :</p><p class=\"big-code\">12</p>"
+          },
           "h": [
             "880b2e4ec3b20ca0"
           ]
         },
         {
           "type": "text",
-          "title": "La clé de pierre · 3. Décrypter",
-          "text": "<p>Le message a été décalé vers l'avant du nombre de lettres de votre clé.</p><p>Pour le lire, <b>reculez</b> chaque lettre de cette valeur dans l'alphabet.</p><p class=\"big-code\">BADF PQ OMEEUE</p>",
-          "match": "contains",
+          "title": "Le message crypté",
+          "text": "<p>Un message a été intercepté.</p><p class=\"big-code\">BADF PQ OMEEUE</p><p>Il a été chiffré à l'aide d'un <b>code César</b> : chaque lettre du message original a été décalée.</p><p>Décryptez maintenant le message.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "wrong": "❌ MESSAGE NON DÉCRYPTÉ<br>Votre clé est bien 12. Pour chaque lettre du message, comptez 12 lettres en arrière dans l'alphabet.<br>Essayez de nouveau.",
           "hints": [
-            "Avec une clé de 12, B → P."
+            "Commencez par le premier mot : <b>BADF</b><br>Avec une clé de 12 : B → P",
+            "Le premier mot décrypté est : <b>PORT</b>",
+            "Le message complet comporte trois mots :<p class=\"big-code\">_ _ _ _ &nbsp; _ _ &nbsp; _ _ _ _ _ _</p>"
           ],
           "success": {
-            "text": "<p>✅ <b>MESSAGE DÉCRYPTÉ</b></p><p>Votre prochaine destination est le <b>PORT DE CASSIS</b>.</p>"
+            "title": "✅ MESSAGE DÉCRYPTÉ",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT DE CASSIS</p><p>Votre prochaine destination est le <b>Port de Cassis</b>.<br>Rendez-vous sur place pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
           },
           "h": [
             "8d24517e0969ae5b",
+            "60301863596af296",
             "2806ba3f9393a056"
           ]
         },
