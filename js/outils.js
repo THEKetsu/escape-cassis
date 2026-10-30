@@ -19,10 +19,13 @@
     return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  // QR code généré par un service gratuit (nécessite internet au moment d'imprimer)
-  function qr(data, size) {
-    return `https://api.qrserver.com/v1/create-qr-code/?size=${size || 300}x${size || 300}&margin=8&data=${encodeURIComponent(data)}`;
+  // QR code généré localement (js/qrcode.js) : aucun service externe, les codes ne sortent pas du poste
+  function qr(data) {
+    return `<div class="qr-img">${window.QR.svg(data)}</div>`;
   }
+
+  const urlWarning = urlConfigured ? '' :
+    '<p class="warning no-print">⚠️ <code>publicUrl</code> n\'est pas renseignée dans config.js : ces QR codes pointent vers une adresse d\'exemple et ne fonctionneront pas.</p>';
 
   // ---------- 1. vérification ----------
 
@@ -121,7 +124,7 @@
         <div class="qr-card">
           <h3>${esc(GAME.title)}</h3>
           <div class="qr-team">${esc(team.name || t)}</div>
-          <img src="${qr(url)}" alt="QR ${esc(t)}">
+          ${qr(url)}
           <p>Capitaine : scannez ce code avec l'appareil photo de votre téléphone.</p>
           <small>${esc(url)}</small>
         </div>`;
@@ -129,6 +132,7 @@
     return `
       <section id="qr-equipes">
         <h2 class="no-print">4. QR codes des équipes <button data-action="print" data-target="qr-equipes">🖨️ Imprimer</button></h2>
+        ${urlWarning}
         <p class="muted no-print">Si un téléphone tombe en panne, un autre membre de l'équipe rescanne le même QR code : il pourra reprendre la partie (avec le dashboard activé).</p>
         <div class="qr-grid">${cards}</div>
       </section>`;
@@ -143,7 +147,7 @@
       const code = step.answers[0];
       cards.push(`
         <div class="qr-card">
-          <img src="${qr(`${base}?scan=${encodeURIComponent(code)}`)}" alt="QR ${esc(code)}">
+          ${qr(`${base}?scan=${encodeURIComponent(code)}`)}
           <div class="qr-code">${esc(code)}</div>
           <small class="no-print">Zone ${esc(z)}${v} étape ${i + 1} : ${esc(step.title)}</small>
         </div>`);
@@ -151,6 +155,7 @@
     return `
       <section id="qr-checkpoints">
         <h2 class="no-print">5. QR codes à cacher sur le terrain <button data-action="print" data-target="qr-checkpoints">🖨️ Imprimer</button></h2>
+        ${urlWarning}
         <p class="muted no-print">Un par étape de type <code>qr</code>. Le code écrit dessous permet de le saisir à la main.</p>
         <div class="qr-grid">${cards.join('') || '<p class="muted">Aucune étape de type qr.</p>'}</div>
       </section>`;

@@ -19,7 +19,7 @@ section { background: #fff; border-radius: 12px; padding: 4px 18px 18px; margin-
 .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
 .qr-card { border: 2px dashed #c6ced3; border-radius: 12px; padding: 14px; text-align: center; break-inside: avoid; }
 .qr-card h3 { margin: 0; font-size: 14px; color: var(--muted); }
-.qr-card img { width: 100%; max-width: 220px; }
+.qr-img svg { display: block; width: 100%; max-width: 220px; margin: 6px auto; }
 .qr-card p { font-size: 13px; margin: 6px 0; }
 .qr-card small { word-break: break-all; font-size: 10px; }
 .qr-team { font-size: 26px; font-weight: 800; color: var(--navy); margin: 4px 0; }
