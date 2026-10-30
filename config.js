@@ -4,7 +4,7 @@
  */
 window.CONFIG = {
   // Adresse publique du jeu une fois publié sur GitHub Pages (sert à générer les QR codes)
-  publicUrl: 'https://VOTRE-PSEUDO.github.io/escape-cassis/',
+  publicUrl: 'https://theketsu.github.io/escape-cassis/',
 
   // Dashboard en direct : Supabase (gratuit). Laisser vide pour jouer sans dashboard.
   // Project Settings > API Keys : "Project URL" et clé "publishable" (ou "anon" legacy).
