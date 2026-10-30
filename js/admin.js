@@ -256,7 +256,7 @@
           ${fetchError ? `<span class="err">⚠️ ${esc(fetchError)}</span>` : ''}
           <span>Mise à jour : ${lastFetch ? new Date(lastFetch).toLocaleTimeString('fr-FR') : '…'}</span>
           ${unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${unreadTotal()} message${unreadTotal() > 1 ? 's' : ''}</button>` : ''}
-          <button data-action="book">🔑 Réponses</button>
+          <button data-action="book" class="dark">🔑 Réponses</button>
           <button data-action="qr" class="primary">📱 QR codes équipes</button>
           <button data-action="refresh">↻</button>
           <button data-action="wipe" class="danger">🗑️ Effacer toutes les données</button>

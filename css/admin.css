@@ -142,6 +142,7 @@ footer { margin-top: 28px; display: flex; justify-content: space-between; align-
 /* ---------- QR codes des équipes ---------- */
 
 button.primary { background: var(--coral); color: #fff; font-weight: 600; }
+button.dark { background: #1d2730; color: #fff; font-weight: 600; }
 .qr-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(10, 20, 30, .6); overflow: auto; padding: 16px; }
 .qr-panel { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 16px 20px 24px; }
 .qr-panel header h2 { margin: 0; }
