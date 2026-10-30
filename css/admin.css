@@ -81,3 +81,17 @@ footer { margin-top: 28px; display: flex; justify-content: space-between; align-
   .cols { grid-template-columns: 1fr; }
   .kpis { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ---------- QR codes des équipes ---------- */
+
+button.primary { background: var(--coral); color: #fff; font-weight: 600; }
+.qr-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(10, 20, 30, .6); overflow: auto; padding: 16px; }
+.qr-panel { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 16px 20px 24px; }
+.qr-panel header h2 { margin: 0; }
+.qr-teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.qr-team { background: #fff; border: 2px solid #e3e8eb; border-radius: 14px; padding: 12px; display: grid; gap: 8px; justify-items: center; }
+.qr-team b { font-size: 20px; color: var(--navy); }
+.qr-team svg { width: 100%; max-width: 220px; height: auto; display: block; }
+.qr-team.zoom { position: fixed; inset: 0; z-index: 60; border-radius: 0; border: 0; align-content: center; }
+.qr-team.zoom b { font-size: 34px; }
+.qr-team.zoom svg { max-width: min(90vw, 80vh); }

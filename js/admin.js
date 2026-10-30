@@ -176,6 +176,7 @@
         <div class="meta">
           ${fetchError ? `<span class="err">⚠️ ${esc(fetchError)}</span>` : ''}
           <span>Mise à jour : ${lastFetch ? new Date(lastFetch).toLocaleTimeString('fr-FR') : '…'}</span>
+          <button data-action="qr" class="primary">📱 QR codes équipes</button>
           <button data-action="refresh">↻</button>
         </div>
       </header>
@@ -204,6 +205,38 @@
     checkLeak();
   }
 
+  // ---------- QR codes des équipes (à montrer au briefing) ----------
+
+  function joinUrl() {
+    const configured = window.CONFIG && window.CONFIG.publicUrl;
+    if (location.protocol.startsWith('http')) return new URL('./', location.href).href;
+    return configured && !configured.includes('VOTRE-PSEUDO') ? configured.replace(/\/?$/, '/') : null;
+  }
+
+  // Fenêtre hors de #admin : le dashboard est redessiné chaque seconde
+  function showQr() {
+    const base = joinUrl();
+    const overlay = document.createElement('div');
+    overlay.className = 'qr-overlay';
+    overlay.innerHTML = `
+      <div class="qr-panel">
+        <header><h2>📱 Rejoindre le jeu</h2><button data-close>✕ Fermer</button></header>
+        ${base ? `<p class="muted">Le capitaine de chaque équipe scanne son QR code avec l'appareil photo du téléphone. Touchez un code pour l'agrandir.</p>
+        <div class="qr-teams">${teamIds.map((t) => `
+          <button class="qr-team" data-team="${esc(t)}">
+            <b>${esc(GAME.teams[t].name || t)}</b>
+            ${window.QR.svg(base + '?equipe=' + encodeURIComponent(t))}
+          </button>`).join('')}</div>`
+        : '<p class="err">Renseignez <code>publicUrl</code> dans config.js, ou ouvrez le dashboard depuis le site publié.</p>'}
+      </div>`;
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('[data-close]')) return overlay.remove();
+      const card = e.target.closest('.qr-team');
+      if (card) card.classList.toggle('zoom');
+    });
+    document.body.appendChild(overlay);
+  }
+
   // Alerte si contenu.js (réponses en clair) a été publié par erreur
   let leak = null;
   function checkLeak() {
@@ -226,6 +259,7 @@
     $root.addEventListener('click', async (e) => {
       const action = e.target.closest('[data-action]');
       if (action && action.dataset.action === 'refresh') return refresh();
+      if (action && action.dataset.action === 'qr') return showQr();
       if (action && action.dataset.action === 'wipe') {
         if (!confirm('Effacer la progression de TOUTES les équipes sur le serveur ?')) return;
         if (!confirm('Vraiment ? (à faire avant le jeu, après les tests)')) return;
