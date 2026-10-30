@@ -117,11 +117,11 @@ window.GAME = {
         {
           "type": "number",
           "title": "La clé de pierre · 1. La date",
-          "text": "<p>Sur la place, trouvez le monument portant une date en chiffres romains.</p><p>Convertissez cette date en chiffres arabes.</p><p class=\"big-code\">MDCCCCXI</p>",
+          "text": "<p>Rendez-vous sur la <b>Place Baragnon</b> et trouvez le monument portant une date en chiffres romains.</p><p>Convertissez cette date en chiffres arabes.</p>",
           "hints": [
             "Cherchez un monument en pierre sur la Place Baragnon.",
             "Observez la fontaine et cherchez une date en chiffres romains.",
-            "MDCCCCXI = 1911."
+            "Rappel : M = 1000, D = 500, C = 100, L = 50, X = 10, V = 5, I = 1."
           ],
           "h": [
             "69dc82a50df57076"
