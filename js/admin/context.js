@@ -18,6 +18,7 @@
     GAME,
     S,
     SALT: S.salt || GAME.id,
+    CODE_KEY: 'admin:code:' + GAME.id,
     $root: document.getElementById('admin'),
     REFRESH_MS: 10000,
     OFFLINE_MS: 90000,

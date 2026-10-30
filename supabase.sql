@@ -2,7 +2,7 @@
 -- Peut être relancé sans risque après une mise à jour : les données sont conservées.
 -- Table progress : une ligne par équipe, contenant toute sa progression (JSON).
 -- Table messages : le tchat entre chaque équipe et l'organisation.
--- Table team_secrets : la clé secrète de chaque équipe, et table organiser_book : le carnet de réponses du dashboard
+-- Table team_secrets : la clé secrète de chaque équipe, et table organiser_book : ces clés pour le dashboard (QR codes des équipes)
 -- (remplies par supabase-equipes.sql, voir « Compte organisateur » en bas).
 --
 -- Accès :
@@ -26,7 +26,7 @@ create table if not exists public.team_secrets (
 alter table public.team_secrets enable row level security;
 revoke all on public.team_secrets from anon, authenticated;
 
--- Carnet de réponses du dashboard (une ligne, remplie par supabase-equipes.sql) : lisible par l'organisateur seulement
+-- Clés des équipes pour le dashboard (une ligne { teamKeys }, remplie par supabase-equipes.sql) : lisible par l'organisateur seulement
 create table if not exists public.organiser_book (
   id int primary key check (id = 1),
   data jsonb not null
@@ -201,6 +201,6 @@ grant execute on function public.team_send(text, text, text, text) to anon;
 -- 3. Donnez-lui le rôle organisateur (remplacez l'email), puis exécutez :
 --      update auth.users set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role": "organisateur"}'
 --      where email = 'organisateur@exemple.fr';
--- 4. Clés des équipes et carnet de réponses : node outils/publier.js génère supabase-equipes.sql (ignoré par git) ;
---    collez-le dans le SQL Editor (à refaire après chaque modification des énigmes, des équipes ou de leurs clés).
---    Le code d'accès du dashboard n'est dans aucun fichier publié : seul Supabase le vérifie.
+-- 4. Clés des équipes : node outils/publier.js génère supabase-equipes.sql (ignoré par git) ; collez-le dans le SQL Editor.
+--    À refaire seulement si vous changez une équipe ou sa clé (pas pour modifier les énigmes).
+--    Le code d'accès du dashboard n'est publié nulle part (ni en clair, ni haché) : seul Supabase le vérifie.

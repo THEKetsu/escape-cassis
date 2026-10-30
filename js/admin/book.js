@@ -1,22 +1,34 @@
-/* Carnet de réponses : en clair en local, sinon lu sur Supabase par le compte organisateur. */
+/* Carnet de réponses : en clair en local, sinon déchiffré avec le code d'accès. */
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
-  const { E, Sync, GAME, S } = A;
+  const { E, Sync, GAME, S, CODE_KEY } = A;
   const { esc } = window.Util;
 
-  // En local, contenu.js donne les réponses en clair ; en ligne, elles sont dans la table organiser_book de Supabase,
-  // lisible seulement une fois connecté en organisateur (jamais dans game.js).
+  // En local, contenu.js donne tout en clair. En ligne, les réponses sont dans game.js, chiffrées par le code d'accès
+  // (answerBook), et les clés des équipes (pour leurs QR codes) dans la table organiser_book de Supabase,
+  // lisible seulement par le compte organisateur.
   A.book = window.GAME_SOURCE ? E.answerBook(GAME) : null;
   let bookError = '';
 
   async function loadBook() {
     if (A.book) return true;
-    try {
-      A.book = await Sync.loadBook();
-      bookError = A.book ? '' : 'Carnet absent du serveur : exécutez supabase-equipes.sql (généré par node outils/publier.js).';
-    } catch (e) {
-      bookError = e.message;
+    const code = sessionStorage.getItem(CODE_KEY);
+    if (!GAME.answerBook) bookError = 'Ce game.js ne contient pas les réponses : régénérez-le avec node outils/publier.js (adminCode renseigné).';
+    else if (!code) bookError = 'Saisissez à nouveau le code d\'accès pour déchiffrer les réponses.';
+    else {
+      try {
+        A.book = Object.assign({ teamKeys: {} }, await E.decryptJSON(GAME.answerBook, code));
+        bookError = '';
+      } catch (e) {
+        bookError = 'Réponses illisibles avec ce code d\'accès.';
+      }
+    }
+    if (A.book) {
+      try {
+        const remote = await Sync.loadBook();
+        A.book.teamKeys = (remote && remote.teamKeys) || {};
+      } catch (e) { /* les QR codes signaleront les clés manquantes */ }
     }
     A.render();
     A.renderPanel();

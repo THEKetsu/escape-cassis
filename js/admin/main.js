@@ -2,12 +2,13 @@
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
-  const { E, Sync, GAME, $root, teamIds, REFRESH_MS } = A;
+  const { E, Sync, GAME, $root, teamIds, REFRESH_MS, CODE_KEY } = A;
 
   // ---------- accès ----------
 
   // Le code d'accès est le mot de passe du compte organisateur Supabase (sous sa forme normalisée : sans casse, tirets
-  // ni espaces). Seul Supabase le vérifie : aucune empreinte du code n'est publiée dans game.js.
+  // ni espaces). Seul Supabase le vérifie : aucune empreinte du code n'est publiée dans game.js. Le même code
+  // déchiffre le carnet de réponses (answerBook de game.js).
   function gate() {
     if (!Sync.enabled) return start(); // affiche « Dashboard non configuré »
     if (sessionStorage.getItem('admin:' + GAME.id) === 'ok' && Sync.hasSession()) return start();
@@ -34,6 +35,7 @@
         return;
       }
       sessionStorage.setItem('admin:' + GAME.id, 'ok');
+      sessionStorage.setItem(CODE_KEY, value); // déchiffre le carnet de réponses, le temps de l'onglet
       start();
     });
   }

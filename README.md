@@ -82,7 +82,7 @@ Le jour J, avec 6 ou 7 équipes, il suffit de ne pas distribuer les QR codes en 
 2. **SQL Editor** → New query → collez le contenu de `supabase.sql` → **Run**.
 3. **Project Settings → API Keys** : copiez la **Project URL** et la clé **publishable** (ou la clé `anon`) dans `config.js`.
 4. **Compte organisateur** (les données ne sont lisibles que par lui) : suivez les étapes en fin de `supabase.sql` — désactiver les inscriptions, créer l'utilisateur avec pour mot de passe le `adminCode` en majuscules sans tirets, lui donner le rôle `organisateur`, puis renseigner son email dans `supabase.adminEmail` (`config.js`).
-5. **Clés des équipes et carnet de réponses** : chaque équipe de `contenu.js` a une `key` secrète (dans son QR code, jamais dans `game.js`). `node outils/publier.js` génère `supabase-equipes.sql` (ignoré par git) avec ces clés et le carnet des réponses : collez-le dans le SQL Editor → **Run**. À refaire après chaque modification des énigmes, des équipes ou de leurs clés.
+5. **Clés des équipes** : chaque équipe de `contenu.js` a une `key` secrète (dans son QR code, jamais dans `game.js`). `node outils/publier.js` génère `supabase-equipes.sql` (ignoré par git) : collez-le dans le SQL Editor → **Run**. À refaire seulement si vous changez une équipe ou sa clé, pas à chaque modification des énigmes (les réponses de la vue « Réponses » sont chiffrées dans `game.js`).
 6. Ouvrez `admin.html` : saisissez le code d'accès, le dashboard se met à jour toutes les 10 s.
 
 Un téléphone sans clé (QR code sans `&k=…`, ou choix d'équipe dans la liste) joue normalement mais ne se synchronise pas.
