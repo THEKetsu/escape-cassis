@@ -1,0 +1,135 @@
+// Lancer : node --test test/
+const test = require('node:test');
+const assert = require('node:assert');
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const E = require('../js/engine.js');
+
+function loadGame() {
+  const sandbox = { window: {} };
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'contenu.js'), 'utf8'), sandbox);
+  return sandbox.window.GAME_SOURCE;
+}
+
+test('normalisation : casse, accents, tirets, St', () => {
+  assert.strictEqual(E.normalize("l'Église St-Michel"), 'LEGLISESAINTMICHEL');
+  assert.strictEqual(E.normalize('  saint   michel '), E.normalize('SAINT-MICHEL'));
+  assert.strictEqual(E.normalize('Cœur'), 'COEUR');
+  assert.strictEqual(E.normalize('1 890'), '1890');
+});
+
+test('réponse exacte avec variantes', () => {
+  const step = { answers: ['SAINT MICHEL', 'EGLISE SAINT MICHEL'] };
+  assert.ok(E.checkAnswer('saint-michel', step, 's'));
+  assert.ok(E.checkAnswer('Église St Michel', step, 's'));
+  assert.ok(!E.checkAnswer('michel', step, 's'));
+  assert.ok(!E.checkAnswer('', step, 's'));
+});
+
+test('mode contains : réponse noyée dans une phrase', () => {
+  const step = { answers: ['SAINT MICHEL'], match: 'contains' };
+  assert.ok(E.checkAnswer("c'est l'église saint-michel !", step, 's'));
+  assert.ok(!E.checkAnswer('saint pierre', step, 's'));
+});
+
+test('la version publiée valide les mêmes réponses sans les contenir', () => {
+  const game = loadGame();
+  const pub = E.publish(game);
+  const src = game.zones[2].A[0];
+  const out = pub.zones[2].A[0];
+  assert.strictEqual(out.answers, undefined);
+  assert.ok(E.checkAnswer('Eglise Saint-Michel', out, pub.settings.salt));
+  assert.ok(E.checkAnswer('Eglise Saint-Michel', src, game.settings.salt));
+  const file = E.publishedFile(game);
+  assert.ok(!file.includes('"answers"'));
+  assert.ok(!file.includes('"masterCode"'));
+  assert.ok(!file.includes('ccoi2026'));
+  assert.ok(E.codeMatches('calanque', undefined, pub.settings.masterHash, pub.settings.salt));
+  assert.ok(E.codeMatches('ccoi2026', undefined, pub.settings.adminHash, pub.settings.salt));
+  assert.ok(!E.codeMatches('autre', undefined, pub.settings.masterHash, pub.settings.salt));
+});
+
+test('le contenu de démo est valide', () => {
+  const { errors } = E.validate(loadGame());
+  assert.deepStrictEqual(errors, []);
+});
+
+test('parcours : ordre des zones et variante de chaque équipe', () => {
+  const game = loadGame();
+  const p6 = E.buildPath(game, 'E6');
+  const zones = [...new Set(p6.map((s) => s.zoneId))];
+  assert.deepStrictEqual(zones, ['1', '5', '4', '3', '2', 'final']);
+  assert.ok(p6.filter((s) => s.zoneId !== 'final').every((s) => s.variant === 'B'));
+  const keys = p6.map((s) => s.key);
+  assert.strictEqual(new Set(keys).size, keys.length);
+});
+
+test('circuits : au plus 2 équipes par zone, jamais la même variante ensemble', () => {
+  E.simulate(loadGame()).forEach((byZone) => {
+    Object.values(byZone).forEach((here) => {
+      assert.ok(here.length <= 2);
+      assert.strictEqual(new Set(here.map((h) => h.variant)).size, here.length);
+    });
+  });
+});
+
+test('pénalités et durées', () => {
+  const game = { settings: { hintPenalties: [60, 120] } };
+  assert.strictEqual(E.hintPenalty(game, {}, 0), 60);
+  assert.strictEqual(E.hintPenalty(game, {}, 5), 120);
+  assert.strictEqual(E.hintPenalty(game, { hintPenalties: [30] }, 0), 30);
+  const st = { startedAt: 1_000, finishedAt: 3_726_000, penalty: 120 };
+  assert.strictEqual(E.totalSeconds(st, 9e9), 3845);
+  assert.strictEqual(E.formatDuration(3845), '1:04:05');
+  assert.strictEqual(E.formatDuration(65), '01:05');
+});
+
+test('étape tap : zone circulaire corrigée du ratio de l\'image', () => {
+  const target = { x: 50, y: 42, r: 10 };
+  assert.ok(E.hitTarget(50, 42, target, 0.87));
+  assert.ok(E.hitTarget(57, 45, target, 0.87));
+  assert.ok(!E.hitTarget(10, 10, target, 0.87));
+  // 10 % de hauteur sur une image deux fois plus large que haute = 5 % de largeur
+  assert.ok(E.hitTarget(50, 60, target, 0.5));
+});
+
+test('badges déduits du journal', () => {
+  const game = loadGame();
+  const path = E.buildPath(game, 'E1');
+  const zone1 = path.filter((p) => p.zoneId === '1');
+  const log = zone1.map((p) => ({ key: p.key, type: p.type, sec: 120, hints: 0, wrong: 0, skipped: false }));
+  let ids = E.earnedBadges({ log }, path).map((b) => b.id);
+  assert.deepStrictEqual(ids, ['brain', 'perfect']);
+  log[0].sec = 20;
+  log[1].wrong = 2;
+  ids = E.earnedBadges({ log }, path).map((b) => b.id);
+  assert.deepStrictEqual(ids, ['flash', 'brain']);
+  log[1].hints = 1;
+  assert.deepStrictEqual(E.earnedBadges({ log }, path).map((b) => b.id), ['flash']);
+});
+
+test('classement : arrivées au temps, puis avancement', () => {
+  const game = loadGame();
+  const now = 10_000_000;
+  const ranked = E.rankTeams(game, {
+    E1: { startedAt: 1, stepIndex: 3, penalty: 0 },
+    E2: { startedAt: 1, stepIndex: 13, finishedAt: 5_000_000, penalty: 600 },
+    E3: { startedAt: 1, stepIndex: 13, finishedAt: 5_000_000, penalty: 0 },
+    E4: { startedAt: 1, stepIndex: 8, penalty: 0 },
+    E5: { startedAt: null },
+  }, now);
+  assert.deepStrictEqual(ranked.map((r) => r.team), ['E3', 'E2', 'E4', 'E1']);
+  // E6 a une étape de plus : 8/15 (53 %) est derrière 7/13 (54 %)
+  const mixed = E.rankTeams(game, {
+    E6: { startedAt: 1, stepIndex: 8, penalty: 0 },
+    E5: { startedAt: 1, stepIndex: 7, penalty: 0 },
+  }, now);
+  assert.strictEqual(E.buildPath(game, 'E6').length, 15);
+  assert.deepStrictEqual(mixed.map((r) => r.team), ['E5', 'E6']);
+});
+
+test('distance GPS', () => {
+  const d = E.distance(43.2131, 5.5357, 43.2140, 5.5357);
+  assert.ok(d > 95 && d < 105);
+});

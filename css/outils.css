@@ -1,0 +1,35 @@
+#outils { max-width: 1100px; margin: 0 auto; padding: 16px; }
+nav { display: flex; gap: 14px; flex-wrap: wrap; }
+nav a { color: var(--sea); text-decoration: none; font-weight: 600; }
+section { background: #fff; border-radius: 12px; padding: 4px 18px 18px; margin-top: 16px; }
+.primary { background: var(--coral); color: #fff; font-weight: 600; padding: 10px 16px; }
+.ok { color: var(--green); font-weight: 600; }
+.issues { padding-left: 20px; }
+.issues .error { color: var(--coral); }
+.issues .warning, .warning { color: #a86b00; }
+.ok-li { color: var(--green); list-style: none; margin-left: -20px; }
+
+.sim td, .sim th { text-align: center; }
+.sim td.bad { background: #fdecea; }
+.sim td.mid { background: #fff1d6; }
+.legend { padding: 2px 8px; border-radius: 6px; margin-left: 6px; }
+.legend.bad { background: #fdecea; }
+.legend.mid { background: #fff1d6; }
+
+.qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.qr-card { border: 2px dashed #c6ced3; border-radius: 12px; padding: 14px; text-align: center; break-inside: avoid; }
+.qr-card h3 { margin: 0; font-size: 14px; color: var(--muted); }
+.qr-card img { width: 100%; max-width: 220px; }
+.qr-card p { font-size: 13px; margin: 6px 0; }
+.qr-card small { word-break: break-all; font-size: 10px; }
+.qr-team { font-size: 26px; font-weight: 800; color: var(--navy); margin: 4px 0; }
+.qr-code { font-family: ui-monospace, monospace; font-size: 22px; font-weight: 700; letter-spacing: 2px; }
+
+@media print {
+  body { background: #fff; }
+  .no-print, header { display: none !important; }
+  section { padding: 0; margin: 0; }
+  body[data-print="qr-equipes"] #qr-checkpoints,
+  body[data-print="qr-checkpoints"] #qr-equipes { display: none; }
+  .qr-grid { grid-template-columns: repeat(3, 1fr); }
+}

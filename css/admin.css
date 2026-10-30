@@ -1,0 +1,83 @@
+:root {
+  --navy: #0b3954;
+  --sea: #1d8fb3;
+  --sand: #f6efe1;
+  --coral: #e76f51;
+  --green: #2a9d5c;
+  --amber: #e9a23b;
+  --muted: #6b7781;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f2f4f6; color: #1d2730; font-size: 15px; }
+#admin { max-width: 1280px; margin: 0 auto; padding: 16px; }
+h1 { margin: 0; font-size: 22px; color: var(--navy); }
+h2 { font-size: 17px; margin: 22px 0 10px; color: var(--navy); }
+h2 small { font-weight: 400; color: var(--muted); }
+small { color: var(--muted); }
+code { background: #e6eaed; padding: 1px 5px; border-radius: 4px; }
+button { font: inherit; cursor: pointer; border: 0; border-radius: 8px; padding: 6px 12px; background: #dfe5e9; }
+.muted { color: var(--muted); }
+.err { color: var(--coral); }
+
+header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.meta { display: flex; gap: 12px; align-items: center; color: var(--muted); }
+
+.gate { max-width: 360px; margin: 15vh auto; background: #fff; padding: 24px; border-radius: 14px; display: grid; gap: 12px; text-align: center; }
+.gate input { font: inherit; font-size: 18px; padding: 10px; border: 2px solid #cfd8dd; border-radius: 10px; }
+.gate button { background: var(--coral); color: #fff; padding: 12px; font-weight: 600; }
+
+.leak { background: var(--coral); color: #fff; padding: 12px; border-radius: 10px; font-weight: 600; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+.kpis div { background: #fff; border-radius: 12px; padding: 12px 16px; }
+.kpis b { font-size: 28px; display: block; color: var(--navy); }
+.kpis .alert { background: var(--coral); }
+.kpis .alert b, .kpis .alert small { color: #fff; }
+.kpis .warnk { background: #fff1d6; }
+
+.table-wrap { overflow-x: auto; background: #fff; border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 9px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid #edf0f2; }
+th { font-size: 13px; color: var(--muted); font-weight: 600; background: #fafbfc; white-space: nowrap; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.team { cursor: pointer; }
+tr.team:hover { background: #f7fafc; }
+tr.team.stuck { background: #fdecea; }
+tr.team.offline { background: #fff7e6; }
+tr.team.done { background: #eef8f1; }
+tr.detail td { background: #fafbfc; }
+.log { font-size: 13px; }
+.log th { background: none; }
+
+.status { white-space: nowrap; font-weight: 600; }
+.status.stuck { color: var(--coral); }
+.status.offline { color: var(--amber); }
+.status.done { color: var(--green); }
+.status.idle { color: var(--muted); }
+
+.chips { display: flex; align-items: center; gap: 2px; white-space: nowrap; }
+.chips i { color: #b8c1c7; font-style: normal; font-size: 12px; }
+.chip { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 12px; font-weight: 700; background: #e6eaed; color: var(--muted); }
+.chip.ok { background: var(--green); color: #fff; }
+.chip.cur { background: var(--sea); color: #fff; box-shadow: 0 0 0 3px #bfe3f0; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.zones { display: grid; gap: 8px; }
+.zone { background: #fff; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.zone.crowded { outline: 2px solid var(--coral); }
+.tag { display: inline-block; background: var(--sand); color: var(--navy); padding: 2px 8px; border-radius: 12px; margin-left: 4px; font-weight: 600; font-size: 13px; }
+
+.ranking { background: #fff; border-radius: 12px; padding: 10px 10px 10px 40px; margin: 0; }
+.ranking li { padding: 6px 0; border-bottom: 1px solid #edf0f2; }
+.ranking li span { display: inline-block; min-width: 50%; }
+.ranking li.done b { color: var(--green); }
+.ranking li small { display: block; }
+
+footer { margin-top: 28px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+.danger { background: #fdecea; color: var(--coral); }
+
+@media (max-width: 800px) {
+  .cols { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+}
