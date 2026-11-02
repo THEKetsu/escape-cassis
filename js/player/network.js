@@ -4,12 +4,44 @@
   if (!A) return;
   const { Sync, STORE, HEARTBEAT_MS, LIVE } = A;
 
+  // Session effacée par l'organisation : la ligne de l'équipe a disparu du serveur alors que ce téléphone l'y avait
+  // déjà enregistrée. On ne l'écrit pas de nouveau : le téléphone repart de l'accueil de la même équipe.
+  // (Une erreur réseau ne compte pas : hors connexion, la partie continue.)
+  let synced = false;
+
+  async function sessionEnded() {
+    const state = A.state;
+    if (!synced || !state) return false;
+    try {
+      return !(await Sync.loadTeam(state.team));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function endSession() {
+    const team = A.state.team;
+    const wasPlaying = !!A.state.startedAt;
+    synced = false;
+    A.remote = null;
+    A.remoteLive = false;
+    A.setState(A.newState(team));
+    A.save();
+    A.render();
+    if (wasPlaying) A.toast('<span class="toast-icon">🔄</span><div><b>Partie réinitialisée</b><small>L\'organisation a effacé la session : retour à l\'accueil.</small></div>');
+  }
+
+  async function checkSession() {
+    if (Sync.enabled && await sessionEnded()) endSession();
+  }
+
   let pushTimer = null;
   function push() {
     if (!Sync.enabled || !A.state) return;
     clearTimeout(pushTimer);
-    pushTimer = setTimeout(() => {
-      Sync.saveState(A.state).then(() => setNet(true), () => setNet(false));
+    pushTimer = setTimeout(async () => {
+      if (await sessionEnded()) return endSession();
+      Sync.saveState(A.state).then(() => { synced = true; setNet(true); }, () => setNet(false));
     }, 300);
   }
 
@@ -52,10 +84,13 @@
     if (A.state && A.state.startedAt && !A.state.finishedAt) {
       push();
       updatePosition();
+    } else {
+      checkSession(); // partie finie ou pas commencée : pas d'envoi, mais on repère quand même une session effacée
     }
   }, HEARTBEAT_MS);
 
   window.addEventListener('online', push);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(); });
 
   // Un QR code scanné ouvre un nouvel onglet : les onglets se tiennent à jour mutuellement
   window.addEventListener('storage', (e) => {

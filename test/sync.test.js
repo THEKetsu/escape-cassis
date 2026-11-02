@@ -50,3 +50,55 @@ test('sans configuration Supabase : désactivé', () => {
   const { Sync } = loadSync(() => ({}), '');
   assert.strictEqual(Sync.enabled, false);
 });
+
+// Charge js/player/network.js avec un faux joueur et un faux serveur
+function loadNetwork(serverRow) {
+  const events = [];
+  const A = {
+    Sync: {
+      enabled: true,
+      saveState: async (s) => { events.push('save'); return s; },
+      loadTeam: async () => (serverRow.present ? { data: {} } : null),
+    },
+    STORE: 'escape:t', HEARTBEAT_MS: 30000, LIVE: false,
+    state: { team: 'E1', startedAt: 1000, stepIndex: 3 },
+    newState: (team) => ({ team, startedAt: null, stepIndex: 0 }),
+    setState(s) { this.state = s; },
+    save() { events.push('local-save'); this.push(); },
+    render: () => events.push('render'),
+    toast: () => events.push('toast'),
+    load: () => null,
+  };
+  const listeners = {};
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'js', 'player', 'network.js'), 'utf8'), {
+    window: { EscapePlayer: A, addEventListener() {} },
+    document: { hidden: false, addEventListener: (n, f) => { listeners[n] = f; }, getElementById: () => null },
+    setTimeout: (f) => f(), clearTimeout() {}, setInterval() {}, navigator: {}, Date, JSON, Promise,
+  });
+  return { A, events, listeners };
+}
+const tick = () => new Promise((r) => setImmediate(r));
+
+test('session effacée : le téléphone déjà synchronisé revient à l\'accueil, sans réécrire la ligne', async () => {
+  const server = { present: true };
+  const { A, events } = loadNetwork(server);
+  A.push(); // première écriture : la ligne existe ensuite sur le serveur
+  await tick(); await tick();
+  assert.deepStrictEqual(events, ['save']);
+  server.present = false; // l'organisateur efface tout
+  events.length = 0;
+  A.push();
+  await tick(); await tick(); await tick();
+  assert.strictEqual(A.state.startedAt, null); // retour à l'accueil, même équipe
+  assert.strictEqual(A.state.team, 'E1');
+  assert.ok(events.includes('toast') && events.includes('render'));
+  assert.strictEqual(events.filter((e) => e === 'save').length, 1); // seule la ligne « prête » du nouvel état est créée
+});
+
+test('téléphone jamais synchronisé (hors ligne depuis le début) : sa partie n\'est pas effacée', async () => {
+  const { A, events } = loadNetwork({ present: false });
+  A.push();
+  await tick(); await tick();
+  assert.strictEqual(A.state.startedAt, 1000);
+  assert.deepStrictEqual(events, ['save']);
+});

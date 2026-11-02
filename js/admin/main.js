@@ -81,7 +81,7 @@
       if (action && action.dataset.action === 'chat') return A.openChat(action.dataset.team);
       if (action && action.dataset.action === 'chat-next') return A.openChat(teamIds.find((t) => A.unread(t)));
       if (action && action.dataset.action === 'wipe') {
-        if (!confirm('Effacer la progression et les messages de TOUTES les équipes sur le serveur ?')) return;
+        if (!confirm('Effacer la progression et les messages de TOUTES les équipes sur le serveur ?\nLes téléphones connectés reviendront à l\'accueil en moins de 30 secondes.')) return;
         if (!confirm('Vraiment ? (à faire avant le jeu, après les tests)')) return;
         try { await Sync.deleteAll(); } catch (err) { alert(err.message); }
         A.closeChat();
