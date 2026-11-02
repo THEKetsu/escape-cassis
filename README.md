@@ -67,7 +67,7 @@ Le jour J, avec 6 ou 7 équipes, il suffit de ne pas distribuer les QR codes en 
 
 | Réglage | Défaut | Rôle |
 |---|---|---|
-| `hintPenalties` | `[60, 120, 180]` | Pénalité (s) des indices 1, 2, 3 |
+| `hintPenalties` | `[120, 240, 360]` | Pénalité (s) des indices 1, 2, 3 (les suivants coûtent comme le dernier) |
 | `masterCode` | `CALANQUE` | Code organisation : fait passer une étape bloquée (bouton 🔑 en bas de chaque écran) |
 | `skipPenalty` | `600` | Pénalité (s) quand le code organisation est utilisé |
 | `adminCode` | — | Code d'accès au dashboard : choisissez-en un long (ex. `s5zw-s7a7`) ; simple barrière, vérifiée dans le navigateur (il déchiffre aussi la vue « Réponses ») |
