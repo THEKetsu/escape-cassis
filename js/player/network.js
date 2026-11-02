@@ -3,15 +3,15 @@
   const A = window.EscapePlayer;
   if (!A) return;
   const { Sync, STORE, HEARTBEAT_MS, LIVE } = A;
+  const SESSION_CHECK_MS = 10000;
 
   // Session effacée par l'organisation : la ligne de l'équipe a disparu du serveur alors que ce téléphone l'y avait
   // déjà enregistrée. On ne l'écrit pas de nouveau : le téléphone repart de l'accueil de la même équipe.
   // (Une erreur réseau ne compte pas : hors connexion, la partie continue.)
-  let synced = false;
-
+  // Le marqueur (state.synced) est gardé avec la partie sur le téléphone : un rechargement de la page ne l'oublie pas.
   async function sessionEnded() {
     const state = A.state;
-    if (!synced || !state) return false;
+    if (!state || !state.synced) return false;
     try {
       return !(await Sync.loadTeam(state.team));
     } catch (e) {
@@ -22,7 +22,6 @@
   function endSession() {
     const team = A.state.team;
     const wasPlaying = !!A.state.startedAt;
-    synced = false;
     if (A.clearZip) A.clearZip();
     A.remote = null;
     A.remoteLive = false;
@@ -42,7 +41,13 @@
     clearTimeout(pushTimer);
     pushTimer = setTimeout(async () => {
       if (await sessionEnded()) return endSession();
-      Sync.saveState(A.state).then(() => { synced = true; setNet(true); }, () => setNet(false));
+      Sync.saveState(A.state).then(() => {
+        if (!A.state.synced) {
+          A.state.synced = true;
+          localStorage.setItem(STORE, JSON.stringify(A.state)); // sans nouvel envoi
+        }
+        setNet(true);
+      }, () => setNet(false));
     }, 300);
   }
 
@@ -85,10 +90,12 @@
     if (A.state && A.state.startedAt && !A.state.finishedAt) {
       push();
       updatePosition();
-    } else {
-      checkSession(); // partie finie ou pas commencée : pas d'envoi, mais on repère quand même une session effacée
     }
   }, HEARTBEAT_MS);
+
+  // Session effacée par l'organisation : repérée vite, quel que soit l'écran (en jeu, accueil, fin de partie)
+  setInterval(checkSession, SESSION_CHECK_MS);
+  checkSession();
 
   window.addEventListener('online', push);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(); });
