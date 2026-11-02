@@ -36,8 +36,8 @@ test('mode contains : réponse noyée dans une phrase', () => {
 test('la version publiée valide les mêmes réponses sans les contenir', async () => {
   const game = loadGame();
   const pub = E.publish(game);
-  const src = game.zones[2].A[0];
-  const out = pub.zones[2].A[0];
+  const src = game.zones[2].B[2];
+  const out = pub.zones[2].B[2];
   assert.strictEqual(out.answers, undefined);
   assert.ok(E.checkAnswer('Eglise Saint-Michel', out, pub.settings.salt));
   assert.ok(E.checkAnswer('Eglise Saint-Michel', src, game.settings.salt));
@@ -63,32 +63,10 @@ test('carnet de réponses : chiffré dans game.js, lisible avec le code admin se
   const sandbox = { window: {} };
   vm.runInNewContext(await E.publishedFile(game), sandbox);
   const box = sandbox.window.GAME.answerBook;
-  // casse et espaces ignorés, comme pour la saisie du code ; les clés d'équipe ne sont pas dans le carnet publié
+  // casse et espaces ignorés, comme pour la saisie du code 
   const opened = await E.decryptJSON(box, ' ' + game.settings.adminCode.toUpperCase() + ' ');
-  assert.deepStrictEqual(opened, { answers: book.answers, masterCode: book.masterCode });
+  assert.deepStrictEqual(opened, book);
   await assert.rejects(E.decryptJSON(box, 'mauvais-code'));
-});
-
-test('clés d\'équipe : jamais dans game.js, seulement dans le SQL à coller dans Supabase', async () => {
-  const game = loadGame();
-  const keys = Object.keys(game.teams).map((t) => game.teams[t].key);
-  assert.ok(keys.every((k) => /^[A-Za-z0-9_-]{12,}$/.test(k)));
-  assert.strictEqual(new Set(keys).size, keys.length);
-  const file = await E.publishedFile(game);
-  keys.forEach((k) => assert.ok(!file.includes(k)));
-  assert.strictEqual(E.publish(game).teams.E1.key, undefined);
-  assert.strictEqual(E.answerBook(game).teamKeys.E1, game.teams.E1.key);
-  const sql = E.secretsSql(game);
-  // organiser_book ne reçoit que les clés d'équipe (pour les QR codes du dashboard) : ni réponses, ni code d'accès
-  assert.ok(sql.includes('insert into public.organiser_book') && sql.includes('teamKeys'));
-  assert.ok(!sql.includes('FOURNIL') && !sql.includes('CALANQUE') && !sql.includes(game.settings.adminCode));
-  keys.forEach((k) => assert.ok(sql.includes(`'${k}'`)));
-  assert.ok(sql.includes("('E1', '" + game.teams.E1.key + "')"));
-  // clé absente ou trop courte : avertissement / erreur de validation
-  game.teams.E1.key = '';
-  assert.ok(E.validate(game).warnings.some((w) => w.includes('Équipe E1') && w.includes('clé')));
-  game.teams.E1.key = 'court';
-  assert.ok(E.validate(game).errors.some((e) => e.includes('Équipe E1') && e.includes('clé')));
 });
 
 test('le contenu de démo est valide', () => {
@@ -261,4 +239,16 @@ test('carte : zoom et tuiles qui englobent tous les points', () => {
   const drawn = Math.hypot(a.x - b.x, a.y - b.y) * view.metersPerPixel(43.2135);
   const real = E.distance(43.2131, 5.5357, 43.2140, 5.5357);
   assert.ok(Math.abs(drawn - real) / real < 0.01, `${drawn} vs ${real}`);
+});
+
+test('choix multiple : réponse = options cochées dans l\'ordre, validée comme les autres réponses', () => {
+  const game = loadGame();
+  const step = game.zones[2].B[1];
+  assert.strictEqual(step.type, 'multi');
+  const salt = game.settings.salt;
+  assert.ok(E.checkAnswer('SAINT-PIERRE + FRÉDÉRIC MISTRAL', step, salt));
+  assert.ok(!E.checkAnswer('SAINT-PIERRE + SAINT-MICHEL', step, salt));
+  assert.ok(E.checkAnswer('SAINT-PIERRE + FRÉDÉRIC MISTRAL', E.publish(game).zones[2].B[1], salt));
+  step.count = 3;
+  assert.ok(E.validate(game).errors.some((e) => e.includes('count')));
 });

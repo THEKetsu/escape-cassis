@@ -24,6 +24,13 @@
     wrongAnswer(el);
   }
 
+  // Choix multiple : les options cochées, dans l'ordre des options (pas celui des clics), séparées par " + "
+  function validateMulti(step) {
+    const picked = [...$app.querySelectorAll('.choice.selected')].map((b) => b.dataset.value);
+    if (picked.length !== step.count) return A.feedback(`Cochez exactement ${step.count} réponses.`, 'bad');
+    submit(picked.join(' + '));
+  }
+
   function tap(e, box) {
     const step = A.current();
     if (Date.now() < A.cooldownUntil) return;
@@ -146,6 +153,8 @@
       case 'start': start(); break;
       case 'resume': A.setState(A.remote); A.remote = null; A.save(); A.preloadImages(); A.render(); A.updatePosition(); break;
       case 'continue': solve(step, false); break;
+      case 'toggle': el.classList.toggle('selected'); el.setAttribute('aria-pressed', el.classList.contains('selected')); break;
+      case 'validate-multi': validateMulti(step); break;
       case 'choose': if (!el.classList.contains('wrong')) submit(el.dataset.value, el); break;
       case 'tap': tap(e, el); break;
       case 'hint': showHint(); break;

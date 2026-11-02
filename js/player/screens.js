@@ -115,9 +115,10 @@
         </label>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
         <button class="btn primary big" data-action="start">C'est parti ! 🚀</button>
+        ${S.credits ? `<p class="credits">${esc(S.credits)}</p>` : ''}
       </main>`;
     if (Sync.enabled && !A.remote) {
-      Sync.teamLoad(state.team, A.teamKey(state.team)).then((row) => {
+      Sync.loadTeam(state.team).then((row) => {
         const s = row && row.data && row.data.state;
         if (s && s.startedAt && !A.state.startedAt) {
           A.remote = s;
@@ -142,6 +143,10 @@
       case 'qcm':
         return '<div class="choices">' + step.options.map((o, i) =>
           `<button class="btn choice" data-action="choose" data-value="${esc(o)}"><span class="letter">${String.fromCharCode(65 + i)}</span>${esc(o)}</button>`).join('') + '</div>';
+      case 'multi':
+        return `<p class="help">Cochez exactement ${step.count} réponses.</p><div class="choices">` + step.options.map((o, i) =>
+          `<button class="btn choice" data-action="toggle" data-value="${esc(o)}" aria-pressed="false"><span class="letter">${String.fromCharCode(65 + i)}</span>${esc(o)}</button>`).join('') +
+          '</div><button class="btn primary big" data-action="validate-multi">Valider</button>';
       case 'image-choice':
         return '<div class="image-choices">' + step.options.map((o) =>
           `<button class="image-choice" data-action="choose" data-value="${esc(o.label)}">

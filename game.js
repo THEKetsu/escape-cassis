@@ -15,6 +15,7 @@ window.GAME = {
     "showLeaderboard": true,
     "liveLocation": true,
     "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
+    "credits": "Créé par Quentin BENDER & Solène PACE",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
     "masterHash": "c6106b91c2340efa"
   },
@@ -222,88 +223,120 @@ window.GAME = {
       ]
     },
     "2": {
-      "name": "Église Saint-Michel",
-      "lat": 43.21583,
-      "lng": 5.53789,
+      "name": "Port de Cassis",
+      "lat": 43.21447,
+      "lng": 5.5387,
       "A": [
         {
-          "type": "text",
-          "title": "Le gardien ailé",
-          "text": "<p>L'archange qui terrasse le dragon veille sur votre prochaine étape. Où devez-vous aller ?</p>",
-          "match": "contains",
+          "type": "info",
+          "title": "Mission 2 — Le bon point de vue",
+          "text": "<p>Sur le port se trouve quelqu'un qui veille sur Cassis sans jamais quitter sa place.</p><p>Il est de pierre et se tient face au paysage.</p><p><b>Retrouvez Calendal.</b></p><p>Lorsque vous pensez l'avoir trouvé, poursuivez la mission.</p>",
+          "button": "J'ai trouvé Calendal"
+        },
+        {
+          "type": "image-choice",
+          "title": "Observation",
+          "text": "<p><b>✅ CALENDAL IDENTIFIÉ</b></p><p>Maintenant, changez de point de vue.</p><p>Placez-vous comme Calendal, dans le même sens que lui.</p><p>Observez attentivement ce qui se trouve :</p><ul><li>devant lui</li><li>derrière lui</li><li>à sa gauche</li><li>à sa droite</li></ul><p>Parmi les 4 propositions visuelles, une seule correspond exactement à ce que vous pouvez observer autour de vous.</p><p><b>Laquelle est correcte ?</b></p>",
+          "options": [
+            {
+              "img": "images/point-de-vue-a.svg",
+              "label": "A"
+            },
+            {
+              "img": "images/point-de-vue-b.svg",
+              "label": "B"
+            },
+            {
+              "img": "images/point-de-vue-c.svg",
+              "label": "C"
+            },
+            {
+              "img": "images/point-de-vue-d.svg",
+              "label": "D"
+            }
+          ],
+          "wrong": "❌ MAUVAIS POINT DE VUE<br>Ne vous fiez pas uniquement à votre mémoire.<br>Placez-vous réellement dans le même sens que Calendal et comparez les quatre directions avec les propositions.<br>Réessayez.",
           "hints": [
-            "C'est un édifice religieux.",
-            "Il porte le nom du chef des archanges."
+            "Vous cherchez une statue en pierre située sur la promenade du port.",
+            "Il s'agit de Calendal.",
+            "Ne vous placez pas face à lui.<br>Placez-vous comme lui, en regardant dans la même direction.",
+            "Comparez une par une :<br>devant — derrière — gauche — droite<br>Une seule proposition correspond exactement à la réalité."
           ],
           "success": {
-            "text": "<p>Rendez-vous devant l'<b>église Saint-Michel</b>.</p>"
+            "title": "✅ POINT DE VUE VALIDÉ",
+            "text": "<p>Vous avez correctement observé Cassis depuis la position de Calendal.</p>"
           },
           "h": [
-            "662a402ef8d1b1c9",
-            "8d105d6c41d2ab40"
+            "ec42678625eb75f3"
           ]
         },
         {
           "type": "text",
-          "title": "Jeu des différences",
-          "text": "<p>Le plan n°1 est celui d'origine. Sur le plan n°2, un élément de la façade a disparu. Lequel ? Comparez avec la vraie façade !</p>",
-          "images": [
-            "images/facade-a.svg",
-            "images/facade-b.svg"
-          ],
-          "hints": [
-            "Regardez en haut, au centre.",
-            "C'est une fenêtre ronde."
-          ],
+          "title": "Destination mystère",
+          "text": "<p>Votre prochaine destination se trouve dans le vieux Cassis.</p><p>Autrefois, les habitants s'y rendaient pour faire cuire leur pain.</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
+          "wrong": "❌ DESTINATION INCORRECTE<br>Cherchez un ancien lieu collectif lié à la cuisson du pain.<br>Son nom contient le mot : <b>FOUR</b>",
+          "success": {
+            "title": "✅ DESTINATION IDENTIFIÉE",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">FOUR BANAL</p><p>Rendez-vous au <b>Four Banal</b> pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
+          },
           "h": [
-            "c68bc7dcd8bcf848",
-            "420b1e3a8d9001df",
-            "89042cc0374e5604"
+            "97487b5e42ae8708",
+            "3e96a4ee6377f85d",
+            "fce3ff48e0219f1a"
           ]
         }
       ],
       "B": [
         {
-          "type": "text",
-          "title": "Les nombres parlent",
-          "text": "<p>Chaque nombre est une lettre :</p><p class=\"big-code\">5 · 7 · 12 · 9 · 19 · 5</p>",
-          "match": "contains",
+          "type": "info",
+          "title": "Mission 2 — Les trois témoins",
+          "text": "<p>Sur le port de Cassis se trouve un tribunal un peu particulier.</p><p>On n'y jugeait ni vols, ni crimes, ni délits.</p><p><b>Votre première mission est de retrouver ce bâtiment.</b></p><p>Lorsque vous pensez l'avoir identifié, observez attentivement sa façade et ses alentours.</p>",
+          "button": "J'ai trouvé le tribunal"
+        },
+        {
+          "type": "multi",
+          "title": "Les trois témoins",
+          "text": "<p><b>✅ LIEU IDENTIFIÉ</b></p><p>Trois noms vous sont proposés :</p><p class=\"big-code\">SAINT-PIERRE<br>FRÉDÉRIC MISTRAL<br>SAINT-MICHEL</p><p>Deux d'entre eux sont directement liés au lieu devant vous. Le troisième ne l'est pas.</p><p>Observez attentivement le bâtiment et les éléments visibles autour de vous.</p><p><b>Quels sont les deux noms liés à ce lieu ?</b></p>",
+          "options": [
+            "SAINT-PIERRE",
+            "FRÉDÉRIC MISTRAL",
+            "SAINT-MICHEL"
+          ],
+          "count": 2,
+          "wrong": "❌ LES DEUX TÉMOINS NE SONT PAS ENCORE IDENTIFIÉS<br>Ne cherchez pas une réponse sur Internet.<br>Tout ce dont vous avez besoin se trouve devant vous.<br>Observez la façade, la niche et les inscriptions visibles autour du bâtiment.<br>Réessayez.",
           "hints": [
-            "1 = A, 2 = B…",
-            "Le 5 est un E."
+            "Commencez par observer attentivement la façade du bâtiment.",
+            "L'un des personnages est traditionnellement associé aux pêcheurs.",
+            "Regardez aussi les plaques ou inscriptions présentes près du bâtiment.",
+            "Les deux personnages que vous cherchez sont :<br><b>SAINT-PIERRE</b><br>et<br><b>FRÉDÉRIC MISTRAL</b>"
           ],
           "success": {
-            "text": "<p>Direction l'<b>église Saint-Michel</b> !</p>"
+            "title": "✅ LES DEUX TÉMOINS SONT IDENTIFIÉS",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">SAINT-PIERRE<br>et<br>FRÉDÉRIC MISTRAL</p>"
           },
           "h": [
-            "5383263578a876cb",
-            "662a402ef8d1b1c9"
+            "e9fffc56134747ca"
           ]
         },
         {
-          "type": "tap",
-          "title": "Œil de lynx",
-          "text": "<p>Sur ce relevé, un élément de la façade a été effacé. <b>Touchez l'endroit où il devrait se trouver.</b></p>",
-          "image": "images/facade-b.svg",
-          "target": {
-            "x": 50,
-            "y": 42,
-            "r": 10
+          "type": "text",
+          "title": "La déduction",
+          "text": "<p>Il reste maintenant un seul nom :</p><p class=\"big-code\">SAINT-MICHEL</p><p>Ce nom n'était pas là par hasard.<br>Il correspond à votre prochaine destination.</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
+          "wrong": "❌ DESTINATION NON IDENTIFIÉE<br>Reprenez la liste initiale :<br>Saint-Pierre, Frédéric Mistral, Saint-Michel<br>Vous avez déjà identifié les deux premiers.<br>Quel nom reste-t-il ?",
+          "success": {
+            "title": "✅ DESTINATION IDENTIFIÉE",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">L'ÉGLISE SAINT-MICHEL</p><p>Rendez-vous à l'<b>église Saint-Michel</b> pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
           },
-          "hints": [
-            "Il est au centre, au-dessus de la porte."
-          ]
-        },
-        {
-          "type": "number",
-          "title": "L'escalier",
-          "text": "<p>Combien de marches faut-il gravir pour atteindre la porte principale ?</p><p class=\"demo\">[DÉMO : 7]</p>",
-          "hints": [
-            "Comptez depuis le niveau de la rue."
-          ],
           "h": [
-            "6d8982026a62f21b",
-            "381d465254912b8b"
+            "662a402ef8d1b1c9",
+            "662a402ef8d1b1c9",
+            "662a402ef8d1b1c9",
+            "82f5225885538351",
+            "82f5225885538351",
+            "82f5225885538351",
+            "82f5225885538351"
           ]
         }
       ]
@@ -538,8 +571,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "AlVI7jbLp1v4Fao6OF1CdQ==",
-    "iv": "6bCk9UbY5B8X8IeH",
-    "data": "R1BR4DWP3wGPOlM5ZyAOmO7AoyXRnOI9+Gi6hnqypUeXjkfKfYoJTK/8FeiWBf0mPm1I1W3XLXfBJWpYeIVWP4wY8V5znVyxXUx8F8RPXqutyBJu00/J6OKHpNh3Ecv5cLhzDZ44MYXVh+Tr2tcxGQbDNEmrUnU5WIFeYF4CZoB1aGDrE6rJxK45OhenMOIvBCJdzEOn/0iRsX1HA8g3GKgctZGwesBq7+ZTxra9mmQmauB0DM6B3AldRkSvKl9l3AA+B5ExZukYlOqJh/y9xTj0MJQSTS36YFBETNemhNl663cWyJ4iUVUsiS1jrkHpYNE87XTtABKkMPeVUAn+sdDCMnF7essr99smjxvg+CgYVCLIZyG/wO09sBtCqWnSB648T74fIk3YWErX5ammZO3yZ23DL5R6wSIlQ6gnAWxDGgJiBZjv8SKLiWkzseQQCT5a26N/0tKgWnPIEqeKEl24BFS6MJkQ/MBPrmGEVd8LNIM9l6iZfGON5Lvca1xzM7fz8xaRL6oXhcTRouq1ZNXZ7qM7QTuAev/rul5dBSFKAPEMyoF/mpJNKeMUjw9GuwLSWv/ZpEw1ta2f5Q8bcVghU8mvCkQ+TtcDCiuuK0eXRLgBNLdYrn7su5n9wzUzOY6CVXsdup+zqr9Ppf5JxWgNaRitqrOMjdHqI/AJyYNwKR+QwBfe/wBEQlQ1SUCvzP1jtU6JJmZ67UnY0T8QgjJUuW1tqqSPs6Z4eFtonGmFmvMR50mujTiWSA8HiJVMLzdOsiNOsu2BOHsJl5otMcwJ0aB7EpJ2/PRvhYsWBKHJQYKYZ5Ygn0BqaiiioCb+W9LFZPlXLcsWpCl0+cAX6D9V/euTdsiH+nUoAUSKSj8g7niCuq3pQy6HVvH7Ag7uC0PxKgJRGQn/cWn+W/ITn9b4bVRtkgdSMZYe/i0jHnvZQiG8NGPD6yxfORs="
+    "salt": "gnHU8xbbaz3Z6BmQk5pOaw==",
+    "iv": "V4CvhX3GUQJHgoW/",
+    "data": "5Va2USYtG9l46QFX9r8bbTFcyKydFd6MXLN+YZmz7/QAUrYWzpzuA5vPYlYgQvQzeQEYlypL3W6jJjdYBv5/mmkWYvCpW3zZiJlPTEQUW46LBQdzl+lVwnKZKM4BkWJqhWrBhb+MGjxXsgGJ6T5wUFSQ2I1zAl5BWh6df1G0+T3lCm7ca+qla8UIy8EThC/jnx2973+xxvo3db7O6aCva3W1g4iRAxTVCv9u+wCH6hVGa3Bwy9w1bEvAUQJLd6TbtiHEruZ7eu5TPrBOZ1ZvP6JxHHQmoaTAGzXiINOTP11iMYpmG8UeGYIF00vR4G7+bFfwGeSO22Dn6monDGwquFhXvGC9eco7JrZnosO2uar3u4Ez2yEtZwHdT11zGd+7gWqUFNc6Z1IAtpJv2pPR8SO3HgcFrKJnzJawk+J9NSb8bQJYF1uY2wixwjR9nopYrk7EEGdQcrpjnkihRTPi7YKRzGPu7eMgvXxFDl0E/pZSCjM+IRb1eLuzBLfhyZlxrWu4mE+96tlyfHkAkI1Al2i2GJXK12ox4uxskLeuse0yUwIglaEmqgj+WTca7Pn7roTbuqwOwjiu+6QOdFXTEHyb3nBtpv//ACCQ9aexxMPwpfwTmFXm6ksPvg8Bud/+7kYiprIffj1FcOkD171AprU48tXqEqJ28hsHjvIr628KB9p8ycszXjKFsFx1NyuKt2q1Flk/FsikDn6wOUWm4vamINLrDGv09eDTjLkYjTjWti4lBuAOnFNNCvz0MzW6xEllZeawwqlg+R3J5p58IuvdqTatANA/MCpLxxbDx2s8FsIevKhNS9bOxHEekpYpg2e9NvYZ4VhQvxeswEwEhohpIQX348NqxU2WyEeqfnHfvxlVMbsh80+FchsNBq2l48SYpDCvNy+1gTN/+uRgdPHAAdosL5WG+kNdws4hLMax0TrNit2tewVp5clNTNspZsHHk8iG3OZ2anKghzS7AIn1OSZ4JbhzJExhmyx4s8pl6V4LU84vPFbEXvte4pwH8LtbCICdQ8nYIQ7D1OjIDDDVIuBPQuCRShE8YHOiIQi143Rh2Ze5g0rPTiKuQw/oiuqjbhHDA9eCWA2z5WXflJOP7hPD"
   }
 };

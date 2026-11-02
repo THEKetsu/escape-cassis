@@ -2,16 +2,27 @@
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
-  const { E, Sync, GAME, $root, teamIds, REFRESH_MS, CODE_KEY } = A;
+  const { E, Sync, GAME, S, SALT, $root, teamIds, REFRESH_MS, CODE_KEY } = A;
 
   // ---------- accès ----------
 
-  // Le code d'accès est le mot de passe du compte organisateur Supabase (sous sa forme normalisée : sans casse, tirets
-  // ni espaces). Seul Supabase le vérifie : aucune empreinte du code n'est publiée dans game.js. Le même code
-  // déchiffre le carnet de réponses (answerBook de game.js).
+  // Le code d'accès est une simple barrière, vérifiée dans le navigateur : en ligne, il est bon s'il déchiffre le carnet
+  // de réponses (answerBook de game.js), aucune empreinte du code n'étant publiée ; en local, on le compare à adminCode.
+  async function checkCode(value) {
+    if (window.GAME_SOURCE) return !S.adminCode || E.codeMatches(value, S.adminCode, undefined, SALT);
+    if (!GAME.answerBook) throw new Error('Ce game.js ne contient pas de carnet de réponses : régénérez-le avec node outils/publier.js (adminCode renseigné).');
+    try {
+      A.book = await E.decryptJSON(GAME.answerBook, value);
+      return true;
+    } catch (e) {
+      if (e && e.name === 'OperationError') return false; // AES-GCM refuse : mauvais code
+      throw e;
+    }
+  }
+
   function gate() {
-    if (!Sync.enabled) return start(); // affiche « Dashboard non configuré »
-    if (sessionStorage.getItem('admin:' + GAME.id) === 'ok' && Sync.hasSession()) return start();
+    if (sessionStorage.getItem('admin:' + GAME.id) === 'ok') return start();
+    if (window.GAME_SOURCE && !S.adminCode) return start();
     $root.innerHTML = `
       <form class="gate">
         <h1>🧭 Dashboard</h1>
@@ -27,10 +38,14 @@
       const value = form.querySelector('input').value;
       button.disabled = true;
       err.textContent = '';
+      let ok = false;
       try {
-        await Sync.signIn(E.normalize(value));
+        ok = await checkCode(value);
       } catch (error) {
-        err.textContent = error.invalidLogin ? 'Code incorrect' : 'Connexion au serveur impossible : ' + error.message;
+        err.textContent = error.message;
+      }
+      if (!ok) {
+        if (!err.textContent) err.textContent = 'Code incorrect';
         button.disabled = false;
         return;
       }
@@ -46,10 +61,6 @@
         <p>Renseignez <code>supabase.url</code> et <code>supabase.key</code> dans <code>config.js</code> (voir README).</p></div>`;
       return;
     }
-    Sync.onAuthLost = () => { // session expirée ou refusée : retour à la saisie du code
-      sessionStorage.removeItem('admin:' + GAME.id);
-      location.reload();
-    };
     $root.addEventListener('click', async (e) => {
       const action = e.target.closest('[data-action]');
       if (action && action.dataset.action === 'refresh') return A.refresh();

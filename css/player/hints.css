@@ -14,3 +14,4 @@
 .btn.hint-btn small { color: var(--coral); font-weight: 700; }
 
 .foot { text-align: center; margin-top: 10px; }
+.credits { margin: 18px 0 0; text-align: center; font-size: 10px; letter-spacing: .04em; opacity: .45; }
