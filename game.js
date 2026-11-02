@@ -384,7 +384,7 @@ window.GAME = {
           "title": "Le Zip",
           "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
           "images": [
-            "images/Zone_3A_Zip_DIFFICILE.svg"
+            "images/Zone_3A_Zip_DIFFICILE.png"
           ],
           "button": "J'ai terminé le chemin",
           "hints": [
@@ -449,7 +449,7 @@ window.GAME = {
           "title": "Le Zip",
           "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
           "images": [
-            "images/Zone_3B_Zip_DIFFICILE.svg"
+            "images/Zone_3B_Zip_DIFFICILE.png"
           ],
           "button": "J'ai terminé le chemin",
           "hints": [
@@ -637,8 +637,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "TT5Y/y/qhLvulztAz8PY2Q==",
-    "iv": "yOYT1T0FD7/wx9lM",
-    "data": "GG6A+PZgqqBWLuFbodJBd+z8JsfJt1wuIhobGbF8la2yOrt0DMlz0lYo92baYh6dcddIZ2QAINFNd0EXoG/8iHKE9GtPFwhOntBoeXSZe6fbwcqEYsBUZ4RKfkk/4ifd7MeWhZdIlMF3b/4hQdqeb4U9l3i7JIDn90of+gHj+zgtpceNHSGNy8s5VCXHqB5oMn7Yk6nQacJnpcYKo9A43OsucXAxsmVynBllq4L02soa0F00P8U1mY02Q+QBOlHqsM6htIs6wUZQtkuLVqkE4LAiKtl9yWfQu00Ko31fs7rk2gexGuHQqGd4INYNCGo2Tz3W5KwhW1EYMcUCqNHTSMTrtem/7I4PnMJL0lNEahT8TbM8bss36LnPRJhBDQZ+0yjQISFOQ7rTtpViSFRlx8jwDU3WKzIkouk7iQCMFvjC58lkDk6NK/ym8Gt4HYeyKjm6JiYJzghcIOA9jnxnIpFTp2yFQ0dSs7T1wS7aGGbLNRI0S7/M7nCdATLJ5HeRwrxcM2Q9xw9dPMX6jovcpdx0Q23BkMI8BqmiAtOcJNVIextlggTCn4I1AKY0BIH76usVzmcaDJZK8s0p/CJKniTDfqzD2a2UHEM2BfEdk+GCqJuSLHJbxCsAKuW4+RqwlTa4mdPeqaDk7oMy0FjLG4D/9xt3UJ5H++g0ZYqgX1enBxThHSME12DkzdweK9RzQY8OtsaLzx4DDE7Hb1kqLGN2wDf6LkuYgOXEZVh0kwRk70DL6dLAdyXcjVSIMuWCm8V1QiUJy9YgIWQZMtCDZBlrGrRpLme+1jxgbnZbLlNwr/7y+uVV8FDpnFe3+TQDubdjuh6KE/ZsvVWXGQ7Cjx7bSiZpXNWlAmuuZrQzQvEASaaS+rg9RHnUcHqKhVDKY0mhV8zuuBALwXRuhaXIR4jSlJgRJIh7Fwr6tlbT1tMTuG3AtJHza12Tgjg0o2NzlXSUX1aFxi4kOqHYgwtQ/+IhyBqtCEXx1hd0qFEVlxKovOVWlHhbgm0DxmpwsAWHWRwuyO5VU1oa3WoGnz+n9QaLcwT5kh2U4Ab8Z5scKXe+mFkG1egNU/8IsNJEGuWh19mN8CTd54V/d6SAY18SBmQ0Ri8tBKUqTatvoyzju6p5zyxVRrSuPKxBHUTZrtY9+VZIVrs950I2vftuRQ8n6ZyJw7AZ+cAdXeUCM3q9xNCVkJWgurgsLXvq650EZBm+y0mdEfJTUU6iz7hRfLMXlPoHEkw86z1RCyFBoyVJB9NG8csZkoUJOnTWIJrVRG+i6vAeHByCloVPVXaqcTjYKqbG0/sRABGgvIQCOJvds9weujWT97ZmhajV9cLPig=="
+    "salt": "7r9DjBLe4xUyUPo+ah6i/w==",
+    "iv": "BdW07po+nFzZM6OX",
+    "data": "QrRGnLwetdM26bEacva+owM/5IhBJ+xZiTwVkZjv02qKKfgmUv7gqNQaZIvI+O18SsM+pDexZpbyIYmCduc0OPb3muHOQsXlRrR3ctejmRC3jbRNSFaH3cr3ozpM7OfEs/kLLhXCBxRnxUZtjz6YXEx/Lx1P5twivrmzjbeRYHdUv6MdLKrkHsO2x/ADJ/gyuSwvU+AJc31tvSdJutloLJauKQXMveiMLiekfzELxpjE7mrt+khHY+rtI47i4lqJBpk9mAMS4n1LaplZwtbBbjOb7bISuWkzOJf0do2s8J1g1mK5YD1vszsjbyUIGhI/24g8k0pRrTKdCM7khKRla/8vSi4rU1fFMjXaNNlATkE+XU4bH9Z2dnqAR6wrHdSlae7zxea+lvXXGRZFJ/M/g3sQRvAwYb+0kJOw330MEqRqp9G2PB0/2eXLa+zR7As8WjuzGHIPLHNGnnt8nj8rnKY4TtBP4lFdf3YJa2ppwzBJbAC8183rXibwoOz+QgF3Lgn9AnHV9CHYePDBFmYB3At1q23PYtFfB2SnAiUkvpp4WnPDrQKYW8N0vcj/7U8ltqAj4yNw/Fcfknm7DgqEyUgbztA4kE0rcqjEpp1INBlFeIXrSauQVDpBkML4DGOSCihog/O1yYvyKbhYJQtpUACjPlu11JbgkWptmP40rB8KIAioKl562oai4j22fLyY7MnEvObspJ0/4IqpTrMV6YwT88CWH3+X1c0uAnNQJDSNiAD1B1fSeFMCNccndmenX+ZdAQlrl7TUXwY9WRaf5hYRVOHMWSYSro6Zb+V7pE3/dEWbwD+Y91Aa3M3P5/GNg+N4fzcg5KPLXmWOI78Me2p5BVt9qDoCWfLdbIknq25LIgWwY2PL+S2IspXus5l12lGczfmygSNQk+fWkcnJ1xlzek3nuZ21/1AdabApWsmUXIvcBoEsSFFv1WTPXE688gtA06CbX51qfXmUyEYn9pNwfQkHWXvosXzW0kBlaqix5ToF+LE/DzA2O7imzjDykydAbx6UNqxX99WzYTnMfBr1AddfLLynwu0pE/ncR8OwEwU3yd4jv95rbGMpTAJSPq8TeGumuYbzPtBtI5/2UinXiTohEbiRFJpcGW8Y7HJBr8fJl7WRdv/5bLRGeET8ia/WCUVPwDqAHDCVVlI0uxkmZbsaQeofPos+vdDx/VT+cFDj6Fzo8OI9EwvXu6hXOw9RivB0bIMmZSoDyn33uYZ/R/0VPlMCk98vSZI1k8xz8VJG6FE2g5Wpbfo/PvFWdB49oWCz+gzuPM1dS/lcPHPjU/+VZkKOSYiKzDavR6BgfEZBDnrfqM600l7KlQ=="
   }
 };

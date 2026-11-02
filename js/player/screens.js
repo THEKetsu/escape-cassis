@@ -231,7 +231,7 @@
       ${header()}
       <main class="card success anim">
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
-        <h1 class="display">${s.title || (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
+        <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
         ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
         <div class="text">${s.text || ''}</div>
         ${A.imagesHtml(s.images)}

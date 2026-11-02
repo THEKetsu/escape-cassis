@@ -171,8 +171,12 @@
   function zoom(src) {
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
-    overlay.innerHTML = `<img src="${esc(src)}" alt=""><button class="btn close">✕ Fermer</button>`;
-    overlay.addEventListener('click', (e) => { if (e.target.tagName !== 'IMG') overlay.remove(); });
+    overlay.innerHTML = `<p class="zoom-hint">Touchez l'image pour l'agrandir ou la réduire</p><img src="${esc(src)}" alt=""><button class="btn close">✕ Fermer</button>`;
+    // un touché sur l'image alterne entre « à la largeur de l'écran » et « grande, à faire défiler » (grilles, plans)
+    overlay.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') overlay.classList.toggle('wide');
+      else overlay.remove();
+    });
     document.body.appendChild(overlay);
   }
 
