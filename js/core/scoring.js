@@ -9,7 +9,7 @@
     Object.assign(E, factory(E));
   }
 })(typeof self !== 'undefined' ? self : this, function (E) {
-  const { buildPath, totalSeconds } = E;
+  const { buildPath, totalSeconds, formatDuration } = E;
 
   const BADGES = [
     { id: 'flash', icon: '⚡', name: 'Éclair', desc: 'Une énigme résolue en moins de 45 s' },
@@ -59,5 +59,31 @@
     return (messages || []).filter((m) => m.sender === sender && m.id > (readId || 0)).length;
   }
 
-  return { BADGES, earnedBadges, rankTeams, unreadCount };
+  // Export de fin de partie (CSV, séparateur « ; » et BOM pour Excel en français) : le classement, puis le détail
+  // de chaque étape validée (durée, indices, erreurs, étape passée avec le code organisation)
+  function exportCsv(game, states, now) {
+    const cell = (v) => {
+      const s = String(v == null ? '' : v);
+      return /[";\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const line = (cells) => cells.map(cell).join(';');
+    const name = (r) => r.state.teamName || (game.teams[r.team] && game.teams[r.team].name) || r.team;
+    const ranked = rankTeams(game, states, now);
+    const out = [line(['Rang', 'Équipe', 'Nom', 'Statut', 'Temps de jeu', 'Pénalités', 'Total', 'Indices', 'Erreurs'])];
+    ranked.forEach((r, i) => {
+      const log = r.state.log || [];
+      out.push(line([i + 1, r.team, name(r), r.done ? 'Arrivée' : 'En jeu',
+        formatDuration(r.total - (r.state.penalty || 0)), formatDuration(r.state.penalty || 0), formatDuration(r.total),
+        log.reduce((n, l) => n + (l.hints || 0), 0), log.reduce((n, l) => n + (l.wrong || 0), 0)]));
+    });
+    out.push('', line(['Équipe', 'Nom', 'Zone', 'Étape', 'Durée', 'Indices', 'Erreurs', 'Passée avec le code organisation']));
+    ranked.forEach((r) => {
+      (r.state.log || []).forEach((l) => {
+        out.push(line([r.team, name(r), l.zoneName || l.zone, l.title, formatDuration(l.sec), l.hints || 0, l.wrong || 0, l.skipped ? 'oui' : '']));
+      });
+    });
+    return '\ufeff' + out.join('\r\n') + '\r\n';
+  }
+
+  return { BADGES, earnedBadges, rankTeams, unreadCount, exportCsv };
 });

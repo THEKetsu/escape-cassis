@@ -2,7 +2,7 @@
 (function () {
   const A = window.EscapePlayer;
   if (!A) return;
-  const { E, Sync, GAME, S, $app, FINAL_COLOR, leaderboard, LIVE } = A;
+  const { E, Sync, GAME, S, $app, FINAL_COLOR, leaderboard, LIVE, TAKEOVER_MS } = A;
   const esc = window.Util.esc;
 
   function render() {
@@ -92,9 +92,16 @@
     const state = A.state;
     A.setTheme(FINAL_COLOR);
     const remote = A.remote;
+    // Une partie est déjà enregistrée pour cette équipe : on la reprend (pas de nouvelle partie par-dessus).
+    // Si un autre téléphone l'a mise à jour il y a moins d'une minute et demie, il joue encore : reprise refusée
+    // sauf avec le code organisation.
     const resume = remote && remote.startedAt
-      ? `<div class="notice">Cette équipe a déjà une partie en cours (étape ${remote.stepIndex + 1}).
-           <button class="btn primary" data-action="resume">↩️ Reprendre la partie</button></div>`
+      ? (A.remoteLive
+        ? `<div class="notice">🚫 Cette équipe est déjà en jeu sur un autre téléphone.
+             <small>Un seul téléphone par équipe. Si l'autre téléphone est hors service, attendez 1 min 30 ou demandez à l'organisation.</small>
+             <button class="btn" data-action="unlock">🔑 Code organisation</button></div>`
+        : `<div class="notice">Cette équipe a déjà une partie en cours (étape ${remote.stepIndex + 1}).
+             <button class="btn primary" data-action="resume">↩️ Reprendre la partie</button></div>`)
       : '';
     const hintCosts = (S.hintPenalties || []).map(A.minutes).join(' · ');
     $app.innerHTML = `
@@ -110,11 +117,12 @@
           <div><span>🏅</span><b>Badges</b><small>vitesse, sans faute…</small></div>
           <div><span>🏆</span><b>Classement</b><small>temps + pénalités</small></div>
         </div>
+        ${S.rules ? `<div class="rules"><b>À savoir</b>${S.rules}</div>` : ''}
         <label class="field">Nom de votre équipe
           <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express">
         </label>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
-        <button class="btn primary big" data-action="start">C'est parti ! 🚀</button>
+        ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">C\'est parti ! 🚀</button>'}
         ${S.credits ? `<p class="credits">${esc(S.credits)}</p>` : ''}
       </main>`;
     if (Sync.enabled && !A.remote) {
@@ -122,6 +130,7 @@
         const s = row && row.data && row.data.state;
         if (s && s.startedAt && !A.state.startedAt) {
           A.remote = s;
+          A.remoteLive = !!s.device && s.device !== A.deviceId && Date.now() - Date.parse(row.updated_at) < TAKEOVER_MS;
           renderWelcome();
         }
       }).catch(() => {});
@@ -147,6 +156,10 @@
         return `<p class="help">Cochez exactement ${step.count} réponses.</p><div class="choices">` + step.options.map((o, i) =>
           `<button class="btn choice" data-action="toggle" data-value="${esc(o)}" aria-pressed="false"><span class="letter">${String.fromCharCode(65 + i)}</span>${esc(o)}</button>`).join('') +
           '</div><button class="btn primary big" data-action="validate-multi">Valider</button>';
+      case 'order':
+        return '<p class="help">Touchez les éléments dans l\'ordre, du premier au dernier. Touchez un élément choisi pour le retirer.</p><div class="choices">' +
+          step.options.map((o) => `<button class="btn choice" data-action="order-pick" data-value="${esc(o)}"><span class="letter"></span>${esc(o)}</button>`).join('') +
+          '</div><button class="btn primary big" data-action="validate-order">Valider l\'ordre</button>';
       case 'image-choice':
         return '<div class="image-choices">' + step.options.map((o) =>
           `<button class="image-choice" data-action="choose" data-value="${esc(o.label)}">

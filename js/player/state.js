@@ -27,12 +27,24 @@
     A.path = s ? E.buildPath(GAME, s.team) : null;
   }
 
+  // Identifiant de ce téléphone, gardé hors de la progression : le serveur sait quel appareil joue pour l'équipe
+  function deviceId() {
+    let id = localStorage.getItem('escape:device');
+    if (!id) {
+      id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('escape:device', id);
+    }
+    return id;
+  }
+
   function save() {
+    A.state.device = A.deviceId;
     A.state.updatedAt = Date.now();
     localStorage.setItem(STORE, JSON.stringify(A.state));
     A.push();
   }
 
+  A.deviceId = deviceId();
   Object.assign(A, { load, newState, setState, save });
   setState(load());
 })();

@@ -48,5 +48,16 @@
     done: ['🏁', 'Arrivée', 'done'],
   };
 
-  Object.assign(A, { refresh, teamInfo, STATUS });
+  // Bilan de la partie en CSV, à partir de la dernière lecture du serveur
+  function exportCsv() {
+    const states = {};
+    Object.keys(A.rows).forEach((t) => { if (A.rows[t].state) states[t] = A.rows[t].state; });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([E.exportCsv(GAME, states, Date.now())], { type: 'text/csv;charset=utf-8' }));
+    link.download = 'bilan-' + GAME.id + '.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  Object.assign(A, { refresh, teamInfo, STATUS, exportCsv });
 })();

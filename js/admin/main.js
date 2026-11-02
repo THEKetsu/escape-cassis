@@ -64,6 +64,7 @@
     $root.addEventListener('click', async (e) => {
       const action = e.target.closest('[data-action]');
       if (action && action.dataset.action === 'refresh') return A.refresh();
+      if (action && action.dataset.action === 'export') return A.exportCsv();
       if (action && action.dataset.action === 'qr') return A.showQr();
       if (action && action.dataset.action === 'book') return A.showBook();
       if (action && action.dataset.action === 'zoom-in') return A.zoomMap(1);

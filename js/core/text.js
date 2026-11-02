@@ -9,7 +9,7 @@
     Object.assign(E, factory(E));
   }
 })(typeof self !== 'undefined' ? self : this, function () {
-  const STEP_TYPES = ['info', 'text', 'number', 'qcm', 'multi', 'image-choice', 'qr', 'gps', 'tap'];
+  const STEP_TYPES = ['info', 'text', 'number', 'qcm', 'multi', 'order', 'image-choice', 'qr', 'gps', 'tap'];
   const SYNONYMS = { ST: 'SAINT', STE: 'SAINTE' };
 
   // "l'Église St-Michel" -> ["L", "EGLISE", "SAINT", "MICHEL"]

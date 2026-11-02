@@ -92,6 +92,7 @@
         </div>
         <div class="meta">
           ${A.unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${A.unreadTotal()} message${A.unreadTotal() > 1 ? 's' : ''}</button>` : ''}
+          <button data-action="export" title="Télécharger le bilan de la partie (CSV)">📊 Export</button>
           <button data-action="book" class="dark">🔑 Réponses</button>
           <button data-action="qr" class="primary">📱 QR codes équipes</button>
           <button data-action="refresh" class="icon" title="Actualiser">↻</button>

@@ -88,6 +88,6 @@ drop function if exists public.team_board(text, text);
 drop function if exists public.team_messages(text, text, bigint);
 drop function if exists public.team_send(text, text, text, text);
 drop function if exists public.team_ok(text, text);
-drop function if exists public.is_organiser();
 drop table if exists public.team_secrets;
-drop table if exists public.organiser_book;
+drop table if exists public.organiser_book; -- avant is_organiser() : sa règle en dépend
+drop function if exists public.is_organiser();

@@ -48,17 +48,18 @@
       if (!STEP_TYPES.includes(step.type)) return errors.push(`${where} : type "${step.type}" inconnu`);
       if (!step.title) warnings.push(`${where} : pas de titre`);
       const hasAnswers = (step.answers && step.answers.length) || (step.h && step.h.length);
-      if (['text', 'number', 'qcm', 'multi', 'image-choice', 'qr'].includes(step.type) && !hasAnswers) errors.push(`${where} : aucune réponse acceptée`);
-      if (['qcm', 'multi', 'image-choice'].includes(step.type)) {
+      if (['text', 'number', 'qcm', 'multi', 'order', 'image-choice', 'qr'].includes(step.type) && !hasAnswers) errors.push(`${where} : aucune réponse acceptée`);
+      if (['qcm', 'multi', 'order', 'image-choice'].includes(step.type)) {
         if (!step.options || step.options.length < 2) errors.push(`${where} : il faut au moins 2 options`);
         else if (step.answers) {
           const labels = step.options.map((o) => normalize(typeof o === 'string' ? o : o.label));
-          // multi : une réponse = les options à cocher, dans l'ordre des options, séparées par " + "
+          // multi : une réponse = les options à cocher, dans l'ordre des options ; order : toutes les options, dans l'ordre à trouver ; séparées par " + "
           step.answers.forEach((a) => {
-            const parts = step.type === 'multi' ? a.split(' + ') : [a];
+            const parts = ['multi', 'order'].includes(step.type) ? a.split(' + ') : [a];
             parts.forEach((p) => {
               if (!labels.includes(normalize(p))) errors.push(`${where} : la réponse "${a}" ne correspond à aucune option`);
             });
+            if (step.type === 'order' && parts.length !== step.options.length) errors.push(`${where} : la réponse "${a}" doit contenir toutes les options, dans l'ordre`);
             if (step.type === 'multi' && parts.length !== step.count) errors.push(`${where} : count (${step.count}) doit être le nombre d'options de la réponse "${a}"`);
           });
         }

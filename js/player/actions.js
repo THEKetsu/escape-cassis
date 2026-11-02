@@ -31,6 +31,28 @@
     submit(picked.join(' + '));
   }
 
+  // Classement : chaque proposition touchée reçoit son rang (1, 2, 3…) ; la retirer renumérote les suivantes
+  function orderPick(el) {
+    const buttons = [...$app.querySelectorAll('.choice[data-value]')];
+    const rank = Number(el.dataset.rank || 0);
+    if (rank) {
+      delete el.dataset.rank;
+      buttons.forEach((b) => { if (Number(b.dataset.rank) > rank) b.dataset.rank = Number(b.dataset.rank) - 1; });
+    } else {
+      el.dataset.rank = buttons.filter((b) => b.dataset.rank).length + 1;
+    }
+    buttons.forEach((b) => {
+      b.classList.toggle('selected', !!b.dataset.rank);
+      b.querySelector('.letter').textContent = b.dataset.rank || '';
+    });
+  }
+
+  function validateOrder(step) {
+    const picked = [...$app.querySelectorAll('.choice[data-rank]')].sort((a, b) => a.dataset.rank - b.dataset.rank);
+    if (picked.length !== step.options.length) return A.feedback('Placez les ' + step.options.length + ' éléments dans l\'ordre.', 'bad');
+    submit(picked.map((b) => b.dataset.value).join(' + '));
+  }
+
   function tap(e, box) {
     const step = A.current();
     if (Date.now() < A.cooldownUntil) return;
@@ -111,6 +133,18 @@
     solve(step, true);
   }
 
+  // Reprise forcée d'une équipe encore en jeu ailleurs : réservée à l'organisation
+  async function unlock() {
+    const code = await A.ask({
+      icon: '🔑', title: 'Code organisation', input: 'Code',
+      text: 'Reprendre cette équipe sur ce téléphone. L\'autre téléphone ne doit plus jouer.', ok: 'Valider',
+    });
+    if (!code) return;
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    A.remoteLive = false;
+    A.render();
+  }
+
   function checkGps(step) {
     if (!navigator.geolocation) return A.feedback('Géolocalisation indisponible : utilisez le code de secours.', 'bad');
     A.feedback('📡 Recherche de votre position…');
@@ -151,8 +185,11 @@
     switch (el.dataset.action) {
       case 'pick': A.setState(A.newState(el.dataset.team)); A.save(); A.render(); break;
       case 'start': start(); break;
+      case 'unlock': unlock(); break;
       case 'resume': A.setState(A.remote); A.remote = null; A.save(); A.preloadImages(); A.render(); A.updatePosition(); break;
       case 'continue': solve(step, false); break;
+      case 'order-pick': orderPick(el); break;
+      case 'validate-order': validateOrder(step); break;
       case 'toggle': el.classList.toggle('selected'); el.setAttribute('aria-pressed', el.classList.contains('selected')); break;
       case 'validate-multi': validateMulti(step); break;
       case 'choose': if (!el.classList.contains('wrong')) submit(el.dataset.value, el); break;

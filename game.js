@@ -15,6 +15,7 @@ window.GAME = {
     "showLeaderboard": true,
     "liveLocation": true,
     "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
+    "rules": "<ul><li>Restez ensemble et respectez la circulation : traversez aux passages piétons.</li><li>Ne touchez pas, ne déplacez rien : tout se résout en observant.</li><li>Un souci ou un blocage ? Écrivez à l'organisation avec le bouton 💬, ou appelez le <b>[N° DE L'ORGANISATION]</b>.</li></ul>",
     "credits": "Créé par Quentin BENDER & Solène PACE",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
     "masterHash": "c6106b91c2340efa"
@@ -342,72 +343,137 @@ window.GAME = {
       ]
     },
     "3": {
-      "name": "Le Four Banal",
-      "lat": 43.21478,
-      "lng": 5.53776,
+      "name": "Église Saint-Michel",
+      "lat": 43.21583,
+      "lng": 5.53789,
       "A": [
         {
-          "type": "text",
-          "title": "Qui suis-je ?",
-          "text": "<p>Autrefois, je cuisais le pain de tout le village et chacun payait sa part au seigneur. Qui suis-je ?</p>",
-          "match": "contains",
+          "type": "info",
+          "title": "Mission 3 — Le chemin architectural",
+          "text": "<p>Vous êtes devant l'<b>église Saint-Michel</b>.</p><p>Votre prochaine destination est cachée dans son architecture.</p><p>Observez attentivement la façade. Vous devez retrouver cinq éléments :</p><ul><li>PORTAIL</li><li>BAIES JUMELLES</li><li>OCULUS</li><li>CROIX</li><li>CLOCHER / HORLOGE</li></ul><p>Une fois les cinq éléments identifiés, déterminez dans quel ordre ils se lisent sur le bâtiment.</p>",
+          "button": "J'ai observé la façade"
+        },
+        {
+          "type": "order",
+          "title": "Trouver l'ordre",
+          "text": "<p>Vous avez devant vous cinq repères architecturaux.</p><p><b>Quel est leur ordre correct ?</b></p>",
+          "options": [
+            "OCULUS",
+            "CLOCHER / HORLOGE",
+            "PORTAIL",
+            "CROIX",
+            "BAIES JUMELLES"
+          ],
+          "wrong": "❌ ORDRE INCORRECT<br>Regardez de nouveau la façade.<br>Commencez par l'axe principal de l'église, du bas vers le haut.<br>Le clocher est un élément latéral : il vient en dernier.<br>Réessayez.",
           "hints": [
-            "Le mot « banal » désignait ce qui appartenait au seigneur.",
-            "On y enfournait le pain."
+            "Commencez tout en bas de la façade.",
+            "Le portail est le premier élément.",
+            "Suivez ensuite la façade vers le haut :<br>portail → baies → oculus → croix",
+            "Le clocher / l'horloge constitue le dernier repère."
           ],
           "success": {
-            "text": "<p>Rendez-vous au <b>Four Banal</b>.</p>"
+            "title": "✅ ORDRE ARCHITECTURAL VALIDÉ",
+            "text": "<p>Vous connaissez maintenant l'ordre des repères.</p><p>Utilisez-le pour résoudre la grille.</p>"
           },
           "h": [
-            "97487b5e42ae8708",
-            "fce3ff48e0219f1a"
+            "084b5037ddce5191"
+          ]
+        },
+        {
+          "type": "info",
+          "title": "Le Zip",
+          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
+          "images": [
+            "images/Zone_3A_Zip_DIFFICILE.svg"
+          ],
+          "button": "J'ai terminé le chemin",
+          "hints": [
+            "Votre objectif n'est pas seulement de relier les cinq repères.<br>Toutes les cases doivent être utilisées.",
+            "Avant de tracer une longue ligne, vérifiez que vous ne créez pas une zone impossible à rejoindre plus tard.",
+            "Les murs sont là pour vous aider autant que pour vous bloquer.<br>Observez les passages où vous n'aurez qu'une seule possibilité.",
+            "Vous devez arriver au clocher / horloge seulement après avoir parcouru les quatre autres repères."
           ]
         },
         {
           "type": "text",
-          "title": "Le gardien du four",
-          "text": "<p><b>Entrez dans le Four Banal et interrogez la personne présente.</b> Elle vous confiera un mot de passe si vous lui dites « Le pain est cuit ».</p><p class=\"demo\">[DÉMO : FOURNIL]</p>",
-          "hints": [
-            "Il faut parler à la personne à l'intérieur !"
-          ],
+          "title": "Destination révélée",
+          "text": "<p>Lorsque le chemin est terminé, lisez les lettres dans l'ordre où vous les avez rencontrées.</p><p>Elles forment le nom de votre prochaine destination.</p><p><b>Quelle destination avez-vous trouvée ?</b></p>",
+          "wrong": "❌ DESTINATION INCORRECTE<br>Vérifiez votre chemin.<br>Si le Zip est correctement résolu, les lettres doivent former un lieu de Cassis.",
+          "success": {
+            "title": "✅ PARCOURS TERMINÉ",
+            "text": "<p>Votre chemin a révélé :</p><p class=\"big-code\">FOUR BANAL</p><p>Rendez-vous au <b>Four Banal</b> pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
+          },
           "h": [
-            "9c9b0442e107c6ca"
+            "97487b5e42ae8708",
+            "3e96a4ee6377f85d",
+            "fce3ff48e0219f1a"
           ]
         }
       ],
       "B": [
         {
-          "type": "text",
-          "title": "Miroir, mon beau miroir",
-          "text": "<p>Ce message se lit dans un miroir :</p><p class=\"big-code mirror\">FOUR BANAL</p><p>Où devez-vous aller ?</p>",
-          "match": "contains",
+          "type": "info",
+          "title": "Mission 3 — Le second chemin",
+          "text": "<p>Vous êtes devant l'<b>église Saint-Michel</b>.</p><p>Votre prochaine destination est elle aussi dissimulée dans son architecture.</p><p>Observez attentivement la façade et identifiez les cinq éléments suivants :</p><ul><li>PORTAIL</li><li>BAIES JUMELLES</li><li>OCULUS</li><li>CROIX</li><li>CLOCHER / HORLOGE</li></ul><p>Votre première mission est de déterminer leur ordre.</p>",
+          "button": "J'ai observé la façade"
+        },
+        {
+          "type": "order",
+          "title": "Trouver l'ordre",
+          "text": "<p>Replacez les cinq éléments dans l'ordre correct.</p>",
+          "options": [
+            "OCULUS",
+            "CLOCHER / HORLOGE",
+            "PORTAIL",
+            "CROIX",
+            "BAIES JUMELLES"
+          ],
+          "wrong": "❌ ORDRE INCORRECT<br>Ne cherchez pas l'ordre dans la grille.<br>Il se trouve directement sur l'église devant vous.<br>Observez la façade du bas vers le haut.",
           "hints": [
-            "Utilisez l'écran éteint d'un téléphone comme miroir."
+            "Commencez par le portail.",
+            "Poursuivez avec les baies.",
+            "L'oculus se trouve au-dessus.",
+            "Le clocher est le dernier repère."
           ],
           "success": {
-            "text": "<p>Rendez-vous au <b>Four Banal</b>.</p>"
+            "title": "✅ ORDRE ARCHITECTURAL VALIDÉ",
+            "text": "<p>Une nouvelle grille vous attend.</p><p>Les règles restent les mêmes.</p>"
           },
           "h": [
-            "97487b5e42ae8708"
+            "084b5037ddce5191"
           ]
         },
         {
           "type": "info",
-          "title": "Rencontre",
-          "text": "<p><b>Entrez dans le Four Banal et demandez à la personne présente de vous raconter une tradition cassidenne.</b> Revenez ensuite à l'application.</p>",
-          "button": "C'est fait, on a la réponse"
+          "title": "Le Zip",
+          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
+          "images": [
+            "images/Zone_3B_Zip_DIFFICILE.svg"
+          ],
+          "button": "J'ai terminé le chemin",
+          "hints": [
+            "Commencez par identifier les cases ou passages qui offrent très peu d'options.",
+            "Attention aux zones que vous risquez d'enfermer trop tôt.",
+            "Les cinq repères donnent l'ordre général, mais toutes les cases doivent être parcourues.",
+            "Si votre chemin arrive au clocher alors qu'il reste des cases libres, votre parcours est incorrect."
+          ]
         },
         {
           "type": "text",
-          "title": "La tradition",
-          "text": "<p>Quelle fête la personne vous a-t-elle décrite ?</p><p class=\"demo\">[DÉMO : VENDANGES]</p>",
-          "match": "contains",
-          "hints": [
-            "Elle est liée au vin de Cassis."
-          ],
+          "title": "Destination révélée",
+          "text": "<p>Votre chemin est terminé.</p><p>Lisez maintenant les lettres dans l'ordre où vous les avez rencontrées.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "wrong": "❌ DESTINATION INCORRECTE<br>Vérifiez que votre parcours passe bien par les 49 cases et que vous avez relevé les lettres dans le bon ordre.",
+          "success": {
+            "title": "✅ PARCOURS TERMINÉ",
+            "text": "<p>Votre chemin a révélé :</p><p class=\"big-code\">MAISON DE L'EUROPE</p><p>Rendez-vous à la <b>Maison de l'Europe</b> pour poursuivre votre mission.</p>",
+            "button": "Continuer la mission"
+          },
           "h": [
-            "232cbdd91bc529e0",
-            "f4b21de3a5104c2b"
+            "deb8859d398c5ad7",
+            "deb8859d398c5ad7",
+            "deb8859d398c5ad7",
+            "51f77dbd615a088b"
           ]
         }
       ]
@@ -571,8 +637,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "gnHU8xbbaz3Z6BmQk5pOaw==",
-    "iv": "V4CvhX3GUQJHgoW/",
-    "data": "5Va2USYtG9l46QFX9r8bbTFcyKydFd6MXLN+YZmz7/QAUrYWzpzuA5vPYlYgQvQzeQEYlypL3W6jJjdYBv5/mmkWYvCpW3zZiJlPTEQUW46LBQdzl+lVwnKZKM4BkWJqhWrBhb+MGjxXsgGJ6T5wUFSQ2I1zAl5BWh6df1G0+T3lCm7ca+qla8UIy8EThC/jnx2973+xxvo3db7O6aCva3W1g4iRAxTVCv9u+wCH6hVGa3Bwy9w1bEvAUQJLd6TbtiHEruZ7eu5TPrBOZ1ZvP6JxHHQmoaTAGzXiINOTP11iMYpmG8UeGYIF00vR4G7+bFfwGeSO22Dn6monDGwquFhXvGC9eco7JrZnosO2uar3u4Ez2yEtZwHdT11zGd+7gWqUFNc6Z1IAtpJv2pPR8SO3HgcFrKJnzJawk+J9NSb8bQJYF1uY2wixwjR9nopYrk7EEGdQcrpjnkihRTPi7YKRzGPu7eMgvXxFDl0E/pZSCjM+IRb1eLuzBLfhyZlxrWu4mE+96tlyfHkAkI1Al2i2GJXK12ox4uxskLeuse0yUwIglaEmqgj+WTca7Pn7roTbuqwOwjiu+6QOdFXTEHyb3nBtpv//ACCQ9aexxMPwpfwTmFXm6ksPvg8Bud/+7kYiprIffj1FcOkD171AprU48tXqEqJ28hsHjvIr628KB9p8ycszXjKFsFx1NyuKt2q1Flk/FsikDn6wOUWm4vamINLrDGv09eDTjLkYjTjWti4lBuAOnFNNCvz0MzW6xEllZeawwqlg+R3J5p58IuvdqTatANA/MCpLxxbDx2s8FsIevKhNS9bOxHEekpYpg2e9NvYZ4VhQvxeswEwEhohpIQX348NqxU2WyEeqfnHfvxlVMbsh80+FchsNBq2l48SYpDCvNy+1gTN/+uRgdPHAAdosL5WG+kNdws4hLMax0TrNit2tewVp5clNTNspZsHHk8iG3OZ2anKghzS7AIn1OSZ4JbhzJExhmyx4s8pl6V4LU84vPFbEXvte4pwH8LtbCICdQ8nYIQ7D1OjIDDDVIuBPQuCRShE8YHOiIQi143Rh2Ze5g0rPTiKuQw/oiuqjbhHDA9eCWA2z5WXflJOP7hPD"
+    "salt": "TT5Y/y/qhLvulztAz8PY2Q==",
+    "iv": "yOYT1T0FD7/wx9lM",
+    "data": "GG6A+PZgqqBWLuFbodJBd+z8JsfJt1wuIhobGbF8la2yOrt0DMlz0lYo92baYh6dcddIZ2QAINFNd0EXoG/8iHKE9GtPFwhOntBoeXSZe6fbwcqEYsBUZ4RKfkk/4ifd7MeWhZdIlMF3b/4hQdqeb4U9l3i7JIDn90of+gHj+zgtpceNHSGNy8s5VCXHqB5oMn7Yk6nQacJnpcYKo9A43OsucXAxsmVynBllq4L02soa0F00P8U1mY02Q+QBOlHqsM6htIs6wUZQtkuLVqkE4LAiKtl9yWfQu00Ko31fs7rk2gexGuHQqGd4INYNCGo2Tz3W5KwhW1EYMcUCqNHTSMTrtem/7I4PnMJL0lNEahT8TbM8bss36LnPRJhBDQZ+0yjQISFOQ7rTtpViSFRlx8jwDU3WKzIkouk7iQCMFvjC58lkDk6NK/ym8Gt4HYeyKjm6JiYJzghcIOA9jnxnIpFTp2yFQ0dSs7T1wS7aGGbLNRI0S7/M7nCdATLJ5HeRwrxcM2Q9xw9dPMX6jovcpdx0Q23BkMI8BqmiAtOcJNVIextlggTCn4I1AKY0BIH76usVzmcaDJZK8s0p/CJKniTDfqzD2a2UHEM2BfEdk+GCqJuSLHJbxCsAKuW4+RqwlTa4mdPeqaDk7oMy0FjLG4D/9xt3UJ5H++g0ZYqgX1enBxThHSME12DkzdweK9RzQY8OtsaLzx4DDE7Hb1kqLGN2wDf6LkuYgOXEZVh0kwRk70DL6dLAdyXcjVSIMuWCm8V1QiUJy9YgIWQZMtCDZBlrGrRpLme+1jxgbnZbLlNwr/7y+uVV8FDpnFe3+TQDubdjuh6KE/ZsvVWXGQ7Cjx7bSiZpXNWlAmuuZrQzQvEASaaS+rg9RHnUcHqKhVDKY0mhV8zuuBALwXRuhaXIR4jSlJgRJIh7Fwr6tlbT1tMTuG3AtJHza12Tgjg0o2NzlXSUX1aFxi4kOqHYgwtQ/+IhyBqtCEXx1hd0qFEVlxKovOVWlHhbgm0DxmpwsAWHWRwuyO5VU1oa3WoGnz+n9QaLcwT5kh2U4Ab8Z5scKXe+mFkG1egNU/8IsNJEGuWh19mN8CTd54V/d6SAY18SBmQ0Ri8tBKUqTatvoyzju6p5zyxVRrSuPKxBHUTZrtY9+VZIVrs950I2vftuRQ8n6ZyJw7AZ+cAdXeUCM3q9xNCVkJWgurgsLXvq650EZBm+y0mdEfJTUU6iz7hRfLMXlPoHEkw86z1RCyFBoyVJB9NG8csZkoUJOnTWIJrVRG+i6vAeHByCloVPVXaqcTjYKqbG0/sRABGgvIQCOJvds9weujWT97ZmhajV9cLPig=="
   }
 };

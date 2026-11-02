@@ -56,9 +56,9 @@ test('la version publiée valide les mêmes réponses sans les contenir', async 
 test('carnet de réponses : chiffré dans game.js, lisible avec le code admin seulement', async () => {
   const game = loadGame();
   const book = JSON.parse(JSON.stringify(E.answerBook(game))); // tableaux issus de vm : autre prototype
-  assert.deepStrictEqual(book.answers['z3-A-1'], ['FOURNIL']);
+  assert.deepStrictEqual(book.answers['z3-A-3'], ['FOUR BANAL', 'LE FOUR BANAL', 'FOUR']);
   assert.deepStrictEqual(book.answers['final-1'], ['ARRIVEE']);
-  assert.strictEqual(book.answers['z3-B-1'], undefined); // étape info : pas de réponse
+  assert.strictEqual(book.answers['z3-B-2'], undefined); // étape info : pas de réponse
   assert.strictEqual(book.masterCode, 'CALANQUE');
   const sandbox = { window: {} };
   vm.runInNewContext(await E.publishedFile(game), sandbox);
@@ -251,4 +251,36 @@ test('choix multiple : réponse = options cochées dans l\'ordre, validée comme
   assert.ok(E.checkAnswer('SAINT-PIERRE + FRÉDÉRIC MISTRAL', E.publish(game).zones[2].B[1], salt));
   step.count = 3;
   assert.ok(E.validate(game).errors.some((e) => e.includes('count')));
+});
+
+test('export fin de partie : classement puis détail des étapes, au format CSV', () => {
+  const game = loadGame();
+  const now = 10000000;
+  const csv = E.exportCsv(game, {
+    E1: { startedAt: now - 600000, finishedAt: now - 60000, penalty: 120, teamName: 'Les "Rapides"',
+      log: [{ zoneName: 'Port', title: 'Étape; 1', sec: 65, hints: 1, wrong: 2, skipped: true }] },
+    E2: { startedAt: null },
+  }, now);
+  assert.ok(csv.startsWith('\ufeffRang;Équipe;Nom;Statut'));
+  const lines = csv.trim().split('\r\n');
+  assert.strictEqual(lines[1], '1;E1;"Les ""Rapides""";Arrivée;09:00;02:00;11:00;1;2');
+  assert.ok(lines.includes('E1;"Les ""Rapides""";Port;"Étape; 1";01:05;1;2;oui'));
+  assert.ok(!csv.includes('E2')); // équipe qui n'a pas démarré : absente
+});
+
+test('classement à remettre dans l\'ordre : seule la bonne suite est acceptée, options présentées dans le désordre', () => {
+  const game = loadGame();
+  const salt = game.settings.salt;
+  ['A', 'B'].forEach((v) => {
+    const step = game.zones[3][v][1];
+    assert.strictEqual(step.type, 'order');
+    const right = step.answers[0].split(' + ');
+    assert.deepStrictEqual(right, ['PORTAIL', 'BAIES JUMELLES', 'OCULUS', 'CROIX', 'CLOCHER / HORLOGE']);
+    assert.notDeepStrictEqual(step.options, right); // l'ordre ne doit pas se lire dans l'écran
+    assert.ok(E.checkAnswer(right.join(' + '), E.publish(game).zones[3][v][1], salt));
+    assert.ok(!E.checkAnswer(right.slice().reverse().join(' + '), step, salt));
+    assert.ok(!E.checkAnswer([right[1], right[0], ...right.slice(2)].join(' + '), step, salt));
+  });
+  game.zones[3].A[1].answers = ['PORTAIL + OCULUS'];
+  assert.ok(E.validate(game).errors.some((e) => e.includes('toutes les options')));
 });
