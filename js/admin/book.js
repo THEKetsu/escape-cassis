@@ -37,6 +37,10 @@
       : '';
     switch (step.type) {
       case 'info': return `<small>pas de réponse : bouton « ${esc(step.button || 'Continuer')} »</small>`;
+      case 'zip': {
+        const found = E.zipSolve(step.zip, 1)[0];
+        return found ? `chemin à tracer dont les lettres donnent : <b>${esc(E.zipLetters(step.zip, found))}</b>` : '<small class="err">grille sans solution</small>';
+      }
       case 'tap': return `toucher l'image à <b>${step.target.x} % / ${step.target.y} %</b> <small>(largeur / hauteur, rayon ${step.target.r} %)</small>`;
       case 'gps': return `se rendre à <b>${step.lat}, ${step.lng}</b> <small>(${step.radius || 40} m)</small>${list ? `<br>code de secours : ${list}` : ''}`;
       default: return list || '<small class="err">réponse indisponible</small>';

@@ -380,19 +380,155 @@ window.GAME = {
           ]
         },
         {
-          "type": "info",
+          "type": "zip",
           "title": "Le Zip",
-          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
-          "images": [
-            "images/Zone_3A_Zip_DIFFICILE.png"
-          ],
-          "button": "J'ai terminé le chemin",
+          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Faites glisser votre doigt de case en case, <b>en partant du portail</b>. Les <b>lettres rencontrées</b> s'affichent sous la grille.</p>",
+          "zip": {
+            "size": 7,
+            "marks": [
+              {
+                "at": [
+                  3,
+                  3
+                ],
+                "icon": "portail"
+              },
+              {
+                "at": [
+                  6,
+                  6
+                ],
+                "icon": "baies"
+              },
+              {
+                "at": [
+                  2,
+                  2
+                ],
+                "icon": "oculus"
+              },
+              {
+                "at": [
+                  0,
+                  0
+                ],
+                "icon": "croix"
+              },
+              {
+                "at": [
+                  6,
+                  2
+                ],
+                "icon": "clocher"
+              }
+            ],
+            "walls": [
+              [
+                0,
+                1,
+                "D"
+              ],
+              [
+                0,
+                2,
+                "D"
+              ],
+              [
+                0,
+                4,
+                "D"
+              ],
+              [
+                1,
+                0,
+                "D"
+              ],
+              [
+                1,
+                3,
+                "D"
+              ],
+              [
+                1,
+                5,
+                "D"
+              ],
+              [
+                2,
+                1,
+                "D"
+              ],
+              [
+                3,
+                0,
+                "D"
+              ],
+              [
+                3,
+                5,
+                "D"
+              ],
+              [
+                4,
+                4,
+                "D"
+              ],
+              [
+                5,
+                5,
+                "D"
+              ],
+              [
+                2,
+                4,
+                "R"
+              ],
+              [
+                3,
+                1,
+                "R"
+              ],
+              [
+                4,
+                1,
+                "R"
+              ],
+              [
+                3,
+                2,
+                "R"
+              ],
+              [
+                6,
+                2,
+                "R"
+              ],
+              [
+                4,
+                5,
+                "R"
+              ]
+            ],
+            "letters": [
+              ".....A.",
+              "N..B...",
+              "....F..",
+              ".A....O",
+              "....R..",
+              ".L.....",
+              "...U..."
+            ]
+          },
           "hints": [
             "Votre objectif n'est pas seulement de relier les cinq repères.<br>Toutes les cases doivent être utilisées.",
             "Avant de tracer une longue ligne, vérifiez que vous ne créez pas une zone impossible à rejoindre plus tard.",
             "Les murs sont là pour vous aider autant que pour vous bloquer.<br>Observez les passages où vous n'aurez qu'une seule possibilité.",
             "Vous devez arriver au clocher / horloge seulement après avoir parcouru les quatre autres repères."
-          ]
+          ],
+          "success": {
+            "title": "✅ CHEMIN TERMINÉ",
+            "text": "<p>Votre chemin passe par les 49 cases.</p><p>Lisez les lettres dans l'ordre où vous les avez rencontrées : elles forment votre prochaine destination.</p>"
+          }
         },
         {
           "type": "text",
@@ -445,19 +581,150 @@ window.GAME = {
           ]
         },
         {
-          "type": "info",
+          "type": "zip",
           "title": "Le Zip",
-          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Pendant votre parcours, <b>relevez toutes les lettres rencontrées</b>.</p>",
-          "images": [
-            "images/Zone_3B_Zip_DIFFICILE.png"
-          ],
-          "button": "J'ai terminé le chemin",
+          "text": "<p>Vous devez tracer <b>un seul chemin continu</b>.</p><p>Votre chemin doit :</p><ul><li>se déplacer uniquement horizontalement ou verticalement</li><li>passer par les <b>49 cases</b>, chacune exactement une fois</li><li>ne jamais revenir sur une case déjà utilisée</li><li>respecter les murs</li><li>traverser les cinq pictogrammes dans cet ordre :<br><b>PORTAIL → BAIES → OCULUS → CROIX → CLOCHER</b></li></ul><p>Faites glisser votre doigt de case en case, <b>en partant du portail</b>. Les <b>lettres rencontrées</b> s'affichent sous la grille.</p>",
+          "zip": {
+            "size": 7,
+            "marks": [
+              {
+                "at": [
+                  1,
+                  1
+                ],
+                "icon": "portail"
+              },
+              {
+                "at": [
+                  3,
+                  2
+                ],
+                "icon": "baies"
+              },
+              {
+                "at": [
+                  5,
+                  2
+                ],
+                "icon": "oculus"
+              },
+              {
+                "at": [
+                  3,
+                  6
+                ],
+                "icon": "croix"
+              },
+              {
+                "at": [
+                  0,
+                  4
+                ],
+                "icon": "clocher"
+              }
+            ],
+            "walls": [
+              [
+                0,
+                1,
+                "D"
+              ],
+              [
+                0,
+                4,
+                "D"
+              ],
+              [
+                1,
+                0,
+                "D"
+              ],
+              [
+                1,
+                1,
+                "D"
+              ],
+              [
+                3,
+                0,
+                "D"
+              ],
+              [
+                3,
+                1,
+                "D"
+              ],
+              [
+                3,
+                2,
+                "D"
+              ],
+              [
+                3,
+                3,
+                "D"
+              ],
+              [
+                4,
+                2,
+                "D"
+              ],
+              [
+                4,
+                6,
+                "D"
+              ],
+              [
+                5,
+                5,
+                "D"
+              ],
+              [
+                1,
+                1,
+                "R"
+              ],
+              [
+                1,
+                3,
+                "R"
+              ],
+              [
+                6,
+                3,
+                "R"
+              ],
+              [
+                1,
+                5,
+                "R"
+              ],
+              [
+                3,
+                4,
+                "R"
+              ]
+            ],
+            "letters": [
+              "M.A...O",
+              "...EP..",
+              ".I...R.",
+              ".S.....",
+              ".N..OU.",
+              "....L..",
+              "D.E...E"
+            ]
+          },
           "hints": [
             "Commencez par identifier les cases ou passages qui offrent très peu d'options.",
             "Attention aux zones que vous risquez d'enfermer trop tôt.",
             "Les cinq repères donnent l'ordre général, mais toutes les cases doivent être parcourues.",
             "Si votre chemin arrive au clocher alors qu'il reste des cases libres, votre parcours est incorrect."
-          ]
+          ],
+          "success": {
+            "title": "✅ CHEMIN TERMINÉ",
+            "text": "<p>Votre chemin passe par les 49 cases.</p><p>Lisez les lettres dans l'ordre où vous les avez rencontrées : elles forment votre prochaine destination.</p>"
+          }
         },
         {
           "type": "text",
@@ -637,8 +904,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "iucMzq5I1qZovukAj+sA5g==",
-    "iv": "tsoh1Ntdia3vedOR",
-    "data": "0lTZ9UruwUv8A4MeHLx3MjEEKbhi7CjMGX4FBQi61+uLEUTZf3gLH7YkWKRexhsruwTY/M6yXSdfPDPmOw4t685VA7nXtAi2C1Fc85z2R8jb3PxAOXDYe6adU62a2SHoxVpnBcibbeB+2vFi9MnQ8AVTf8afNG+jRbwYTRHwCqO1hw/HUas3US0MsrsAZ9FvZxSQKNfSb5gwKoIcGdEFzBBAOBEFvt1N1vD0qBOfNm7QLixW0eSDLuUzuWz0Z1GHkMkdz1eb+4J2mFLC5eIKIodcsfNlFKvUDO3I1HKfIS5xNVJ19fyc2YW1RGySP7PxCqC5D2bMDVDm/OSid1JkPaW81CCEdDAJ1WYsetE/CtQB5wfMOLyb01quuskGHBFCImYHabAywP/q3709O4/l/GZuHvIxmT1o6hq5txFv/4xl59IEw9L6Z8wVif5s9y6TsCMo5nFLGxoRk/7Hxpeni4dKe8izBf9a2s/KNC5W8Jcc2yn8RevUX2g6xo4ZII3dhOnNAm2fVUL6j6ytDjI3E8OIVVkBNAXdz+wRkd0dVjMmnjzCq0nJHdUUl6jKwmvq1zauQCwlRbfuMS2th/JFIacFtq1yOOov1+JbicSoIqa9ElTlQfmhC6a/mIXkaUHuzWFU/NdZT6kLYtZR3j9ddEMXdw/967+pltyO8o9DpnFaC9YIFPFW51Z4Y5ettRn/RgomL1fVIT5jsgo1hQAAezvn5ngUiOaZ6lHwu0AEr4vollezKrj+6o9fJwbK+KYg1rT2bHt5GjKjDpDUF4RglJfA/zUoYRKIEUyKoTsDzE6b7dxNGvl70e99KztDDTDS+JLw16zlv9ALqY6UNpRrVJHALH2boKbtTwScYPIkvL1I0wBz+V+iNxvwdyfpT8zcnYkRT9UTmU5PHtmE6b7HP32fU9NfME4OzEoVYJN0wfA1vDJrew9pln2NO77Spx5WZZavCtIJ3shZRDJRvVbl9DZLAub1N3BiXwx4hOExqU/gxMCs7TMAX3usmwuQuS5/HmalDuDBhwjc9aC5+qYbBb4vfH6R2jFdO8ZWt1Xwf+/mplq/DSv31o4OdYbljuCArD7/Pt3tRZZk77kZttTIQ9DFkW5qpGUIwxC/u9TeYOgApZbwhvEAY8DGRKBsewHYBxXHnllITgaCHygQs//FREh/I4JjHZ5RRMRleSeDgduX27dl+PcCIVhE6MbJAuThotIW9tfYJE4H9YqNtlSEYFnDxkKJsYuti+YJqoXNLbTJBeU7WTp86Geh4g1INKnUSqm0chbfBierA4dRbVNWlUww8lzHyRCCbS/C3bF3FRrEpyu8ka+d9zFJQ6kZYA=="
+    "salt": "WI5ZXHAat/SQDsK8ao8dyQ==",
+    "iv": "NzXyecaKdb6rIt07",
+    "data": "0xiduiZoDZ52n6ON9dNwcz5vNSQcgspoYVNq8zIuWfge4z1nd9ygdYis2jtQZm1BoaIq35gLqzvm3kxGwzJ3XGvAxtw/JiloAwk2//zzmARJvdIaj1u9N00EwKzL4/9YGkVkI98neopbE7GcwNR2aDRASVLzm2TyQ+1NT6SNw2Wc5bEm/zUd1jVbDax9wDgDtbPYCW6MmrqJhdSsylzl/ewmmCCG0oqgnqtQ2m7wXpgDL9Vxd+v6DvG1qOQV0pWsGkKU4PKAHrfhwXUQZ7FsqHIYDpLg90eUCv02bXqMIxAD5kZUi6m9MBs9xA5BrF3GS3Rl5EDfrusT26vyvSM98ZY8rlQjDJHG7239EJo8LLXeS93WdAuFEcKyH492fkZK62O6jWyKmZIqiMeWt1lOgdgQAyo20DC3Q1kdOpnuOy32tSEVNUNhnziqk7rqlD7dgFG7nbE6nK+2qadBRruWx5RaaJNJrgEvztKzYcUk17ExZd99PB/yyQIIdpBleZuEMKVwPU3pqkEdfdy/0kmZ4vlt9fOL9dg0PhNU8ciHhQjrgjTNw9CUlUfE+VlL2b+EI3kxwHunDJsAisSwLwgE262t7n1kTkOPEOtx0JLArTMHQOj/6nZ2/N9tXAAo4dKrdNxtqR6JxijntT7jlXhYG7TkYI0viW8G+hVs6Qg+q+U/t3GcEeyvurY/Fkd88/BemFrU9gxWCOrURWpke+Ebpki8CuzcUdojqYKhK219XElFnrfnhT+h4Y+b8Jcgp8hM/JQewo6All/v3Y/znJX+vatqnv620RF5uBPnJ6ZVoVpgHPpoTIe9HCbqTEsWCL4kITWLjpAiC4hS3ABT7xWx0aGK87Mz49JECUHA47H1pZtgzHdHSv+bX3Q8vfizxe5maeKD73W4p+5ZtR6V9xnlXzYFAqnMn8TPXY7MHmMnfrXkarGl8IdMghSFhIPZc6lUgRW5thj+G2yBZkWGCynC10N9zctVLOyrD67qwePedq+ssrM1yUw08PwXOzQOZEp8LjAeskR47dhx7GDsecddYM8VyWHJSg2RttRROimQxpBxgN8wAyhfXY1u68r7oNSnLOVn7ZmIy4bpiOzL9ftADZRRWr9merrHVzkC0YIfvqllCWw+VN64mCkYviQImd/z9bAjAejdMvrWZ7hhO7Cb5razRR2Sf3ph5U1TvwNpd5TiyMEuSGGlaQXIb/bRR2fY5T9oeY3KgljqURmASjbOXLpiK3lOp9qEVcKIeqtPNOAaz5WTxaaGuDo1ZFX2TQ0MJgQk6zaquEBKRQRPCIKf4svvYyzvrGEmHMu+k6CLuNPciMhK5AH59YT37E859g=="
   }
 };

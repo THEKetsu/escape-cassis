@@ -7,6 +7,7 @@
   const params = new URLSearchParams(location.search);
   if (params.has('reset') && confirm('Effacer la progression enregistrée sur ce téléphone ?')) {
     localStorage.removeItem(STORE);
+    if (A.clearZip) A.clearZip();
     A.setState(null);
   }
   const urlTeam = params.get('equipe');

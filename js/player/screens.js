@@ -160,6 +160,8 @@
         return '<p class="help">Touchez les éléments dans l\'ordre, du premier au dernier. Touchez un élément choisi pour le retirer.</p><div class="choices">' +
           step.options.map((o) => `<button class="btn choice" data-action="order-pick" data-value="${esc(o)}"><span class="letter"></span>${esc(o)}</button>`).join('') +
           '</div><button class="btn primary big" data-action="validate-order">Valider l\'ordre</button>';
+      case 'zip':
+        return A.zipHtml(step);
       case 'image-choice':
         return '<div class="image-choices">' + step.options.map((o) =>
           `<button class="image-choice" data-action="choose" data-value="${esc(o.label)}">
@@ -234,6 +236,7 @@
         <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
         ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
         <div class="text">${s.text || ''}</div>
+        ${step.type === 'zip' && state.zipLetters ? `<p class="big-code">${esc(state.zipLetters.split('').join(' '))}</p>` : ''}
         ${A.imagesHtml(s.images)}
         <button class="btn primary big" data-action="next">${s.button ? esc(s.button) : last ? '🏁 Voir le résultat' : 'Continuer ➜'}</button>
       </main>`;

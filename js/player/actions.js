@@ -181,6 +181,8 @@
   }
 
   A.submit = submit; // appelé par l'écran d'étape pour un QR scanné
+  A.solve = solve;   // appelés par l'étape zip, qui valide son propre chemin
+  A.wrongAnswer = wrongAnswer;
 
   $app.addEventListener('click', (e) => {
     const el = e.target.closest('[data-action]');

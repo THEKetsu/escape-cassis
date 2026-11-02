@@ -284,3 +284,25 @@ test('classement à remettre dans l\'ordre : seule la bonne suite est acceptée,
   game.zones[3].A[1].answers = ['PORTAIL + OCULUS'];
   assert.ok(E.validate(game).errors.some((e) => e.includes('toutes les options')));
 });
+
+test('zip : une seule solution par grille, lettres dans l\'ordre du chemin, règles de déplacement', () => {
+  const game = loadGame();
+  [['A', 'FOURBANAL'], ['B', 'MAISONDELEUROPE']].forEach(([v, word]) => {
+    const step = game.zones[3][v][2];
+    assert.strictEqual(step.type, 'zip');
+    const z = step.zip;
+    const sols = E.zipSolve(z, 5);
+    assert.strictEqual(sols.length, 1); // grille bien posée : un seul chemin
+    assert.strictEqual(E.zipLetters(z, sols[0]), word);
+    assert.deepStrictEqual(E.zipCheck(z, sols[0]), { ok: true });
+    assert.strictEqual(E.zipCheck(z, sols[0].slice(0, 30)).reason, 'incomplete');
+    assert.strictEqual(E.zipCheck(z, sols[0].slice().reverse()).reason, 'start');
+    // on ne démarre qu'au premier repère, puis on ne peut ni traverser un mur ni sauter un repère
+    const start = z.marks[0].at[0] * z.size + z.marks[0].at[1];
+    assert.ok(E.zipMoves(z, [start]).length >= 1);
+    assert.ok(!E.zipMoves(z, [start]).includes(z.marks[z.marks.length - 1].at[0] * z.size + z.marks[z.marks.length - 1].at[1]));
+  });
+  // grille impossible : refusée à la validation du contenu
+  game.zones[3].A[2].zip.walls = game.zones[3].A[2].zip.walls.concat([[3, 3, 'R'], [3, 3, 'D'], [2, 3, 'D'], [3, 2, 'R']]);
+  assert.ok(E.validate(game).errors.some((e) => e.includes('aucune solution')));
+});

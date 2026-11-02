@@ -23,6 +23,7 @@
     const team = A.state.team;
     const wasPlaying = !!A.state.startedAt;
     synced = false;
+    if (A.clearZip) A.clearZip();
     A.remote = null;
     A.remoteLive = false;
     A.setState(A.newState(team));

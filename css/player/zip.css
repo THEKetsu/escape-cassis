@@ -1,0 +1,25 @@
+/* Étape zip : plateau tactile, murs, chemin tracé */
+.zip-board {
+  position: relative; display: grid; grid-template-columns: repeat(var(--n), 1fr);
+  aspect-ratio: 1; width: 100%; max-width: 520px; margin: 4px auto 10px;
+  background: #fff; border: 2px solid var(--ink); border-radius: 12px; overflow: hidden;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.zc {
+  position: relative; z-index: 2; display: grid; place-items: center;
+  border: 1px solid var(--line); font-size: clamp(15px, 5.2vw, 24px); color: var(--ink);
+}
+.zc b { font-weight: 800; }
+.zc svg { width: 62%; height: 62%; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.zc.mark { background: color-mix(in srgb, var(--zone) 10%, #fff); }
+.zc.start { box-shadow: inset 0 0 0 3px var(--zone); }
+.zip-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.zip-lines polyline {
+  fill: none; stroke: var(--zone); stroke-opacity: .55; stroke-width: .5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.zip-walls line { stroke: var(--ink); stroke-width: .1; stroke-linecap: round; }
+.zip-lines { z-index: 3; }
+.zip-info { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 6px; font-weight: 700; font-size: 15px; }
+.zip-letters b { letter-spacing: .15em; font-size: 17px; }
+.zip-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }

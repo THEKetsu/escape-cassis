@@ -9,5 +9,6 @@ module.exports = Object.assign({},
   require('./time.js'),
   require('./geo.js'),
   require('./scoring.js'),
+  require('./zip.js'),
   require('./validate.js'),
   require('./publish.js'));

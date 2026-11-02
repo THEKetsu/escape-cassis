@@ -3,7 +3,7 @@
  * Logique pure, sans DOM. Module UMD : Node (require) ou navigateur (window.Engine).
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(Object.assign({}, require('./text.js'), require('./path.js'), require('./geo.js')));
+  if (typeof module === 'object' && module.exports) module.exports = factory(Object.assign({}, require('./text.js'), require('./path.js'), require('./geo.js'), require('./zip.js')));
   else {
     const E = root.Engine = root.Engine || {};
     Object.assign(E, factory(E));
@@ -62,6 +62,19 @@
             if (step.type === 'order' && parts.length !== step.options.length) errors.push(`${where} : la réponse "${a}" doit contenir toutes les options, dans l'ordre`);
             if (step.type === 'multi' && parts.length !== step.count) errors.push(`${where} : count (${step.count}) doit être le nombre d'options de la réponse "${a}"`);
           });
+        }
+      }
+      if (step.type === 'zip') {
+        const z = step.zip;
+        if (!z || !z.size || !Array.isArray(z.marks) || z.marks.length < 2) errors.push(`${where} : zip { size, marks (au moins 2) } manquant`);
+        else {
+          const inside = ([r, c]) => r >= 0 && c >= 0 && r < z.size && c < z.size;
+          if (!z.marks.every((m) => inside(m.at)) || !(z.walls || []).every((w) => inside(w))) errors.push(`${where} : zip : repère ou mur hors de la grille`);
+          else {
+            const solutions = E.zipSolve(z, 2);
+            if (!solutions.length) errors.push(`${where} : zip : la grille n'a aucune solution`);
+            else if (solutions.length > 1) warnings.push(`${where} : zip : plusieurs chemins possibles (les lettres peuvent différer)`);
+          }
         }
       }
       if (step.type === 'tap') {
