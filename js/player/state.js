@@ -39,6 +39,7 @@
 
   function save() {
     A.state.device = A.deviceId;
+    A.state.version = A.VERSION;
     A.state.updatedAt = Date.now();
     localStorage.setItem(STORE, JSON.stringify(A.state));
     A.push();

@@ -17,6 +17,7 @@
     Sync: window.Sync,
     GAME,
     S,
+    VERSION: (window.GAME && window.GAME.version) || 'dev',
     SALT: S.salt || GAME.id,
     CODE_KEY: 'admin:code:' + GAME.id,
     $root: document.getElementById('admin'),

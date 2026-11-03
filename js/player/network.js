@@ -38,6 +38,7 @@
   let pushTimer = null;
   function push() {
     if (!Sync.enabled || !A.state) return;
+    A.state.version = A.VERSION; // le dashboard repère les téléphones restés sur une ancienne version
     clearTimeout(pushTimer);
     pushTimer = setTimeout(async () => {
       if (await sessionEnded()) return endSession();

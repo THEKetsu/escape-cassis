@@ -73,14 +73,21 @@
     return JSON.parse(new TextDecoder().decode(data));
   }
 
+  // Version de l'application : date et heure de la publication (ex. « 2026.11.03-1642 »), affichée sur les téléphones et le dashboard
+  const buildVersion = (d) => {
+    const p = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}`;
+  };
+
   // game.js : version publiée + carnet de réponses chiffré par le code d'accès au dashboard.
   async function publishedFile(game) {
     const out = publish(game);
+    out.version = buildVersion(new Date());
     const code = game.settings && game.settings.adminCode;
     if (code) out.answerBook = await encryptJSON(answerBook(game), code);
     return '/* Fichier généré à partir de contenu.js : ne pas modifier à la main. */\n' +
       'window.GAME = ' + JSON.stringify(out, null, 2) + ';\n';
   }
 
-  return { publish, answerBook, encryptJSON, decryptJSON, publishedFile };
+  return { publish, answerBook, buildVersion, encryptJSON, decryptJSON, publishedFile };
 });

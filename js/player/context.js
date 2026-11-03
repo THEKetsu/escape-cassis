@@ -22,6 +22,7 @@
     E, Sync, GAME, S, $app,
     SALT: S.salt || GAME.id,
     STORE: 'escape:' + GAME.id,
+    VERSION: (window.GAME && window.GAME.version) || 'dev', // « dev » : contenu.js lu directement, pas de game.js publié
     HEARTBEAT_MS: 30000,
     TAKEOVER_MS: 90000, // un autre téléphone qui n'a pas écrit depuis ce délai est considéré hors service
     ZONE_COLORS: ['#1d8fb3', '#e76f51', '#2a9d8f', '#7b5ea7', '#d98b1f', '#3d7dd8', '#c2457a', '#5a8f29'],
