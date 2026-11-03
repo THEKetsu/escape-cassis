@@ -70,7 +70,7 @@ Le jour J, avec 6 ou 7 équipes, il suffit de ne pas distribuer les QR codes en 
 | `hintPenalties` | `[120, 240, 360]` | Pénalité (s) des indices 1, 2, 3 (les suivants coûtent comme le dernier) |
 | `masterCode` | `CALANQUE` | Code organisation : fait passer une étape bloquée (bouton 🔑 en bas de chaque écran) |
 | `skipPenalty` | `600` | Pénalité (s) quand le code organisation est utilisé |
-| `adminCode` | — | Code d'accès au dashboard : choisissez-en un long (ex. `s5zw-s7a7`) ; simple barrière, vérifiée dans le navigateur (il déchiffre aussi la vue « Réponses ») |
+| `adminCode` | — | Code d'accès au dashboard : choisissez-en un long (ex. `ccoi2026`) ; simple barrière, vérifiée dans le navigateur (il déchiffre aussi la vue « Réponses ») |
 | `stuckMinutes` | `12` | Seuil d'alerte « bloquée ? » sur le dashboard |
 | `salt` | — | Changez-le une fois (n'importe quel texte) |
 
