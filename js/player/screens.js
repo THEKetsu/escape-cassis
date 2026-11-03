@@ -123,7 +123,7 @@
         </label>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
         ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">C\'est parti ! 🚀</button>'}
-        <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)}</p>
+        <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p>
       </main>`;
     if (Sync.enabled && !A.remote) {
       Sync.loadTeam(state.team).then((row) => {
@@ -207,7 +207,7 @@
         <p id="feedback" class="feedback" aria-live="polite"></p>
       </main>
       ${hintsHtml(step)}
-      <footer class="foot"><button class="link" data-action="master">🔑 Code organisation</button><p class="credits">version ${esc(A.VERSION)}</p></footer>`;
+      <footer class="foot"><button class="link" data-action="master">🔑 Code organisation</button><p class="credits">version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p></footer>`;
     startTimer();
     A.push();
 

@@ -83,7 +83,7 @@
       if (action && action.dataset.action === 'wipe') {
         if (!confirm('Effacer la progression et les messages de TOUTES les équipes sur le serveur ?\nLes téléphones connectés reviendront à l\'accueil en moins de 30 secondes.')) return;
         if (!confirm('Vraiment ? (à faire avant le jeu, après les tests)')) return;
-        try { await Sync.deleteAll(); } catch (err) { alert(err.message); }
+        try { await Sync.resetAll(); } catch (err) { alert(err.message); }
         A.closeChat();
         A.msgs = {};
         return A.refresh();

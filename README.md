@@ -79,7 +79,7 @@ Le jour J, avec 6 ou 7 équipes, il suffit de ne pas distribuer les QR codes en 
 ## 3. Activer le dashboard (Supabase, gratuit, 10 min)
 
 1. Créez un compte sur [supabase.com](https://supabase.com) (« Continue with GitHub »), puis **New project** (région Europe, mot de passe au choix).
-2. **SQL Editor** → New query → collez le contenu de `supabase.sql` → **Run**.
+2. **SQL Editor** → New query → collez le contenu de `supabase.sql` → **Run**. À relancer après chaque mise à jour du fichier (sans danger : les données sont conservées).
 3. **Project Settings → API Keys** : copiez la **Project URL** et la clé **publishable** (ou la clé `anon`) dans `config.js`.
 4. Ouvrez `admin.html` : saisissez le code d'accès (`adminCode`), le dashboard se met à jour toutes les 10 s.
 

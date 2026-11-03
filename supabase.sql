@@ -74,6 +74,22 @@ create policy "messages_delete" on public.messages for delete to anon using (tru
 
 grant select, insert, delete on public.messages to anon;
 
+-- ---------- session de jeu ----------
+-- Une seule ligne : le numéro de la session en cours. Le dashboard le change à chaque « Effacer toutes les données » :
+-- les téléphones qui ont un autre numéro repartent de zéro.
+create table if not exists public.game_session (
+  id int primary key check (id = 1),
+  epoch text not null check (char_length(epoch) between 1 and 40),
+  updated_at timestamptz not null default now()
+);
+insert into public.game_session (id, epoch) values (1, '0') on conflict (id) do nothing;
+alter table public.game_session enable row level security;
+drop policy if exists "session_select" on public.game_session;
+drop policy if exists "session_update" on public.game_session;
+create policy "session_select" on public.game_session for select to anon using (true);
+create policy "session_update" on public.game_session for update to anon using (id = 1) with check (id = 1);
+grant select, update on public.game_session to anon;
+
 -- ---------- retour au mode simple (à garder, sans danger si l'ancien mode n'a jamais été installé) ----------
 -- Retire le compte organisateur et les clés d'équipe de l'ancien mode : plus de fonctions team_*, plus de tables
 -- team_secrets / organiser_book. L'accès au dashboard est un simple code secret vérifié dans le navigateur.

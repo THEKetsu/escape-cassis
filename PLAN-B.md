@@ -14,6 +14,7 @@
 |---|---|
 | Une équipe n'a plus de réseau | Rien : elle continue à jouer, le dashboard la montre « Sans signal » et se met à jour au retour du réseau. |
 | Le dashboard n'affiche plus rien | Bouton ↻. Si l'erreur persiste : projet Supabase en pause ou réseau de l'organisation coupé. Les équipes continuent de jouer ; relever les arrivées à la main. |
+| Un téléphone est resté sur une ancienne partie | Après « Effacer toutes les données », les téléphones connectés repartent de zéro en moins de 10 s. Un téléphone qui ne l'a pas fait (hors réseau, ancienne version de la page) : lien **réinitialiser** en bas de l'accueil ou de l'écran d'énigme, avec le code organisation. |
 | Un téléphone est mort ou cassé | Un autre membre de l'équipe scanne le **même QR code d'équipe** et choisit « Reprendre la partie » : l'état est repris depuis le serveur. Une seule personne joue ensuite. |
 | Une équipe est bloquée | La voir sur le dashboard (« Bloquée ? »), lui écrire par le tchat, puis lui donner le **code organisation** (bouton 🔑 en bas de l'écran de l'étape) : l'étape est passée avec une pénalité. |
 | Le GPS ne valide pas la position | Taper le **code de secours** sous « Le GPS ne marche pas ? » (voir 🔑 Réponses). |

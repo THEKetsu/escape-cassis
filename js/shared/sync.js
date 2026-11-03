@@ -43,6 +43,42 @@ window.Sync = (function () {
     return res.json();
   }
 
+  // Numéro de la session en cours (table game_session) ; null si la table n'existe pas (supabase.sql pas relancé)
+  async function loadEpoch() {
+    try {
+      const res = await request(rest + 'game_session?id=eq.1&select=epoch', { headers: headers() });
+      const rows = await res.json();
+      return rows[0] ? rows[0].epoch : null;
+    } catch (e) {
+      if (e.message.includes(' 404')) return null;
+      throw e;
+    }
+  }
+
+  // Nouvelle session : change le numéro, les téléphones qui en avaient un autre repartent de zéro
+  async function newSession() {
+    const epoch = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const res = await request(rest + 'game_session?id=eq.1', {
+      method: 'PATCH',
+      headers: headers({ Prefer: 'return=representation' }),
+      body: JSON.stringify({ epoch, updated_at: new Date().toISOString() }),
+    });
+    if (!(await res.json()).length) throw new Error('table game_session vide ou absente : relancez supabase.sql');
+    return epoch;
+  }
+
+  // « Effacer toutes les données » : d'abord le nouveau numéro (les téléphones n'écrivent plus rien), puis les lignes
+  async function resetAll() {
+    let warning = '';
+    try {
+      await newSession();
+    } catch (e) {
+      warning = e.message;
+    }
+    await deleteAll();
+    if (warning) throw new Error('Données effacées, mais les téléphones ne seront pas remis à zéro : ' + warning);
+  }
+
   function deleteAll() {
     return Promise.all([
       request(base + '?team=not.is.null', { method: 'DELETE', headers: headers() }),
@@ -69,5 +105,5 @@ window.Sync = (function () {
     return res.json();
   }
 
-  return { enabled, saveState, loadTeam, loadAll, deleteAll, sendMessage, loadMessages };
+  return { enabled, saveState, loadTeam, loadAll, loadEpoch, newSession, resetAll, deleteAll, sendMessage, loadMessages };
 })();

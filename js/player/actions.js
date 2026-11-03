@@ -133,6 +133,17 @@
     solve(step, true);
   }
 
+  // Remise à zéro d'un téléphone resté sur une ancienne partie : réservée à l'organisation
+  async function resetPhone() {
+    const code = await A.ask({
+      icon: '🔄', title: 'Réinitialiser ce téléphone', input: 'Code organisation',
+      text: 'La partie enregistrée sur ce téléphone sera effacée : retour à l\'accueil.', ok: 'Réinitialiser',
+    });
+    if (!code) return;
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    A.endSession();
+  }
+
   // Reprise forcée d'une équipe encore en jeu ailleurs : réservée à l'organisation
   async function unlock() {
     const code = await A.ask({
@@ -192,6 +203,7 @@
       case 'pick': A.setState(A.newState(el.dataset.team)); A.save(); A.render(); break;
       case 'start': start(); break;
       case 'unlock': unlock(); break;
+      case 'reset-phone': resetPhone(); break;
       case 'resume': A.setState(A.remote); A.remote = null; A.save(); A.preloadImages(); A.render(); A.updatePosition(); break;
       case 'continue': solve(step, false); break;
       case 'order-pick': orderPick(el); break;

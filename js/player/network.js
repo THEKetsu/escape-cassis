@@ -5,34 +5,54 @@
   const { Sync, STORE, HEARTBEAT_MS, LIVE } = A;
   const SESSION_CHECK_MS = 10000;
 
-  // Session effacée par l'organisation : la ligne de l'équipe a disparu du serveur alors que ce téléphone l'y avait
-  // déjà enregistrée. On ne l'écrit pas de nouveau : le téléphone repart de l'accueil de la même équipe.
-  // (Une erreur réseau ne compte pas : hors connexion, la partie continue.)
-  // Le marqueur (state.synced) est gardé avec la partie sur le téléphone : un rechargement de la page ne l'oublie pas.
+  // Numéro de session : l'organisateur le change à chaque « Effacer toutes les données » (table game_session).
+  // Un téléphone qui a un autre numéro que le serveur repart de zéro, même si la ligne de son équipe a été recréée entre-temps
+  // par un autre téléphone de la même équipe. Au premier contact un téléphone adopte le numéro courant : il ne perd rien.
+  // Sans table game_session (supabase.sql pas relancé), on se rabat sur la disparition de la ligne de l'équipe.
+  // Une erreur réseau ne compte jamais comme une fin de session : hors connexion, la partie continue.
+  // Renvoie null si la session continue, sinon { epoch } (le numéro à adopter après la remise à zéro).
   async function sessionEnded() {
     const state = A.state;
-    if (!state || !state.synced) return false;
+    if (!state) return null;
+    let epoch;
     try {
-      return !(await Sync.loadTeam(state.team));
+      epoch = await Sync.loadEpoch();
     } catch (e) {
-      return false;
+      return null;
+    }
+    if (epoch) {
+      if (!state.epoch) {
+        state.epoch = epoch;
+        localStorage.setItem(STORE, JSON.stringify(state));
+        return null;
+      }
+      return state.epoch !== epoch ? { epoch } : null;
+    }
+    if (!state.synced) return null;
+    try {
+      return (await Sync.loadTeam(state.team)) ? null : { epoch: null };
+    } catch (e) {
+      return null;
     }
   }
 
-  function endSession() {
+  function endSession(ended) {
     const team = A.state.team;
     const wasPlaying = !!A.state.startedAt;
     if (A.clearZip) A.clearZip();
     A.remote = null;
     A.remoteLive = false;
     A.setState(A.newState(team));
+    if (ended && ended.epoch) A.state.epoch = ended.epoch;
     A.save();
     A.render();
-    if (wasPlaying) A.toast('<span class="toast-icon">🔄</span><div><b>Partie réinitialisée</b><small>L\'organisation a effacé la session : retour à l\'accueil.</small></div>');
+    if (wasPlaying) A.toast('<span class="toast-icon">🔄</span><div><b>Partie réinitialisée</b><small>La session a été remise à zéro : retour à l\'accueil.</small></div>');
   }
 
   async function checkSession() {
-    if (Sync.enabled && await sessionEnded()) endSession();
+    if (!Sync.enabled) return;
+    const ended = await sessionEnded();
+    if (ended) endSession(ended);
   }
 
   let pushTimer = null;
@@ -41,7 +61,8 @@
     A.state.version = A.VERSION; // le dashboard repère les téléphones restés sur une ancienne version
     clearTimeout(pushTimer);
     pushTimer = setTimeout(async () => {
-      if (await sessionEnded()) return endSession();
+      const ended = await sessionEnded();
+      if (ended) return endSession(ended);
       Sync.saveState(A.state).then(() => {
         if (!A.state.synced) {
           A.state.synced = true;
@@ -85,7 +106,7 @@
     }, { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 });
   }
 
-  Object.assign(A, { push, setNet, updatePosition });
+  Object.assign(A, { push, setNet, updatePosition, endSession });
 
   setInterval(() => {
     if (A.state && A.state.startedAt && !A.state.finishedAt) {

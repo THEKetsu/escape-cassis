@@ -60,6 +60,7 @@ function loadNetwork(serverRow) {
       enabled: true,
       saveState: async (s) => { events.push('save'); return s; },
       loadTeam: async () => (serverRow.present ? { data: {} } : null),
+      loadEpoch: async () => serverRow.epoch || null, // null : table game_session absente
     },
     STORE: 'escape:t', HEARTBEAT_MS: 30000, LIVE: false,
     state: { team: 'E1', startedAt: 1000, stepIndex: 3 },
@@ -108,6 +109,7 @@ test('téléphone jamais synchronisé (hors ligne depuis le début) : sa partie 
 test('session effacée : repérée au bout de 10 s même après un rechargement de la page', async () => {
   const server = { present: false };
   const { A, events, intervals } = loadNetwork(server);
+  await tick(); await tick(); // contrôle fait au chargement de la page, avant le marqueur
   A.state.synced = true; // marqueur gardé avec la partie : le téléphone avait déjà enregistré sa partie avant le rechargement
   const check = intervals.find(([, ms]) => ms === 10000)[0];
   check();
@@ -124,4 +126,55 @@ test('session toujours présente sur le serveur : rien ne change', async () => {
   await tick(); await tick();
   assert.strictEqual(A.state.startedAt, 1000);
   assert.ok(!events.includes('toast'));
+});
+
+test('numéro de session : un téléphone dont le numéro a changé repart de zéro, même si la ligne de l\'équipe existe encore', async () => {
+  // cas du deuxième téléphone d'une même équipe : le premier a déjà recréé la ligne après l'effacement
+  const server = { present: true, epoch: 'nouvelle' };
+  const { A, events, intervals } = loadNetwork(server);
+  A.state.epoch = 'ancienne';
+  intervals.find(([, ms]) => ms === 10000)[0]();
+  await tick(); await tick(); await tick();
+  assert.strictEqual(A.state.startedAt, null);
+  assert.strictEqual(A.state.epoch, 'nouvelle'); // adopte le nouveau numéro
+  assert.ok(events.includes('toast'));
+});
+
+test('numéro de session : un téléphone qui n\'en a pas encore adopte le numéro courant sans rien perdre', async () => {
+  const { A, events, intervals } = loadNetwork({ present: true, epoch: 'courante' });
+  intervals.find(([, ms]) => ms === 10000)[0]();
+  await tick(); await tick();
+  assert.strictEqual(A.state.startedAt, 1000);
+  assert.strictEqual(A.state.epoch, 'courante');
+  assert.ok(!events.includes('toast'));
+});
+
+test('numéro de session : même numéro = la partie continue ; réinitialisation manuelle possible', async () => {
+  const { A, events, intervals } = loadNetwork({ present: true, epoch: 'x' });
+  A.state.epoch = 'x';
+  intervals.find(([, ms]) => ms === 10000)[0]();
+  await tick(); await tick();
+  assert.strictEqual(A.state.startedAt, 1000);
+  A.endSession(); // bouton « réinitialiser » protégé par le code organisation
+  assert.strictEqual(A.state.startedAt, null);
+  assert.strictEqual(A.state.team, 'E1');
+});
+
+test('organisateur : « effacer » change d\'abord le numéro de session, puis supprime les lignes', async () => {
+  const { Sync, calls } = loadSync((url, options) => (options.method === 'PATCH' ? { json: [{ epoch: 'e' }] } : { json: [] }));
+  await Sync.resetAll();
+  assert.ok(calls[0].url.includes('game_session?id=eq.1') && calls[0].options.method === 'PATCH');
+  assert.ok(calls[0].body.epoch.length > 5);
+  assert.deepStrictEqual(calls.slice(1).map((c) => c.options.method), ['DELETE', 'DELETE']);
+});
+
+test('organisateur : sans table game_session, les lignes sont quand même effacées et l\'avertissement est remonté', async () => {
+  const { Sync, calls } = loadSync((url, options) => (options.method === 'PATCH' ? { json: [] } : { json: [] }));
+  await assert.rejects(Sync.resetAll(), /ne seront pas remis à zéro/);
+  assert.strictEqual(calls.filter((c) => c.options.method === 'DELETE').length, 2);
+});
+
+test('téléphone : table game_session absente (404) = ancien comportement, pas d\'erreur', async () => {
+  const { Sync } = loadSync(() => ({ status: 404, json: { code: 'PGRST205' } }));
+  assert.strictEqual(await Sync.loadEpoch(), null);
 });
