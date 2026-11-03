@@ -28,14 +28,25 @@
 
 /* ---------- accueil ---------- */
 
-.welcome { margin-top: calc(18px + env(safe-area-inset-top)); text-align: center; padding-top: 0; overflow: hidden; }
-.hero { margin: 0 -20px 4px; }
+.welcome { margin-top: calc(18px + env(safe-area-inset-top)); text-align: center; padding-top: 0; overflow: clip; }
+.hero { margin: 0 -20px 4px; position: relative; }
+.textsize-btn {
+  position: absolute; top: 10px; right: 10px; border: 0; border-radius: 999px; padding: 6px 12px;
+  background: rgba(255, 255, 255, .85); color: var(--ink); font: inherit; font-weight: 800; cursor: pointer;
+}
+/* Le bouton de départ reste visible en bas de l'écran pendant qu'on lit l'accueil */
+.welcome > .btn.big[data-action="start"] {
+  position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 5;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
+}
+.how { margin: 14px 0 0; text-align: left; }
+.how summary { cursor: pointer; font-weight: 700; color: var(--zone); padding: 6px 0; }
 .hero-art { display: block; width: 100%; height: auto; }
 .team-badge {
   display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
   margin-top: -36px; font-family: var(--display); font-weight: 800; color: var(--zone); position: relative;
 }
-.welcome .text { text-align: left; color: var(--muted); }
+.welcome .text { text-align: left; color: #3f4a54; }
 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 6px; text-align: left; }
 .tiles div { background: var(--soft); border-radius: 16px; padding: 12px; display: grid; }
 .tiles span { font-size: 24px; }

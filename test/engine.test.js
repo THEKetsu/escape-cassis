@@ -78,8 +78,9 @@ test('parcours : ordre des zones et variante de chaque équipe', () => {
   const game = loadGame();
   const p6 = E.buildPath(game, 'E6');
   const zones = [...new Set(p6.map((s) => s.zoneId))];
-  assert.deepStrictEqual(zones, ['1', '5', '4', '3', '2', 'final']);
-  assert.ok(p6.filter((s) => s.zoneId !== 'final').every((s) => s.variant === 'B'));
+  assert.deepStrictEqual(zones, ['3', '5', '1', '2', '4', 'final']);
+  // variante choisie zone par zone : 3B, 5A, 1A, 2A, 4A
+  assert.deepStrictEqual(zones.slice(0, 5).map((z) => p6.find((s) => s.zoneId === z).variant), ['B', 'A', 'A', 'A', 'A']);
   const keys = p6.map((s) => s.key);
   assert.strictEqual(new Set(keys).size, keys.length);
 });
@@ -143,7 +144,7 @@ test('classement : arrivées au temps, puis avancement', () => {
   // en proportion, mais à un index plus bas
   const lengths = () => [E.buildPath(game, 'E5').length, E.buildPath(game, 'E6').length];
   const extra = lengths()[0] - lengths()[1] - 2;
-  const pad = extra < 0 ? game.zones[1].A : game.zones[1].B; // E5 joue la variante A, E6 la B
+  const pad = extra < 0 ? game.zones[3].A : game.zones[3].B; // en zone 3, E5 joue la variante A et E6 la B
   for (let i = 0; i < Math.abs(extra); i++) pad.push({ type: 'info', title: 'x' });
   const [len5, len6] = lengths();
   assert.strictEqual(len5, len6 + 2);
@@ -317,17 +318,29 @@ test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées p
   ok(four.B[1], four.B[1].options[2]); ko(four.B[1], four.B[1].options[0]);
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
-  const dest = letters('TERRAIN DE BOULES');
   const text = (step) => step.text.replace(/<[^>]+>/g, ' ');
-  const reserve = (step, n) => text(step).match(/\b(?:[A-Z] ){14,}[A-Z]\b/g)[n];
+  const reserve = (step) => text(step).match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
   const five = game.zones[5];
   [['A', 1], ['B', 2]].forEach(([v, i]) => {
-    ['TERRAIN DE BOULES', 'terrain de pétanque', 'Les terrains de boules'].forEach((d) => ok(five[v][i], d));
-    ko(five[v][i], 'terrain de foot');
+    ok(five[v][i], 'Cassis'); ko(five[v][i], 'terrain de boules'); // le résultat est le mot fixe CASSIS, plus une destination
     ok(five[v][0], 'Une crosse et deux poissons'); ok(five[v][0], '1 crosse + 2 poissons'); ko(five[v][0], 'trois poissons');
+    assert.ok(five[v][i].success.routing); // l'écran suivant annonce la destination propre à l'équipe
   });
-  assert.strictEqual(remove(reserve(five.A[1], 0), 'CROSSE POISSON POISSON'), dest); // 5A : il reste TERRAIN DE BOULES
-  assert.strictEqual(remove(reserve(five.B[2], 0), 'PORT'), dest); // 5B : PORT retiré, il reste TERRAIN DE BOULES
-  assert.strictEqual(remove('SPCROES', 'CROSSE') + remove('OPSOIONS', 'POISSON') + remove('PTOISRO' + 'SN', 'POISSON'), 'PORT'.replace(/R|T/g, '') + 'RT'); // P + O + (R, T)
+  assert.strictEqual(remove(reserve(five.A[1]), 'CROSSE POISSON POISSON'), letters('CASSIS')); // 5A : il reste CASSIS
+  assert.strictEqual(remove(reserve(five.B[2]), 'PORT'), letters('CASSIS')); // 5B : PORT retiré, il reste CASSIS
+  assert.strictEqual(remove('SPCROES', 'CROSSE') + remove('OPSOIONS', 'POISSON') + remove('PTOISROSN', 'POISSON'), 'PORT'); // 5B : P + O + (R, T)
   ok(five.B[1], 'port');
+});
+
+test('routage : dernière zone de chaque équipe = écran « finale » ; après la zone 5, destination propre à l\'équipe', () => {
+  const game = loadGame();
+  Object.keys(game.zones).forEach((z) => {
+    assert.ok(game.zones[z].lastSuccess && game.zones[z].lastSuccess.text, `zone ${z} : écran « dernière zone » manquant`);
+    assert.ok(game.zones[z].where, `zone ${z} : lieu à annoncer manquant`);
+  });
+  const next = (t) => { const c = game.teams[t].circuit; const i = c.indexOf(5); return i === c.length - 1 ? 'finale' : c[i + 1]; };
+  // table de routage après la Maison de l'Europe
+  assert.deepStrictEqual(Object.keys(game.teams).map(next), ['finale', 2, 4, 1, 1, 1, 'finale', 2]);
+  // dernière zone de chaque équipe
+  assert.deepStrictEqual(Object.keys(game.teams).map((t) => game.teams[t].circuit.slice(-1)[0]), [5, 2, 1, 1, 2, 4, 5, 3]);
 });

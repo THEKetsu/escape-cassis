@@ -30,84 +30,132 @@ window.GAME = {
         4,
         5
       ],
-      "variant": "A"
+      "variant": {
+        "1": "A",
+        "2": "B",
+        "3": "A",
+        "4": "A",
+        "5": "A"
+      }
     },
     "E2": {
       "name": "Équipe 2",
       "circuit": [
-        2,
+        1,
         3,
         4,
         5,
-        1
+        2
       ],
-      "variant": "A"
+      "variant": {
+        "1": "B",
+        "2": "A",
+        "3": "A",
+        "4": "A",
+        "5": "A"
+      }
     },
     "E3": {
       "name": "Équipe 3",
       "circuit": [
+        2,
         3,
-        4,
         5,
-        1,
-        2
+        4,
+        1
       ],
-      "variant": "A"
+      "variant": {
+        "1": "A",
+        "2": "B",
+        "3": "B",
+        "4": "B",
+        "5": "A"
+      }
     },
     "E4": {
       "name": "Équipe 4",
       "circuit": [
-        4,
-        5,
-        1,
         2,
-        3
+        4,
+        3,
+        5,
+        1
       ],
-      "variant": "A"
+      "variant": {
+        "1": "B",
+        "2": "A",
+        "3": "B",
+        "4": "A",
+        "5": "B"
+      }
     },
     "E5": {
       "name": "Équipe 5",
       "circuit": [
+        3,
+        4,
         5,
         1,
-        2,
-        3,
-        4
+        2
       ],
-      "variant": "A"
+      "variant": {
+        "1": "A",
+        "2": "B",
+        "3": "A",
+        "4": "B",
+        "5": "B"
+      }
     },
     "E6": {
       "name": "Équipe 6",
       "circuit": [
-        1,
-        5,
-        4,
         3,
-        2
+        5,
+        1,
+        2,
+        4
       ],
-      "variant": "B"
+      "variant": {
+        "1": "A",
+        "2": "A",
+        "3": "B",
+        "4": "A",
+        "5": "A"
+      }
     },
     "E7": {
       "name": "Équipe 7",
       "circuit": [
-        3,
-        2,
+        4,
         1,
-        5,
-        4
+        2,
+        3,
+        5
       ],
-      "variant": "B"
+      "variant": {
+        "1": "A",
+        "2": "B",
+        "3": "B",
+        "4": "A",
+        "5": "B"
+      }
     },
     "E8": {
       "name": "Équipe 8",
       "circuit": [
         5,
-        4,
-        3,
         2,
-        1
+        4,
+        1,
+        3
       ],
-      "variant": "B"
+      "variant": {
+        "1": "B",
+        "2": "A",
+        "3": "A",
+        "4": "B",
+        "5": "A"
+      }
     }
   },
   "zones": {
@@ -115,6 +163,12 @@ window.GAME = {
       "name": "Place Baragnon",
       "lat": 43.21427,
       "lng": 5.5396,
+      "where": "la Place Baragnon",
+      "lastSuccess": {
+        "title": "✅ MESSAGE DÉCRYPTÉ",
+        "text": "<p>Vous venez de terminer votre 5e et dernière zone.</p><p>Votre parcours individuel est terminé.</p><p>Rendez-vous maintenant au <b>terrain de boules</b> sur le port pour la mission finale.</p><p><b>N'oubliez surtout pas votre carte mystère.</b></p>",
+        "button": "Rejoindre le point final"
+      },
       "A": [
         {
           "type": "number",
@@ -227,6 +281,12 @@ window.GAME = {
       "name": "Port de Cassis",
       "lat": 43.21447,
       "lng": 5.5387,
+      "where": "le Port de Cassis, près de la statue de Calendal",
+      "lastSuccess": {
+        "title": "✅ ÉNIGME RÉSOLUE",
+        "text": "<p>Vous venez de terminer votre 5e zone.</p><p>Toutes les étapes de votre parcours sont maintenant validées.</p><p>Rejoignez le <b>terrain de boules</b> sur le port.</p><p><b>Gardez votre carte mystère avec vous</b> : vous allez bientôt en avoir besoin.</p>",
+        "button": "Rejoindre le point final"
+      },
       "A": [
         {
           "type": "info",
@@ -346,6 +406,12 @@ window.GAME = {
       "name": "Église Saint-Michel",
       "lat": 43.21583,
       "lng": 5.53789,
+      "where": "l'église Saint-Michel",
+      "lastSuccess": {
+        "title": "✅ ZIP RÉSOLU",
+        "text": "<p>Votre dernière énigme est validée.</p><p>Vous avez désormais terminé les 5 zones.</p><p>Rendez-vous au <b>terrain de boules</b> sur le port pour la mission finale.</p><p><b>Prenez votre carte mystère avec vous.</b></p>",
+        "button": "Rejoindre le point final"
+      },
       "A": [
         {
           "type": "info",
@@ -749,6 +815,12 @@ window.GAME = {
       "name": "Four Banal",
       "lat": 43.21478,
       "lng": 5.53776,
+      "where": "le Four Banal",
+      "lastSuccess": {
+        "title": "✅ ENVELOPPE RÉCUPÉRÉE",
+        "text": "<p>Ouvrez votre enveloppe : elle contient votre <b>carte mystère</b>.</p><p><b>PARCOURS TERMINÉ</b><br>Vous avez désormais traversé les 5 zones.</p><p>Rendez-vous au <b>terrain de boules</b> sur le port.</p><p><b>Gardez votre carte mystère précieusement.</b> Elle va bientôt vous servir.</p>",
+        "button": "Rejoindre le point final"
+      },
       "A": [
         {
           "type": "info",
@@ -827,6 +899,12 @@ window.GAME = {
       "name": "Maison de l'Europe",
       "lat": 43.215,
       "lng": 5.5383,
+      "where": "la Maison de l'Europe",
+      "lastSuccess": {
+        "title": "✅ MESSAGE DU BLASON DÉCRYPTÉ",
+        "text": "<p>Vous avez trouvé le mot :</p><p class=\"big-code\">CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p><p>Vous venez de terminer votre 5e zone : rendez-vous au <b>terrain de boules</b> sur le port pour la mission finale.</p><p><b>Gardez votre carte mystère avec vous.</b></p>",
+        "button": "Rejoindre le point final"
+      },
       "A": [
         {
           "type": "text",
@@ -859,26 +937,20 @@ window.GAME = {
         {
           "type": "text",
           "title": "La réserve de lettres",
-          "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">E R R U T L E D P O O S N O B S E I O A S O R S S N C E O S S I P N I</p><p>Une fois toutes les lettres du blason retirées, il vous restera <b>15 lettres</b>.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+          "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">S S S P C I C S O S N S I E N S O A S R O O I O S P</p><p>Une fois toutes les lettres du blason retirées, il vous restera <b>6 lettres</b>.<br>Réorganisez-les : elles forment un mot en rapport avec le blason.</p>",
           "wrong": "❌ ANAGRAMME INCORRECTE<br>Vérifiez d'abord que vous avez retiré exactement :<br>1 × CROSSE<br>2 × POISSON<br>Ensuite, utilisez toutes les lettres restantes.",
           "hints": [
             "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
             "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
-            "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
+            "Il reste 6 lettres. Ce sont les armes de la ville : le mot commence par <b>CA…</b>"
           ],
           "success": {
-            "title": "✅ DESTINATION IDENTIFIÉE",
-            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">TERRAIN DE BOULES</p><p>Votre parcours touche à sa fin.</p><p>Rendez-vous au <b>terrain de boules</b> sur le port.</p><p>Conservez avec vous tout ce que vous avez récupéré pendant la mission. Vous pourriez encore en avoir besoin.</p>",
-            "button": "Rejoindre le point final"
+            "title": "✅ MESSAGE DU BLASON DÉCRYPTÉ",
+            "text": "<p>Vous avez trouvé le mot :</p><p class=\"big-code\">CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+            "routing": true
           },
           "h": [
-            "0127ee232eadacb1",
-            "1babb03ef46e0021",
-            "27f846c4240e328d",
-            "1679a87d24243bc2",
-            "fd9e34f23440ca52",
-            "cab91489a859b505",
-            "cab91489a859b505"
+            "53ff32eaedcb23cc"
           ]
         }
       ],
@@ -932,26 +1004,20 @@ window.GAME = {
         {
           "type": "text",
           "title": "La clé",
-          "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">D R S E R R L T P I E O A B U O E T N</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">S S O R S C I A T P</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quel mot obtenez-vous ?</b></p>",
           "wrong": "❌ ANAGRAMME INCORRECTE<br>Votre clé est :<br><b>PORT</b><br>Retirez donc exactement : P + O + R + T<br>Puis utilisez toutes les lettres restantes.",
           "hints": [
-            "Après avoir retiré PORT, il vous reste <b>15 lettres</b>.",
-            "Votre destination se trouve justement sur le port.",
-            "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
+            "Après avoir retiré PORT, il vous reste <b>6 lettres</b>.",
+            "Les armoiries que vous avez observées sont celles de la ville.",
+            "Le mot commence par <b>CA…</b>"
           ],
           "success": {
-            "title": "✅ DESTINATION IDENTIFIÉE",
-            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">TERRAIN DE BOULES</p><p>Rendez-vous maintenant au <b>terrain de boules</b> sur le port.</p><p>Votre mission individuelle s'arrête ici.<br>Mais le jeu, lui, n'est pas encore terminé.</p><p>Gardez avec vous votre <b>carte mystère</b> récupérée au Four Banal.<br><b>ELLE VA BIENTÔT VOUS SERVIR.</b></p>",
-            "button": "Rejoindre la finale"
+            "title": "✅ MESSAGE DU BLASON DÉCRYPTÉ",
+            "text": "<p>Vous avez trouvé le mot :</p><p class=\"big-code\">CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+            "routing": true
           },
           "h": [
-            "0127ee232eadacb1",
-            "1babb03ef46e0021",
-            "27f846c4240e328d",
-            "1679a87d24243bc2",
-            "fd9e34f23440ca52",
-            "cab91489a859b505",
-            "cab91489a859b505"
+            "53ff32eaedcb23cc"
           ]
         }
       ]
@@ -979,10 +1045,10 @@ window.GAME = {
       }
     ]
   },
-  "version": "2026.11.03-1555",
+  "version": "2026.11.03-1642",
   "answerBook": {
-    "salt": "ARNFgjtlTsD56ryA5qPkDQ==",
-    "iv": "m6WZJsgnw5i5qj6z",
-    "data": "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"
+    "salt": "qMp9DoF+hfktcLxDYe/ZCg==",
+    "iv": "3Neta62wPyIko6e7",
+    "data": "nzFQk+kbU8L45Qx8O7DRNvBzwHHXyLZJpCEvK8HFsF+t7nL+HIyCX823yLYa2fwhNWoLdTBOl2zKQ9E16y0vbnLQUpyIyXL6ZCAi46QELatnVBdAISUlGz6Wxoa++4fXWjoShFHcITm45REq9zsKfuMlacJVszK0BeDIxvvJz6OsCD8pFvabKhg3QYW4FEQqyFQ1rtoyfkxy+u2pVItbFlRIowrdpYsetHF0fJqxfEC4B84bStSVwdh+NdDhJ9OLm/dp0a2UMZaqCBPJtEizpFMb5SDp1L0r3DgeTa/5jlSuIPR6865zlAHH1HmsyS7NpJoGlNZ83Kx+VvpPd3hbnEPntj+k5bc185fEmmy5rdFgXhd2mRcS7h7oUJ75nQKPDBFXYBkTab/vYb2no+8PTPgbVUhyldRZ99qRunujF45Yy8hobtTKpAwr0fqvc8uQo2jnsDFKrRT6N4in+7vYvYwfJTWGlbrC5cnNZAUiTCAEmtZYqj6x/Phi0UctBeAf75RuTrWnmukQyHSOLY3ZAClN1OidPOY49iv5DTmTPKKL78YDkjR+WDfjutJbazlQ6Z44v5xKZvV1aZL3y3SnQkJOvC+daDEqi8NGnDekLz7KDLbzWL0hOKfblPGR6OXzkb9S5bmE1Jg+LwqT8ETuVmNjP91Dpic/4UPlVKz1e8Vzfb/XVSmFJWZTtfqFV5EcIyNoiykLwHqcqpNT8fLthRKSDEeaC5SW8mtZvW+SKzbiiAGxL6mXejbCJbLXcf9ym6ynUDiQUapxhLfXpOpbNaeIcKXDMT9ah5TQKMhizMEOGYLJE6vYvc1TChlurIFu6huZxGWe5F+oyDCFn3qbEx2RdC1c5SNqip9Eu1VBzcbfcufEf1pFFB1hcVN3fknIKzXOpKHxEJaFsCnk40VDIb8bP07czKqpXfKEKOKW0L3Devz1LQ+l5LcwN3AtX3YKY/bMxu/E6RTrxu4kY66dk8NBvOMUlVW9ijks6F6MsDgjJkZAU3XyMM9CAYnN2xMIs2sQUc/KO6Wn4Lfm1R/4P2Tjx3kg/xtjXRyDA7elC2e/91CzD9OzWCu6yw8YftMmsi076reLDjLS8oTtD7A8ve0XoEXjhAavmzSvWQKSjLDCQDO0ui69eC+YK6qbECu3dW/q6AAJxmTm9pY+v59LxS0PxyskuzH35G+I9Q5k3QJ34GUeb+MM//HvUYS/M+zEkRlTqfnR04gTGTD80XU1hNQvn41f5F2632hwso1+pcYuEB8XVmRz/jjUrSmzR7NHnZV+/Yj7Z6t611MdgUKZ2p82EPCzMRBwHK7BE0tQrgmm6IMi5YpusuCwWwGYIr2kwZNrhjglu/VTt014VLo4MjxI3eGEyuM3NVTFyApGl2KWlaJvZNDtYYQoOg16ChT8Sk0/WPwh9RZwflTX8VHTF0DWreHiIqv/Hpdl8EiST7euZZa5YkuT1Cp5YPH0XoPqYCmxWqSzB63O4tpp45LeQY68BUQwSIOrnAqTAEpvOBTooa90mIh6az9yli0yxvrBP0dp//ZWnGHs1ow9vmv3CIKptnlbbpEJvWPxmmab3+kEnGMCMj0J7cSMDRrvEQwAd9cxmzIJX4LXkgs4+y4MoqzmJMrHcq0PKVKGEAx7ogdYJoPd25ZBkAyDmShKQDvYF55Mo993751HQxKdyYYMT8SwOVkLAbANvgWQY84rcXasDXR0w5FiKzFOlZdUqFVAbS2GYhgVmRr6FBCZCLiRwVDHf9f8HKE1wLms+Xv9k2p3w+nOYYvIX45Mbl5p9Htr57ej7GCmAagOgXR/0UAkI2cvApdP7LR++Ct/OnbIFs+QlgTI+4bYSDLGQ6JO5iNV+vFionO3lzmsAstCcCxOuj94K6aNVMvUB2x4zjaZ2ilHDk27tIdnRQEaCRQEjCAz+KIQiAjA+ts2Jl2HOOhtKR1wtnuLBiPUEPxVZ4APXRrmdMDd2ZYO/joRcSwadz376IKHmxe1dP3r"
   }
 };

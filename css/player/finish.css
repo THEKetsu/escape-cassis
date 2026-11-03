@@ -3,8 +3,10 @@
 /* ---------- succès / fin ---------- */
 
 .success, .finished { margin-top: 6px; text-align: center; }
+/* Écran de réussite : la carte descend un peu pour ne pas rester collée en haut d'un écran vide */
+.success { margin-top: clamp(12px, 9vh, 90px); padding-top: 30px; padding-bottom: 26px; }
 .success .text { color: var(--muted); }
-.check { width: 92px; height: 92px; margin: 4px auto 0; }
+.check { width: 104px; height: 104px; margin: 4px auto 6px; }
 .check svg { width: 100%; height: 100%; }
 .check circle { fill: var(--green); stroke: none; transform-origin: center; animation: pop .35s cubic-bezier(.3, 1.6, .5, 1); }
 .check path { fill: none; stroke: #fff; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw .4s .25s forwards; }

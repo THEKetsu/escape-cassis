@@ -41,6 +41,7 @@
           <div class="top-actions">
             <span class="pill"><span id="net" class="net ${A.online === null ? '' : A.online ? 'ok' : 'ko'}"></span><span id="timer">${E.formatDuration(E.elapsedSeconds(state, Date.now()))}</span>
               ${state.penalty ? `<small>+${E.formatDuration(state.penalty)}</small>` : ''}</span>
+            <button class="pill icon" data-action="textsize" aria-label="Taille du texte">Aa</button>
             ${Sync.enabled ? A.chatButton() : ''}
             ${leaderboard ? '<button class="pill icon" data-action="board" aria-label="Classement">🏆</button>' : ''}
           </div>
@@ -106,17 +107,20 @@
     const hintCosts = (S.hintPenalties || []).map(A.minutes).join(' · ');
     $app.innerHTML = `
       <main class="card welcome anim">
-        <div class="hero">${HERO}</div>
+        <div class="hero">${HERO}<button class="textsize-btn" data-action="textsize" aria-label="Taille du texte">Aa</button></div>
         <div class="team-badge"><span class="avatar big">${A.avatar(state.team)}</span>${esc(A.teamName(state.team))}</div>
         <h1 class="display">${esc(GAME.title)}</h1>
         ${resume}
         <div class="text">${S.intro || ''}</div>
-        <div class="tiles">
-          <div><span>🧩</span><b>Énigmes</b><small>une à la fois, sur place</small></div>
-          <div><span>💡</span><b>Indices</b><small>${hintCosts ? '+' + hintCosts : 'disponibles'}</small></div>
-          <div><span>🏅</span><b>Badges</b><small>vitesse, sans faute…</small></div>
-          <div><span>🏆</span><b>Classement</b><small>temps + pénalités</small></div>
-        </div>
+        <details class="how">
+          <summary>Comment ça marche ?</summary>
+          <div class="tiles">
+            <div><span>🧩</span><b>Énigmes</b><small>une à la fois, sur place</small></div>
+            <div><span>💡</span><b>Indices</b><small>${hintCosts ? '+' + hintCosts : 'disponibles'}</small></div>
+            <div><span>🏅</span><b>Badges</b><small>vitesse, sans faute…</small></div>
+            <div><span>🏆</span><b>Classement</b><small>temps + pénalités</small></div>
+          </div>
+        </details>
         ${S.rules ? `<div class="rules"><b>À savoir</b>${S.rules}</div>` : ''}
         <label class="field">Nom de votre équipe
           <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express">
@@ -222,9 +226,15 @@
   function renderSuccess(step) {
     const state = A.state;
     A.setTheme(A.zoneColor(step));
-    const s = step.success || {};
     const last = state.stepIndex === A.path.length - 1;
     const zoneDone = step.zoneStep === step.zoneSteps - 1 && step.zoneId !== 'final';
+    const circuit = GAME.teams[state.team].circuit;
+    // Dernière zone du circuit de l'équipe : écran propre à la zone (« rendez-vous à la finale »), au lieu d'annoncer un lieu déjà visité
+    const lastZone = zoneDone && step.zoneIndex === circuit.length - 1;
+    const s = lastZone && GAME.zones[step.zoneId].lastSuccess ? GAME.zones[step.zoneId].lastSuccess : (step.success || {});
+    // routing : après cette zone, l'application annonce la vraie destination de l'équipe (sa prochaine zone)
+    const nextZone = s.routing && zoneDone && !lastZone ? GAME.zones[circuit[step.zoneIndex + 1]] : null;
+    const routing = nextZone ? `<p>Prochaine destination :<br><b>${esc(nextZone.where || nextZone.name)}</b></p>` : '';
     const left = GAME.teams[state.team].circuit.length - step.zoneIndex - 1;
     const subtitle = zoneDone
       ? (left ? `${esc(step.zoneName)} ✓ · encore ${left} zone${left > 1 ? 's' : ''}` : 'Toutes les zones sont faites, cap sur le final !')
@@ -235,7 +245,7 @@
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
         <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
         ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
-        <div class="text">${s.text || ''}</div>
+        <div class="text">${s.text || ''}${routing}</div>
         ${step.type === 'zip' && state.zipLetters ? `<p class="big-code">${esc(state.zipLetters.split('').join(' '))}</p>` : ''}
         ${A.imagesHtml(s.images)}
         <button class="btn primary big" data-action="next">${s.button ? esc(s.button) : last ? '🏁 Voir le résultat' : 'Continuer ➜'}</button>

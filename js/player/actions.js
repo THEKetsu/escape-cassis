@@ -133,6 +133,14 @@
     solve(step, true);
   }
 
+  // Taille du texte (3 niveaux), gardée sur le téléphone : utile en plein soleil
+  const textSize = () => Number(localStorage.getItem('escape:textsize') || 0);
+  function setTextSize(n) {
+    localStorage.setItem('escape:textsize', n);
+    document.documentElement.dataset.text = n;
+  }
+  document.documentElement.dataset.text = textSize();
+
   // Remise à zéro d'un téléphone resté sur une ancienne partie : réservée à l'organisation
   async function resetPhone() {
     const code = await A.ask({
@@ -202,6 +210,7 @@
     switch (el.dataset.action) {
       case 'pick': A.setState(A.newState(el.dataset.team)); A.save(); A.render(); break;
       case 'start': start(); break;
+      case 'textsize': setTextSize((textSize() + 1) % 3); break;
       case 'unlock': unlock(); break;
       case 'reset-phone': resetPhone(); break;
       case 'resume': A.setState(A.remote); A.remote = null; A.save(); A.preloadImages(); A.render(); A.updatePosition(); break;
