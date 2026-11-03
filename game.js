@@ -746,136 +746,212 @@ window.GAME = {
       ]
     },
     "4": {
-      "name": "Place Baragnon",
-      "lat": 43.21427,
-      "lng": 5.5396,
+      "name": "Four Banal",
+      "lat": 43.21478,
+      "lng": 5.53776,
       "A": [
         {
+          "type": "info",
+          "title": "Mission 4 — Le métier oublié",
+          "text": "<p>Vous avez retrouvé le <b>Four Banal</b>.</p><p>Autrefois, ce lieu ne pouvait fonctionner sans le savoir-faire d'une personne bien précise.</p><p>Elle préparait le four, surveillait sa chauffe et veillait au bon déroulement des cuissons.</p><p>Votre mission est simple : <b>retrouvez le nom de ce métier.</b></p><p>Cette fois, inutile de chercher la réponse sur votre téléphone.</p><p><b>Entrez dans le Four Banal et trouvez quelqu'un capable de vous renseigner.</b></p>",
+          "button": "J'ai trouvé la réponse"
+        },
+        {
           "type": "text",
-          "title": "Le télégraphe",
-          "text": "<p>Un message vous parvient en morse :</p><p class=\"big-code\">-... .- .-. .- --. -. --- -.</p>",
-          "match": "contains",
+          "title": "Saisir la réponse",
+          "text": "<p><b>Quel était le métier de la personne chargée de faire fonctionner le four et de surveiller les cuissons ?</b></p>",
+          "wrong": "❌ CE N'EST PAS LE BON MÉTIER<br>Ne cherchez pas à deviner.<br>La réponse se trouve auprès de la personne présente dans le Four Banal.<br>Posez-lui directement la question.<br>Réessayez.",
           "hints": [
-            "Les lettres sont séparées par des espaces.",
-            "B = -...  A = .-  R = .-.",
-            "G = --.  N = -.  O = ---"
+            "Ce métier est directement lié au fonctionnement du four.",
+            "Le nom du métier commence comme le mot :<br><b>FOUR</b>",
+            "La réponse est :<br><b>FOURNIER</b>"
           ],
-          "success": {
-            "text": "<p>Rendez-vous <b>place Baragnon</b>.</p>"
-          },
           "h": [
-            "0a792bcc53efb9ff",
-            "090f7dbba7c29d30"
+            "8d09a9c838f22c29",
+            "bcb29a7a5d0848e5"
           ]
         },
         {
-          "type": "qr",
-          "title": "Le code caché",
-          "text": "<p>Un QR code est caché près de la fontaine. Scannez-le avec l'appareil photo du téléphone, ou tapez le code écrit dessous.</p><p class=\"demo\">[DÉMO : FONTAINE]</p>",
-          "hints": [
-            "Il est à hauteur de genou."
-          ],
-          "h": [
-            "34663b9c47226365"
-          ]
+          "type": "info",
+          "title": "✅ MÉTIER IDENTIFIÉ",
+          "text": "<p>Vous avez retrouvé celui qui faisait vivre le four.</p><p class=\"big-code\">FOURNIER</p><p>Mais votre mission dans ce lieu n'est pas tout à fait terminée.</p><p><b>Montrez cet écran à la personne présente dans le Four Banal.</b><br>Elle vous remettra l'enveloppe correspondant à votre équipe.</p>",
+          "button": "J'ai récupéré mon enveloppe",
+          "success": {
+            "title": "✅ ENVELOPPE RÉCUPÉRÉE",
+            "text": "<p>Ouvrez maintenant votre enveloppe.</p><p>Vous y trouverez :</p><ul><li>votre <b>prochaine destination</b></li><li>une <b>carte mystère</b></li></ul><p>Lisez votre prochaine destination et poursuivez votre parcours.</p><p><b>⚠️ GARDEZ VOTRE CARTE MYSTÈRE PRÉCIEUSEMENT.</b><br>Elle pourrait vous servir à tout moment. Ne la perdez pas et conservez-la avec votre équipe jusqu'à la fin du jeu.</p>",
+            "button": "Continuer la mission"
+          }
         }
       ],
       "B": [
         {
-          "type": "text",
-          "title": "Acrostiche",
-          "text": "<p><b>B</b>ateaux <b>A</b>marrés, <b>R</b>ames <b>A</b>lignées, <b>G</b>oélands <b>N</b>ichant, <b>O</b>ndes <b>N</b>onchalantes.</p><p>Où vous attend la suite ?</p>",
-          "match": "contains",
-          "hints": [
-            "Regardez les lettres en gras."
+          "type": "info",
+          "title": "Mission 4 — Un nom trompeur",
+          "text": "<p>Aujourd'hui, quelque chose de <i>banal</i> est quelque chose d'ordinaire.</p><p>Pourtant, ce n'est pas pour cette raison que ce lieu porte le nom de :</p><p class=\"big-code\">FOUR BANAL</p><p>Votre mission est de découvrir ce que signifiait réellement le mot « banal » dans ce contexte.</p><p>Cette fois encore, la réponse ne se trouve pas sur votre téléphone.</p><p><b>Entrez dans le Four Banal et interrogez une personne sur place.</b></p>",
+          "button": "J'ai obtenu une explication"
+        },
+        {
+          "type": "qcm",
+          "title": "Validation",
+          "text": "<p><b>Pourquoi appelait-on ce lieu un Four Banal ?</b></p>",
+          "options": [
+            "Parce que le pain qui y était cuit était considéré comme ordinaire.",
+            "Parce que le four appartenait collectivement à tous les habitants.",
+            "Parce qu'il relevait du droit de ban et que les habitants devaient utiliser ce four.",
+            "Parce qu'il n'était utilisé que certains jours de la semaine."
           ],
-          "success": {
-            "text": "<p>Rendez-vous <b>place Baragnon</b>.</p>"
-          },
+          "wrong": "❌ CE N'EST PAS LA BONNE EXPLICATION<br>Le mot « banal » n'avait pas le même sens qu'aujourd'hui.<br>Interrogez de nouveau la personne présente et demandez-lui ce qu'était le droit de ban.<br>Réessayez.",
+          "hints": [
+            "Le mot « banal » est lié à une ancienne règle ou autorité.",
+            "Cherchez le sens de l'expression :<br><b>DROIT DE BAN</b>",
+            "La bonne réponse est celle qui explique que les habitants devaient utiliser ce four dans le cadre du droit de ban."
+          ],
           "h": [
-            "0a792bcc53efb9ff",
-            "090f7dbba7c29d30"
+            "4810d41dc3a9a389"
           ]
         },
         {
-          "type": "qr",
-          "title": "À l'ombre",
-          "text": "<p>Un QR code est caché au pied du plus grand arbre de la place. Scannez-le ou tapez le code écrit dessous.</p><p class=\"demo\">[DÉMO : PLATANE]</p>",
-          "hints": [
-            "Le tronc est tacheté."
-          ],
-          "h": [
-            "1ef18f258173dd36"
-          ]
+          "type": "info",
+          "title": "✅ SIGNIFICATION RETROUVÉE",
+          "text": "<p>Vous avez compris l'origine du nom :</p><p class=\"big-code\">FOUR BANAL</p><p>Le terme « banal » était lié au <b>droit de ban</b>.</p><p>Votre mission dans ce lieu n'est cependant pas terminée.</p><p><b>Montrez cet écran à la personne présente dans le Four Banal.</b><br>Elle vous remettra l'enveloppe correspondant à votre équipe.</p>",
+          "button": "J'ai récupéré mon enveloppe",
+          "success": {
+            "title": "✅ ENVELOPPE RÉCUPÉRÉE",
+            "text": "<p>Ouvrez votre enveloppe.</p><p>Elle contient deux éléments importants :</p><ol><li><b>Votre prochaine destination.</b><br>Suivez l'indication présente dans l'enveloppe pour poursuivre votre parcours.</li><li><b>Une carte mystère.</b><br>Cette carte ne vous sera peut-être pas utile immédiatement.</li></ol><p><b>⚠️ GARDEZ-LA PRÉCIEUSEMENT.</b><br>Elle pourrait vous servir à tout moment. Ne la perdez pas et conservez-la avec votre équipe jusqu'à la fin du jeu.</p>",
+            "button": "Continuer la mission"
+          }
         }
       ]
     },
     "5": {
-      "name": "Plage de la Grande Mer",
-      "lat": 43.21281,
-      "lng": 5.53782,
+      "name": "Maison de l'Europe",
+      "lat": 43.215,
+      "lng": 5.5383,
       "A": [
         {
-          "type": "gps",
-          "title": "Les pieds dans le sable",
-          "text": "<p>Rejoignez la plage de la Grande Mer. Une fois sur place, vérifiez votre position.</p>",
-          "lat": 43.2131,
-          "lng": 5.5357,
-          "radius": 60,
+          "type": "text",
+          "title": "Mission 5 — Le message du blason",
+          "text": "<p>Vous approchez de la fin de votre parcours.</p><p>Votre prochaine destination est cachée juste devant vous.</p><p>Observez attentivement les <b>armoiries</b> situées au-dessus de l'entrée.</p><p><b>Quels éléments y reconnaissez-vous ?</b></p>",
+          "match": "contains",
+          "wrong": "❌ OBSERVATION INCORRECTE<br>Ne cherchez pas une inscription.<br>Regardez directement les symboles représentés sur les armoiries.<br>Réessayez.",
           "hints": [
-            "C'est la grande plage juste à côté du port."
+            "Vous devez identifier trois éléments.",
+            "Deux d'entre eux sont identiques.",
+            "Les armoiries représentent :<br><b>UNE CROSSE ET DEUX POISSONS</b>"
           ],
+          "success": {
+            "title": "✅ BLASON IDENTIFIÉ",
+            "text": "<p>Le blason vient de vous donner la clé.</p>"
+          },
           "h": [
-            "33fbe6860abfed1b"
+            "1f3bc479c12191c9",
+            "1f3bc479c12191c9",
+            "dd076bf53300efbd",
+            "128fb3e43f08a4d6",
+            "fc4e2084893f6102",
+            "ff2dee767bdb43d4",
+            "696e10e6a1dfa536",
+            "16ca96a293531053",
+            "242a4b2533743e93",
+            "217fcb14bfff6eab"
           ]
         },
         {
           "type": "text",
-          "title": "Une lettre sur deux",
-          "text": "<p class=\"big-code\">CXAXLXAXNXQXUXEXS</p>",
+          "title": "La réserve de lettres",
+          "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">E R R U T L E D P O O S N O B S E I O A S O R S S N C E O S S I P N I</p><p>Une fois toutes les lettres du blason retirées, il vous restera <b>15 lettres</b>.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+          "wrong": "❌ ANAGRAMME INCORRECTE<br>Vérifiez d'abord que vous avez retiré exactement :<br>1 × CROSSE<br>2 × POISSON<br>Ensuite, utilisez toutes les lettres restantes.",
           "hints": [
-            "Ignorez certaines lettres.",
-            "Supprimez tous les X."
+            "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+            "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+            "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
           ],
           "success": {
-            "text": "<p>Ouvrez l'<b>enveloppe n°5</b>.</p>"
+            "title": "✅ DESTINATION IDENTIFIÉE",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">TERRAIN DE BOULES</p><p>Votre parcours touche à sa fin.</p><p>Rendez-vous au <b>terrain de boules</b> sur le port.</p><p>Conservez avec vous tout ce que vous avez récupéré pendant la mission. Vous pourriez encore en avoir besoin.</p>",
+            "button": "Rejoindre le point final"
           },
           "h": [
-            "1d40026ebc290771",
-            "c6106b91c2340efa"
+            "0127ee232eadacb1",
+            "1babb03ef46e0021",
+            "27f846c4240e328d",
+            "1679a87d24243bc2",
+            "fd9e34f23440ca52",
+            "cab91489a859b505",
+            "cab91489a859b505"
           ]
         }
       ],
       "B": [
         {
           "type": "text",
-          "title": "Le grand bleu",
-          "text": "<p>On la dit « grande », elle borde la ville et la plage voisine porte son nom. Où allez-vous ?</p>",
+          "title": "Mission 5 — Le blason à double fond",
+          "text": "<p>La fin approche.</p><p>Mais avant de rejoindre votre destination finale, vous allez devoir utiliser les <b>armoiries</b> de la Maison de l'Europe.</p><p>Observez-les attentivement.</p><p><b>Quels trois éléments voyez-vous ?</b></p>",
           "match": "contains",
+          "wrong": "❌ OBSERVATION INCORRECTE<br>Regardez les symboles représentés au-dessus de l'entrée.<br>Deux sont identiques.",
           "hints": [
-            "C'est une plage.",
-            "Grande… ?"
+            "Vous cherchez un objet associé à l'autorité religieuse.",
+            "Les deux autres éléments sont des animaux marins.",
+            "La réponse est :<br><b>UNE CROSSE ET DEUX POISSONS</b>"
           ],
           "success": {
-            "text": "<p>Rendez-vous sur la <b>plage de la Grande Mer</b>.</p>"
+            "title": "✅ BLASON IDENTIFIÉ",
+            "text": "<p>Le blason va servir à une première élimination de lettres.</p>"
           },
           "h": [
-            "b5a22189b9b238bf"
+            "1f3bc479c12191c9",
+            "1f3bc479c12191c9",
+            "dd076bf53300efbd",
+            "128fb3e43f08a4d6",
+            "fc4e2084893f6102",
+            "ff2dee767bdb43d4",
+            "696e10e6a1dfa536",
+            "16ca96a293531053",
+            "242a4b2533743e93",
+            "217fcb14bfff6eab"
           ]
         },
         {
-          "type": "number",
-          "title": "Le compte est bon",
-          "text": "<p>Additionnez les numéros des trois postes de secours visibles depuis la plage.</p><p class=\"demo\">[DÉMO : 6]</p>",
+          "type": "text",
+          "title": "Première élimination",
+          "text": "<p>Trois groupes de lettres vous sont présentés.<br>Dans chacun d'eux, retirez les lettres correspondant à l'élément indiqué.</p><p><b>Groupe 1 — CROSSE</b></p><p class=\"big-code\">S P C R O E S</p><p>Retirez les lettres de CROSSE : quelle lettre reste-t-il ?</p><p><b>Groupe 2 — POISSON</b></p><p class=\"big-code\">O P S O I O N S</p><p>Retirez les lettres de POISSON : quelle lettre reste-t-il ?</p><p><b>Groupe 3 — POISSON</b></p><p class=\"big-code\">P T O I S R O S N</p><p>Retirez les lettres de POISSON : quelles lettres restent-elles ?</p><p><b>Quel mot obtenez-vous en mettant dans l'ordre les lettres qui restent (groupe 1, puis 2, puis 3) ?</b><br><small>Dans le groupe 3, les deux lettres restantes s'enchaînent dans le sens qui donne un mot.</small></p>",
+          "wrong": "❌ CE N'EST PAS LE BON MOT<br>Reprenez chaque groupe : retirez exactement les lettres de CROSSE, puis de POISSON, puis encore de POISSON.<br>Gardez les lettres qui restent, groupe après groupe.",
           "hints": [
-            "Les numéros sont peints sur les cabanes."
+            "Groupe 1 : il reste la lettre <b>P</b>.",
+            "Groupe 2 : il reste la lettre <b>O</b>.",
+            "Groupe 3 : il reste <b>R</b> et <b>T</b>."
           ],
           "success": {
-            "text": "<p>Ouvrez l'<b>enveloppe n°5</b>.</p>"
+            "title": "✅ PREMIÈRE CLÉ TROUVÉE",
+            "text": "<p>Vous avez obtenu :</p><p class=\"big-code\">PORT</p><p>Ce mot est maintenant votre nouvelle clé.</p>"
           },
           "h": [
-            "a03f6d2f77062b5c",
-            "b7eaec8d9cb6c8bc"
+            "2806ba3f9393a056"
+          ]
+        },
+        {
+          "type": "text",
+          "title": "La clé",
+          "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">D R S E R R L T P I E O A B U O E T N</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "wrong": "❌ ANAGRAMME INCORRECTE<br>Votre clé est :<br><b>PORT</b><br>Retirez donc exactement : P + O + R + T<br>Puis utilisez toutes les lettres restantes.",
+          "hints": [
+            "Après avoir retiré PORT, il vous reste <b>15 lettres</b>.",
+            "Votre destination se trouve justement sur le port.",
+            "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
+          ],
+          "success": {
+            "title": "✅ DESTINATION IDENTIFIÉE",
+            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">TERRAIN DE BOULES</p><p>Rendez-vous maintenant au <b>terrain de boules</b> sur le port.</p><p>Votre mission individuelle s'arrête ici.<br>Mais le jeu, lui, n'est pas encore terminé.</p><p>Gardez avec vous votre <b>carte mystère</b> récupérée au Four Banal.<br><b>ELLE VA BIENTÔT VOUS SERVIR.</b></p>",
+            "button": "Rejoindre la finale"
+          },
+          "h": [
+            "0127ee232eadacb1",
+            "1babb03ef46e0021",
+            "27f846c4240e328d",
+            "1679a87d24243bc2",
+            "fd9e34f23440ca52",
+            "cab91489a859b505",
+            "cab91489a859b505"
           ]
         }
       ]
@@ -904,8 +980,8 @@ window.GAME = {
     ]
   },
   "answerBook": {
-    "salt": "WI5ZXHAat/SQDsK8ao8dyQ==",
-    "iv": "NzXyecaKdb6rIt07",
-    "data": "0xiduiZoDZ52n6ON9dNwcz5vNSQcgspoYVNq8zIuWfge4z1nd9ygdYis2jtQZm1BoaIq35gLqzvm3kxGwzJ3XGvAxtw/JiloAwk2//zzmARJvdIaj1u9N00EwKzL4/9YGkVkI98neopbE7GcwNR2aDRASVLzm2TyQ+1NT6SNw2Wc5bEm/zUd1jVbDax9wDgDtbPYCW6MmrqJhdSsylzl/ewmmCCG0oqgnqtQ2m7wXpgDL9Vxd+v6DvG1qOQV0pWsGkKU4PKAHrfhwXUQZ7FsqHIYDpLg90eUCv02bXqMIxAD5kZUi6m9MBs9xA5BrF3GS3Rl5EDfrusT26vyvSM98ZY8rlQjDJHG7239EJo8LLXeS93WdAuFEcKyH492fkZK62O6jWyKmZIqiMeWt1lOgdgQAyo20DC3Q1kdOpnuOy32tSEVNUNhnziqk7rqlD7dgFG7nbE6nK+2qadBRruWx5RaaJNJrgEvztKzYcUk17ExZd99PB/yyQIIdpBleZuEMKVwPU3pqkEdfdy/0kmZ4vlt9fOL9dg0PhNU8ciHhQjrgjTNw9CUlUfE+VlL2b+EI3kxwHunDJsAisSwLwgE262t7n1kTkOPEOtx0JLArTMHQOj/6nZ2/N9tXAAo4dKrdNxtqR6JxijntT7jlXhYG7TkYI0viW8G+hVs6Qg+q+U/t3GcEeyvurY/Fkd88/BemFrU9gxWCOrURWpke+Ebpki8CuzcUdojqYKhK219XElFnrfnhT+h4Y+b8Jcgp8hM/JQewo6All/v3Y/znJX+vatqnv620RF5uBPnJ6ZVoVpgHPpoTIe9HCbqTEsWCL4kITWLjpAiC4hS3ABT7xWx0aGK87Mz49JECUHA47H1pZtgzHdHSv+bX3Q8vfizxe5maeKD73W4p+5ZtR6V9xnlXzYFAqnMn8TPXY7MHmMnfrXkarGl8IdMghSFhIPZc6lUgRW5thj+G2yBZkWGCynC10N9zctVLOyrD67qwePedq+ssrM1yUw08PwXOzQOZEp8LjAeskR47dhx7GDsecddYM8VyWHJSg2RttRROimQxpBxgN8wAyhfXY1u68r7oNSnLOVn7ZmIy4bpiOzL9ftADZRRWr9merrHVzkC0YIfvqllCWw+VN64mCkYviQImd/z9bAjAejdMvrWZ7hhO7Cb5razRR2Sf3ph5U1TvwNpd5TiyMEuSGGlaQXIb/bRR2fY5T9oeY3KgljqURmASjbOXLpiK3lOp9qEVcKIeqtPNOAaz5WTxaaGuDo1ZFX2TQ0MJgQk6zaquEBKRQRPCIKf4svvYyzvrGEmHMu+k6CLuNPciMhK5AH59YT37E859g=="
+    "salt": "lEvuzAs15VtMCTd8JGH0FA==",
+    "iv": "P2yV6c1kmbtsq1ZJ",
+    "data": "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"
   }
 };

@@ -306,3 +306,28 @@ test('zip : une seule solution par grille, lettres dans l\'ordre du chemin, règ
   game.zones[3].A[2].zip.walls = game.zones[3].A[2].zip.walls.concat([[3, 3, 'R'], [3, 3, 'D'], [2, 3, 'D'], [3, 2, 'R']]);
   assert.ok(E.validate(game).errors.some((e) => e.includes('aucune solution')));
 });
+
+test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées puis restantes)', () => {
+  const game = loadGame();
+  const salt = game.settings.salt;
+  const ok = (step, v) => assert.ok(E.checkAnswer(v, step, salt), `${step.title} : « ${v} » devrait être accepté`);
+  const ko = (step, v) => assert.ok(!E.checkAnswer(v, step, salt), `${step.title} : « ${v} » devrait être refusé`);
+  const four = game.zones[4];
+  ok(four.A[1], 'le fournier'); ko(four.A[1], 'boulanger');
+  ok(four.B[1], four.B[1].options[2]); ko(four.B[1], four.B[1].options[0]);
+  const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
+  const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
+  const dest = letters('TERRAIN DE BOULES');
+  const text = (step) => step.text.replace(/<[^>]+>/g, ' ');
+  const reserve = (step, n) => text(step).match(/\b(?:[A-Z] ){14,}[A-Z]\b/g)[n];
+  const five = game.zones[5];
+  [['A', 1], ['B', 2]].forEach(([v, i]) => {
+    ['TERRAIN DE BOULES', 'terrain de pétanque', 'Les terrains de boules'].forEach((d) => ok(five[v][i], d));
+    ko(five[v][i], 'terrain de foot');
+    ok(five[v][0], 'Une crosse et deux poissons'); ok(five[v][0], '1 crosse + 2 poissons'); ko(five[v][0], 'trois poissons');
+  });
+  assert.strictEqual(remove(reserve(five.A[1], 0), 'CROSSE POISSON POISSON'), dest); // 5A : il reste TERRAIN DE BOULES
+  assert.strictEqual(remove(reserve(five.B[2], 0), 'PORT'), dest); // 5B : PORT retiré, il reste TERRAIN DE BOULES
+  assert.strictEqual(remove('SPCROES', 'CROSSE') + remove('OPSOIONS', 'POISSON') + remove('PTOISRO' + 'SN', 'POISSON'), 'PORT'.replace(/R|T/g, '') + 'RT'); // P + O + (R, T)
+  ok(five.B[1], 'port');
+});
