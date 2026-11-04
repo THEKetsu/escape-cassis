@@ -209,13 +209,6 @@
     return html + '</section>';
   }
 
-  // L'étape qui suit un Zip rappelle les lettres rencontrées (il n'y a plus d'écran de réussite entre les deux)
-  function recapLetters(step) {
-    const prev = A.path[A.state.stepIndex - 1];
-    if (!prev || prev.type !== 'zip' || prev.zoneId !== step.zoneId || !A.state.zipLetters) return '';
-    return `<p class="zip-found">Lettres rencontrées : <b>${esc(A.state.zipLetters.split('').join(' '))}</b></p>`;
-  }
-
   function renderStep(step) {
     A.setTheme(A.zoneColor(step));
     $app.innerHTML = `
@@ -224,7 +217,6 @@
         <div class="kicker"><span>📍 ${esc(step.zoneName)}</span><span>Énigme ${step.zoneStep + 1}/${step.zoneSteps}</span></div>
         <h1>${esc(step.title || '')}</h1>
         <div class="text">${tpl(step.text)}</div>
-        ${recapLetters(step)}
         ${A.imagesHtml(step.images)}
         <div class="interaction">${interactionHtml(step)}</div>
         <p id="feedback" class="feedback" aria-live="polite"></p>

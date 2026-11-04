@@ -864,10 +864,8 @@ window.GAME = {
           ],
           "wrong": "❌ ORDRE INCORRECT<br>Ne cherchez pas l'ordre dans la grille.<br>Il se trouve directement sur l'église devant vous.<br>Observez la façade du bas vers le haut.",
           "hints": [
-            "Commencez par le portail.",
-            "Poursuivez avec les baies.",
-            "L'oculus se trouve au-dessus.",
-            "Le clocher est le dernier repère."
+            "Rangez-les dans l'ordre où on les rencontre en parcourant la façade <b>du bas vers le haut</b>. Le clocher, sur le côté, vient en dernier.",
+            "Commencez par le portail."
           ],
           "success": {
             "title": "✅ ORDRE ARCHITECTURAL VALIDÉ",
@@ -1022,7 +1020,7 @@ window.GAME = {
         {
           "type": "text",
           "title": "Destination révélée",
-          "text": "<p>Votre chemin est terminé.</p><p>Lisez maintenant les lettres dans l'ordre où vous les avez rencontrées.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+          "text": "<p><b>Avec les lettres que vous avez rencontrées, quelle est votre prochaine destination ?</b></p>",
           "wrong": "❌ DESTINATION INCORRECTE<br>Vérifiez que votre parcours passe bien par les 49 cases et que vous avez relevé les lettres dans le bon ordre.",
           "success": {
             "title": "✅ PARCOURS TERMINÉ",
@@ -1158,13 +1156,22 @@ window.GAME = {
             [
               "2f2642068cc6871d",
               "75bb48ca2efca90f",
+              "d4b0468c455d9591",
+              "74a179cf99a755c4",
+              "e4096e52d9f775f0",
               "728a1c1ee767b7ff",
               "8a18f99cb1098350",
+              "40bd28b2fb30df89",
               "8c06caa8709eff69"
             ],
             [
               "0005d2c31b26642e",
-              "c7f36c1f388d7242"
+              "c7f36c1f388d7242",
+              "7f758acdae3068bc",
+              "e44b920e43103ba8",
+              "7f111e858b677ea0",
+              "449c18ec67bfe9ea",
+              "aa72e06b3bc038c9"
             ]
           ]
         },
@@ -1292,12 +1299,11 @@ window.GAME = {
           "wrong": "❌ OBSERVATION INCORRECTE<br>Regardez les symboles représentés au-dessus de l'entrée.<br>Deux sont identiques.",
           "hints": [
             "Vous cherchez un objet associé à l'autorité religieuse.",
-            "Les deux autres éléments sont des animaux marins.",
-            "La réponse est :<br><b>UNE CROSSE ET DEUX POISSONS</b>"
+            "Les deux autres éléments sont des animaux marins."
           ],
           "success": {
             "title": "✅ BLASON IDENTIFIÉ",
-            "text": "<p>Le blason va servir à une première élimination de lettres.</p>"
+            "text": "<p>Le blason vient de vous donner la clé.</p>"
           },
           "h": [
             "1f3bc479c12191c9",
@@ -1312,43 +1318,34 @@ window.GAME = {
             [
               "2f2642068cc6871d",
               "75bb48ca2efca90f",
+              "d4b0468c455d9591",
+              "74a179cf99a755c4",
+              "e4096e52d9f775f0",
               "728a1c1ee767b7ff",
               "8a18f99cb1098350",
+              "40bd28b2fb30df89",
               "8c06caa8709eff69"
             ],
             [
               "0005d2c31b26642e",
-              "c7f36c1f388d7242"
+              "c7f36c1f388d7242",
+              "7f758acdae3068bc",
+              "e44b920e43103ba8",
+              "7f111e858b677ea0",
+              "449c18ec67bfe9ea",
+              "aa72e06b3bc038c9"
             ]
           ]
         },
         {
           "type": "text",
-          "title": "Première élimination",
-          "text": "<p>Trois groupes de lettres vous sont présentés.<br>Dans chacun d'eux, retirez les lettres correspondant à l'élément indiqué.</p><p><b>Groupe 1 — CROSSE</b></p><p class=\"big-code\">S P C R O E S</p><p>Retirez les lettres de CROSSE : quelle lettre reste-t-il ?</p><p><b>Groupe 2 — POISSON</b></p><p class=\"big-code\">O P S O I O N S</p><p>Retirez les lettres de POISSON : quelle lettre reste-t-il ?</p><p><b>Groupe 3 — POISSON</b></p><p class=\"big-code\">P T O I S R O S N</p><p>Retirez les lettres de POISSON : quelles lettres restent-elles ?</p><p><b>Quel mot obtenez-vous en mettant dans l'ordre les lettres qui restent (groupe 1, puis 2, puis 3) ?</b><br><small>Dans le groupe 3, les deux lettres restantes s'enchaînent dans le sens qui donne un mot.</small></p>",
-          "wrong": "❌ CE N'EST PAS LE BON MOT<br>Reprenez chaque groupe : retirez exactement les lettres de CROSSE, puis de POISSON, puis encore de POISSON.<br>Gardez les lettres qui restent, groupe après groupe.",
+          "title": "La réserve de lettres",
+          "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">R O S S I P I S P N C S E S S N O O I O S C S A S O</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de un mot en rapport avec le blason.</p>",
+          "wrong": "❌ ANAGRAMME INCORRECTE<br>Vérifiez d'abord que vous avez retiré exactement :<br>1 × CROSSE<br>2 × POISSON<br>Ensuite, utilisez toutes les lettres restantes.",
           "hints": [
-            "Groupe 1 : il reste la lettre <b>P</b>.",
-            "Groupe 2 : il reste la lettre <b>O</b>.",
-            "Groupe 3 : il reste <b>R</b> et <b>T</b>."
-          ],
-          "success": {
-            "title": "✅ PREMIÈRE CLÉ TROUVÉE",
-            "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT</p><p>Ce mot est maintenant votre nouvelle clé.</p>"
-          },
-          "h": [
-            "2806ba3f9393a056"
-          ]
-        },
-        {
-          "type": "text",
-          "title": "La clé",
-          "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">S S O R S C I A T P</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quel mot obtenez-vous ?</b></p>",
-          "wrong": "❌ ANAGRAMME INCORRECTE<br>Votre clé est :<br><b>PORT</b><br>Retirez donc exactement : P + O + R + T<br>Puis utilisez toutes les lettres restantes.",
-          "hints": [
-            "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-            "Les armoiries que vous avez observées sont celles de la ville.",
-            "Le mot commence par <b>CA…</b>"
+            "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+            "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+            "Les lettres restantes commencent par former :<br><b>CA…</b>"
           ],
           "success": {
             "title": "✅ MESSAGE DU BLASON DÉCRYPTÉ",
@@ -1357,10 +1354,10 @@ window.GAME = {
           },
           "after": {
             "1": {
-              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">N P P G E L O N O R T A R B A C A</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">G N A S P R O I C A P R N N N E S S A C O I L S O S O S O P O E B</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
               "hints": [
-                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-                "C'est un lieu de Cassis.",
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
                 "Les lettres restantes commencent par former :<br><b>PLACE…</b>"
               ],
               "success": {
@@ -1375,10 +1372,10 @@ window.GAME = {
               ]
             },
             "2": {
-              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">O R C T I R O S E A D S P T P S</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">P I S P S O T C O O S S E S S D C O E A I N O N R O S R S I S P</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
               "hints": [
-                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-                "C'est un lieu de Cassis.",
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
                 "Les lettres restantes commencent par former :<br><b>PORT…</b>"
               ],
               "success": {
@@ -1395,10 +1392,10 @@ window.GAME = {
               ]
             },
             "3": {
-              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">I I H E R A N L S P E E L G M I S T O T C</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">L O N E G E S C O S C I S S S N I S E T R I E S O P I I L S O O N P H M A</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
               "hints": [
-                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-                "C'est un lieu de Cassis.",
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
                 "Les lettres restantes commencent par former :<br><b>ÉGLISE…</b>"
               ],
               "success": {
@@ -1413,10 +1410,10 @@ window.GAME = {
               ]
             },
             "4": {
-              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">U O O R R A L A F T B N P</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">O I S L U A O O E O O S N C P S R B N S S R A O I P N F S</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
               "hints": [
-                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-                "C'est un lieu de Cassis.",
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
                 "Les lettres restantes commencent par former :<br><b>FOUR…</b>"
               ],
               "success": {
@@ -1431,10 +1428,10 @@ window.GAME = {
               ]
             },
             "final": {
-              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">A R P D N T E R R E E U N P I T T E A Q O</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">O P A P E R N O I R O E O S T E N I P O S S E S T A S S U D Q N N C E R I</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre destination finale.</p>",
               "hints": [
-                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-                "C'est un lieu de Cassis.",
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
                 "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
               ],
               "h": [
@@ -1482,10 +1479,10 @@ window.GAME = {
       }
     ]
   },
-  "version": "2026.11.04-1603",
+  "version": "2026.11.04-1624",
   "answerBook": {
-    "salt": "iPIOLxAo5hj+w7eQ91a3hw==",
-    "iv": "qSxJo9rzt9xUK4ob",
-    "data": "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"
+    "salt": "ff2Stl2asC0rm4rP+L25sw==",
+    "iv": "NfadaVyQ7pGq7esC",
+    "data": "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"
   }
 };

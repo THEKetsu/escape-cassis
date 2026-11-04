@@ -321,15 +321,14 @@ test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées p
   const text = (step) => step.text.replace(/<[^>]+>/g, ' ');
   const reserve = (step) => text(step).match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
   const five = game.zones[5];
-  [['A', 1], ['B', 2]].forEach(([v, i]) => {
+  [['A', 1], ['B', 1]].forEach(([v, i]) => {
     ok(five[v][i], 'Cassis'); ko(five[v][i], 'terrain de boules'); // le résultat est le mot fixe CASSIS, plus une destination
     ok(five[v][0], 'Une crosse et deux poissons'); ok(five[v][0], '1 crosse + 2 poissons'); ko(five[v][0], 'trois poissons');
     assert.ok(five[v][i].success.routing); // l'écran suivant annonce la destination propre à l'équipe
   });
   assert.strictEqual(remove(reserve(five.A[1]), 'CROSSE POISSON POISSON'), letters('CASSIS')); // 5A : il reste CASSIS
-  assert.strictEqual(remove(reserve(five.B[2]), 'PORT'), letters('CASSIS')); // 5B : PORT retiré, il reste CASSIS
-  assert.strictEqual(remove('SPCROES', 'CROSSE') + remove('OPSOIONS', 'POISSON') + remove('PTOISROSN', 'POISSON'), 'PORT'); // 5B : P + O + (R, T)
-  ok(five.B[1], 'port');
+  assert.strictEqual(remove(reserve(five.B[1]), 'CROSSE POISSON POISSON'), letters('CASSIS')); // 5B : une seule étape, comme la 5A
+  assert.strictEqual(five.B.length, 2); // blason, puis réserve de lettres
 });
 
 test('routage : dernière zone de chaque équipe = écran « finale » ; après la zone 5, destination propre à l\'équipe', () => {
@@ -379,12 +378,12 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
   const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: 'FOUR BANAL', E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'PLACE BARAGNON', E7: 'TERRAIN DE PETANQUE', E8: 'PORT DE CASSIS' };
   Object.keys(expected).forEach((t) => {
     const variant = game.teams[t].variant[5];
-    const zi = variant === 'A' ? 1 : 2; // étape qui donne la destination (A : réserve, B : seconde élimination)
+    const zi = 1; // étape qui donne la destination : la réserve de lettres (5A et 5B)
     const find = (g) => E.buildPath(g, t).find((s) => s.zoneId === '5' && s.zoneStep === zi);
     const st = find(game);
     assert.ok(st.afterOverride, t + ' : pas de contenu propre à la zone suivante');
     // la réserve de lettres, une fois les lettres du blason (ou de PORT) retirées, donne exactement la destination
-    assert.strictEqual(remove(reserve(st), variant === 'A' ? 'CROSSE POISSON POISSON' : 'PORT'), letters(expected[t]), t);
+    assert.strictEqual(remove(reserve(st), 'CROSSE POISSON POISSON'), letters(expected[t]), t);
     const ps = find(pub);
     assert.ok(E.checkAnswer(expected[t], ps, salt), t + ' : ' + expected[t] + ' refusé');
     assert.ok(!E.checkAnswer('cassis', ps, salt), t + ' : CASSIS ne doit plus être la réponse');
