@@ -1,0 +1,27 @@
+/* Carte du joueur : fenêtre plein écran, fond OpenStreetMap, épingles qui se dévoilent */
+
+.pmap { align-items: stretch; justify-content: flex-start; padding: calc(10px + env(safe-area-inset-top)) 10px 16px; }
+.pmap-card { width: 100%; max-width: 560px; margin: 0 auto; display: grid; gap: 10px; }
+.pmap-card header { display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 18px; }
+.pmap-frame { position: relative; width: 100%; overflow: hidden; border-radius: 22px; background: #e8eef0; max-height: calc(100vh - 150px); }
+.pmap-tiles { position: absolute; inset: 0; filter: saturate(.5) brightness(1.05) contrast(.95); }
+.pmap .pmap-tiles img { position: absolute; max-width: none; border-radius: 0; background: none; cursor: default; user-select: none; }
+.pmap-empty { background: #fff; color: var(--ink); padding: 18px; border-radius: 18px; text-align: center; }
+.pmap-hint { margin: 0; color: rgba(255, 255, 255, .85); font-size: 14px; text-align: center; }
+.pmap-credit { position: absolute; right: 8px; bottom: 6px; font-size: 10px; color: #555; background: rgba(255, 255, 255, .7); padding: 1px 6px; border-radius: 8px; text-decoration: none; }
+
+.pmap-pin { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 3px; pointer-events: none; }
+.pmap-pin b {
+  width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; color: #fff;
+  background: #7b5ea7; box-shadow: 0 0 0 4px #fff, 0 6px 14px rgba(0, 0, 0, .3);
+}
+.pmap-pin small { padding: 2px 9px; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--ink); font-weight: 700; font-size: 12px; white-space: nowrap; box-shadow: 0 1px 5px rgba(0, 0, 0, .2); }
+.pmap-pin i { font-style: normal; font-size: 11px; font-weight: 600; color: #333; background: rgba(255, 255, 255, .75); padding: 0 7px; border-radius: 999px; white-space: nowrap; }
+.pmap-pin.done b { background: var(--green); }
+.pmap-pin.current b { background: var(--zone); animation: pmap-pulse 1.8s ease-in-out infinite; }
+.pmap-pin.next b { background: #e76f51; }
+.pmap-pin.next small { background: #fff4d6; }
+@keyframes pmap-pulse { 50% { box-shadow: 0 0 0 9px rgba(255, 255, 255, .55), 0 6px 14px rgba(0, 0, 0, .3); } }
+
+.pmap-me { position: absolute; width: 18px; height: 18px; transform: translate(-50%, -50%); border-radius: 50%; background: #1a73e8; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, .4); }
+.pmap-acc { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(26, 115, 232, .15); border: 1.5px solid rgba(26, 115, 232, .4); }

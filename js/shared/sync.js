@@ -67,7 +67,7 @@ window.Sync = (function () {
     return epoch;
   }
 
-  // « Effacer toutes les données » : d'abord le nouveau numéro (les téléphones n'écrivent plus rien), puis les lignes
+  // « Terminer la partie » : d'abord le nouveau numéro (les téléphones n'écrivent plus rien), puis les lignes
   async function resetAll() {
     let warning = '';
     try {

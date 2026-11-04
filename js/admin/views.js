@@ -97,7 +97,7 @@
           <button data-action="book" class="dark">🔑 Réponses</button>
           <button data-action="qr" class="primary">📱 QR codes équipes</button>
           <button data-action="refresh" class="icon" title="Actualiser">↻</button>
-          <button data-action="wipe" class="danger">🗑️ Effacer toutes les données</button>
+          <button data-action="wipe" class="danger">🏁 Terminer la partie</button>
         </div>
       </header>
       <div id="warn"></div>

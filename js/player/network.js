@@ -5,7 +5,7 @@
   const { Sync, STORE, HEARTBEAT_MS, LIVE } = A;
   const SESSION_CHECK_MS = 10000;
 
-  // Numéro de session : l'organisateur le change à chaque « Effacer toutes les données » (table game_session).
+  // Numéro de session : l'organisateur le change à chaque « Terminer la partie » (table game_session).
   // Un téléphone qui a un autre numéro que le serveur repart de zéro, même si la ligne de son équipe a été recréée entre-temps
   // par un autre téléphone de la même équipe. Au premier contact un téléphone adopte le numéro courant : il ne perd rien.
   // Sans table game_session (supabase.sql pas relancé), on se rabat sur la disparition de la ligne de l'équipe.

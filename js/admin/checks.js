@@ -1,4 +1,4 @@
-/* Contrôle avant le départ (et pendant la partie) : ce qui est prêt, ce qui reste à vérifier. */
+/* Contrôle avant le départ (et pendant la partie) : tuiles vertes / orange / rouges, détail seulement pour ce qui coince. */
 (function () {
   const A = window.EscapeAdmin;
   if (!A) return;
@@ -20,57 +20,73 @@
     A.render();
   }
 
+  const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
+
+  // Une tuile : icône, libellé, valeur courte, état (ok, info, warn, err) et, si ça coince, l'explication
   function items(infos) {
     const list = [];
-    const add = (level, text) => list.push({ level, text });
-    // 1. serveur
-    if (!A.lastFetch && !A.fetchError) add('info', 'Connexion à Supabase en cours…');
-    else if (A.fetchError) add('err', `Supabase ne répond pas : ${esc(A.fetchError)}`);
-    else add('ok', 'Supabase répond.');
-    // 2. table de session
-    if (A.sessionTable === 'absent') add('warn', 'Table <code>game_session</code> absente : relancez <code>supabase.sql</code>, sinon « Effacer toutes les données » ne remet pas les téléphones à zéro.');
-    else if (A.sessionTable === 'ok') add('ok', 'Remise à zéro des téléphones disponible.');
-    // 3. équipes connectées
+    const add = (icon, label, value, level, detail) => list.push({ icon, label, value, level, detail });
+
+    if (!A.lastFetch && !A.fetchError) add('📡', 'Serveur', 'connexion…', 'info');
+    else if (A.fetchError) add('📡', 'Serveur', 'ne répond pas', 'err', `Supabase ne répond pas : ${esc(A.fetchError)}`);
+    else add('📡', 'Serveur', 'répond', 'ok');
+
+    if (A.sessionTable === 'absent') add('🔄', 'Remise à zéro', 'table absente', 'warn', 'Table <code>game_session</code> absente : relancez <code>supabase.sql</code>, sinon « Terminer la partie » ne remet pas les téléphones à zéro.');
+    else if (A.sessionTable === 'ok') add('🔄', 'Remise à zéro', 'disponible', 'ok');
+    else add('🔄', 'Remise à zéro', 'vérification…', 'info');
+
     const seen = infos.filter((i) => i.row);
     const missing = infos.filter((i) => !i.row).map((i) => i.team.name || i.t);
-    if (A.lastFetch) {
-      if (!seen.length) add('warn', 'Aucune équipe n\'est encore connectée : chaque capitaine doit scanner son QR code.');
-      else add(missing.length ? 'info' : 'ok', `${seen.length}/${infos.length} équipes connectées${missing.length ? ` (pas encore : ${esc(missing.join(', '))})` : '.'}`);
-    }
-    // 4. parties en cours (reste de test ?)
+    if (!A.lastFetch) add('👥', 'Équipes', '…', 'info');
+    else if (!seen.length) add('👥', 'Équipes', `0/${infos.length}`, 'warn', 'Aucune équipe n\'est encore connectée : chaque capitaine doit scanner son QR code.');
+    else add('👥', 'Équipes', `${seen.length}/${infos.length}`, missing.length ? 'info' : 'ok', missing.length ? `Pas encore connectées : ${esc(missing.join(', '))}.` : '');
+
     const started = infos.filter((i) => i.st && i.st.startedAt);
-    if (started.length) add('info', `${started.length} équipe${started.length > 1 ? 's ont' : ' a'} une partie en cours. Avant le départ : « Effacer toutes les données ».`);
-    // 5. versions
+    add('🧹', 'Base de données', started.length ? plural(started.length, 'partie en cours', 'parties en cours') : 'propre', started.length ? 'info' : 'ok',
+      started.length ? 'Des parties sont déjà en cours (reste de test ?). Avant le départ : « Terminer la partie » pour repartir d\'une base propre.' : '');
+
     const outdated = infos.filter((i) => i.st && i.st.version && VERSION !== 'dev' && i.st.version !== VERSION);
-    if (VERSION === 'dev') add('info', 'Version locale (« dev ») : pas de game.js publié.');
-    else if (outdated.length) add('warn', `${outdated.length} téléphone${outdated.length > 1 ? 's' : ''} sur une ancienne version (${esc(outdated.map((i) => i.t).join(', '))}) : recharger la page.`);
-    else add('ok', `Version du jeu : ${esc(VERSION)}.`);
-    // 6. parcours
-    if (A.parcoursConflicts.length) add('warn', `${A.parcoursConflicts.length} conflit${A.parcoursConflicts.length > 1 ? 's' : ''} de parcours (voir la vue Parcours).`);
-    else add('ok', 'Parcours : aucun conflit de zone.');
-    // 7. contenu provisoire
+    if (VERSION === 'dev') add('🏷️', 'Version', 'locale (dev)', 'info', 'Version locale : pas de game.js publié.');
+    else if (outdated.length) add('🏷️', 'Version', plural(outdated.length, 'ancienne', 'anciennes'), 'warn', `Téléphones sur une ancienne version : ${esc(outdated.map((i) => i.t).join(', '))}. Recharger la page.`);
+    else add('🏷️', 'Version', VERSION.replace(/^\d+\./, ''), 'ok');
+
+    const n = A.parcoursConflicts.length;
+    add('🧭', 'Parcours', n ? plural(n, 'conflit', 'conflits') : 'sans conflit', n ? 'warn' : 'ok', n ? 'Conflits de zone : voir la vue Parcours plus bas.' : '');
+
     if (provisional.length || rulesProvisional) {
-      const where = provisional.slice(0, 4).map(esc).join(' · ');
-      add('warn', `Contenu provisoire à remplacer${provisional.length ? ` (${provisional.length} étape${provisional.length > 1 ? 's' : ''} : ${where}${provisional.length > 4 ? '…' : ''})` : ''}${rulesProvisional ? ' · consignes de l\'accueil à compléter (numéro de l\'organisation)' : ''}.`);
-    } else add('ok', 'Aucun contenu provisoire.');
-    // 8. carte
+      const total = provisional.length + (rulesProvisional ? 1 : 0);
+      add('✍️', 'Contenu', plural(total, 'à finir', 'à finir'), 'warn',
+        `Contenu provisoire à remplacer${provisional.length ? ` (${esc(provisional.slice(0, 4).join(' · '))}${provisional.length > 4 ? '…' : ''})` : ''}${rulesProvisional ? ' · consignes de l\'accueil à compléter (numéro de l\'organisation)' : ''}.`);
+    } else add('✍️', 'Contenu', 'complet', 'ok');
+
     const noPos = Object.keys(GAME.zones).filter((z) => GAME.zones[z].lat == null).map((z) => 'zone ' + z).concat(GAME.final && GAME.final.lat == null ? ['finale'] : []);
-    if (noPos.length) add('warn', `Pas de position sur la carte pour : ${noPos.join(', ')}.`);
-    // 9. fichiers et carnet
-    if (A.leaked) add('err', 'contenu.js est en ligne : les réponses sont lisibles par tous.');
-    add(A.book ? 'ok' : 'warn', A.book ? 'Carnet de réponses chargé.' : 'Carnet de réponses non chargé (code d\'accès à ressaisir ?).');
+    add('📍', 'Carte', noPos.length ? plural(noPos.length, 'lieu sans position', 'lieux sans position') : 'complète', noPos.length ? 'warn' : 'ok',
+      noPos.length ? `Pas de position sur la carte pour : ${esc(noPos.join(', '))}.` : '');
+
+    add('🔒', 'contenu.js', A.leaked ? 'EN LIGNE' : 'non publié', A.leaked ? 'err' : 'ok', A.leaked ? 'contenu.js est en ligne : les réponses sont lisibles par tous. Supprimez-le du dépôt GitHub.' : '');
+    add('🔑', 'Réponses', A.book ? 'chargées' : 'non chargées', A.book ? 'ok' : 'warn', A.book ? '' : 'Carnet de réponses non chargé (code d\'accès à ressaisir ?).');
     return list;
   }
 
-  const ICON = { ok: '✅', info: 'ℹ️', warn: '⚠️', err: '🚨' };
-
   function checksHtml(infos) {
     const list = items(infos);
-    const issues = list.filter((i) => i.level === 'warn' || i.level === 'err').length;
-    if (A.checksOpen === undefined && A.lastFetch) A.checksOpen = issues > 0; // ouvert d'office seulement s'il y a quelque chose à voir
+    const issues = list.filter((i) => i.level === 'warn' || i.level === 'err');
+    const good = list.filter((i) => i.level === 'ok').length;
+    if (A.checksOpen === undefined && A.lastFetch) A.checksOpen = issues.length > 0; // ouvert d'office seulement s'il y a quelque chose à voir
+    const tiles = list.map((i) => `<div class="ck ${i.level}" title="${esc((i.detail || '').replace(/<[^>]+>/g, ''))}">
+        <span class="ck-icon">${i.icon}</span>
+        <span class="ck-text"><b>${esc(i.label)}</b><small>${esc(i.value)}</small></span>
+        <i class="ck-dot"></i>
+      </div>`).join('');
+    const notes = issues.map((i) => `<li class="${i.level}">${i.icon} ${i.detail}</li>`).join('');
     return `<section class="checks"><details ${A.checksOpen ? 'open' : ''}>
-      <summary>${issues ? `⚠️ ${issues} point${issues > 1 ? 's' : ''} à vérifier` : '✅ Tout est prêt'} <small>contrôle avant le départ</small></summary>
-      <ul>${list.map((i) => `<li class="${i.level}">${ICON[i.level]} ${i.text}</li>`).join('')}</ul>
+      <summary>
+        <span>${issues.length ? `⚠️ ${plural(issues.length, 'point à vérifier', 'points à vérifier')}` : '✅ Tout est prêt'}</span>
+        <span class="ck-bar" title="${good} sur ${list.length} contrôles au vert"><i style="width:${Math.round(good / list.length * 100)}%"></i></span>
+        <small>${good}/${list.length}</small>
+      </summary>
+      <div class="ck-grid">${tiles}</div>
+      ${notes ? `<ul class="ck-notes">${notes}</ul>` : ''}
     </details></section>`;
   }
 

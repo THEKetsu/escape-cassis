@@ -25,6 +25,33 @@
     return z && typeof z.lat === 'number' && typeof z.lng === 'number' ? { lat: z.lat, lng: z.lng } : null;
   }
 
+  // Carte du joueur, dévoilée pas à pas : lieux que l'équipe connaît déjà, dans l'ordre de son circuit.
+  // - 'done'    : zone terminée ;
+  // - 'current' : zone où elle joue (annoncée par l'énigme précédente, ou point de départ pour la première) ;
+  // - 'next'    : prochaine destination, annoncée dès que la dernière énigme de la zone en cours est résolue
+  //               (ou la finale, après la dernière zone).
+  // Les lieux encore inconnus de l'équipe n'apparaissent pas. Avant le départ : rien.
+  function revealedZones(game, teamId, path, state) {
+    if (!state || !state.startedAt) return [];
+    const circuit = game.teams[teamId].circuit.map(String);
+    const out = circuit.map((id) => ({ id, status: 'hidden' }));
+    const step = path[state.stepIndex];
+    const finished = !!state.finishedAt || state.phase === 'done' || !step;
+    if (finished || step.zoneId === 'final') {
+      out.forEach((z) => { z.status = 'done'; });
+      out.push({ id: 'final', status: finished ? 'done' : 'current' });
+      return out;
+    }
+    const solvedLast = state.phase === 'success' && step.zoneStep === step.zoneSteps - 1;
+    out.forEach((z, i) => {
+      if (i < step.zoneIndex) z.status = 'done';
+      else if (i === step.zoneIndex) z.status = solvedLast ? 'done' : 'current';
+      else if (i === step.zoneIndex + 1 && solvedLast) z.status = 'next';
+    });
+    if (solvedLast && step.zoneIndex === circuit.length - 1) out.push({ id: 'final', status: 'next' });
+    return out.filter((z) => z.status !== 'hidden');
+  }
+
   // Une position GPS envoyée par le téléphone n'est plus affichée au-delà de ce délai
   const LIVE_MAX_AGE = 2 * 60 * 1000;
 
@@ -96,5 +123,5 @@
     return Math.sqrt(dx * dx + dy * dy) <= target.r;
   }
 
-  return { distance, zonePoint, LIVE_MAX_AGE, teamLocation, mapView, hitTarget };
+  return { distance, zonePoint, LIVE_MAX_AGE, teamLocation, revealedZones, mapView, hitTarget };
 });

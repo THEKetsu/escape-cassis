@@ -42,6 +42,7 @@
           <div class="top-actions">
             <span class="pill"><span id="net" class="net ${A.online === null ? '' : A.online ? 'ok' : 'ko'}"></span><span id="timer">${E.formatDuration(E.elapsedSeconds(state, Date.now()))}</span>
               ${state.penalty ? `<small>+${E.formatDuration(state.penalty)}</small>` : ''}</span>
+            <button class="pill icon" data-action="map" aria-label="Carte">🗺️</button>
             <button class="pill icon" data-action="textsize" aria-label="Taille du texte">Aa</button>
             ${Sync.enabled ? A.chatButton() : ''}
             ${leaderboard ? '<button class="pill icon" data-action="board" aria-label="Classement">🏆</button>' : ''}

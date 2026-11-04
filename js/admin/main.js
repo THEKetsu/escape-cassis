@@ -82,8 +82,9 @@
       if (action && action.dataset.action === 'chat') return A.openChat(action.dataset.team);
       if (action && action.dataset.action === 'chat-next') return A.openChat(teamIds.find((t) => A.unread(t)));
       if (action && action.dataset.action === 'wipe') {
-        if (!confirm('Effacer la progression et les messages de TOUTES les équipes sur le serveur ?\nLes téléphones connectés reviendront à l\'accueil en moins de 30 secondes.')) return;
-        if (!confirm('Vraiment ? (à faire avant le jeu, après les tests)')) return;
+        if (!confirm('Terminer la partie ?\nLes téléphones reviendront à l\'accueil en moins de 10 secondes, et la progression et les messages de TOUTES les équipes seront effacés. Le bilan (CSV) est téléchargé juste avant.')) return;
+        if (!confirm('Vraiment terminer la partie pour toutes les équipes ?')) return;
+        if (Object.values(A.rows).some((r) => r.state && r.state.startedAt)) A.exportCsv(); // le bilan part avant l'effacement
         try { await Sync.resetAll(); } catch (err) { alert(err.message); }
         A.closeChat();
         A.msgs = {};

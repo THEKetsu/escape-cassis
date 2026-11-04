@@ -344,3 +344,19 @@ test('routage : dernière zone de chaque équipe = écran « finale » ; après 
   // dernière zone de chaque équipe
   assert.deepStrictEqual(Object.keys(game.teams).map((t) => game.teams[t].circuit.slice(-1)[0]), [5, 2, 1, 1, 2, 4, 5, 3]);
 });
+
+test('carte du joueur : les lieux se dévoilent au fil des énigmes résolues', () => {
+  const game = loadGame();
+  const team = 'E2'; // circuit 1, 3, 4, 5, 2
+  const path = E.buildPath(game, team);
+  const first = (zone) => path.findIndex((s) => s.zoneId === String(zone));
+  const last = (zone) => path.map((s, i) => (s.zoneId === String(zone) ? i : -1)).filter((i) => i >= 0).pop();
+  const show = (state) => E.revealedZones(game, team, path, Object.assign({ startedAt: 1, phase: 'step' }, state)).map((z) => z.id + ':' + z.status).join(' ');
+  assert.deepStrictEqual(E.revealedZones(game, team, path, { startedAt: null }), []); // avant le départ : rien
+  assert.strictEqual(show({ stepIndex: 0 }), '1:current'); // départ : seule la première zone est connue
+  assert.strictEqual(show({ stepIndex: last(1) }), '1:current'); // dernière énigme pas encore résolue : rien de plus
+  assert.strictEqual(show({ stepIndex: last(1), phase: 'success' }), '1:done 3:next'); // résolue : la prochaine destination apparaît
+  assert.strictEqual(show({ stepIndex: first(3) }), '1:done 3:current');
+  assert.strictEqual(show({ stepIndex: last(2), phase: 'success' }), '1:done 3:done 4:done 5:done 2:done final:next'); // dernière zone résolue : la finale
+  assert.strictEqual(show({ stepIndex: path.length - 1, finishedAt: 5, phase: 'done' }), '1:done 3:done 4:done 5:done 2:done final:done');
+});

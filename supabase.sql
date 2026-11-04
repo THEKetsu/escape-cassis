@@ -64,7 +64,7 @@ alter table public.messages add constraint messages_valid
 alter table public.messages enable row level security;
 
 -- Lecture et envoi pour le jeu et le dashboard ; un message envoyé ne se modifie pas.
--- La suppression sert au bouton « Effacer toutes les données » du dashboard.
+-- La suppression sert au bouton « Terminer la partie » du dashboard.
 drop policy if exists "messages_select" on public.messages;
 drop policy if exists "messages_insert" on public.messages;
 drop policy if exists "messages_delete" on public.messages;
@@ -75,7 +75,7 @@ create policy "messages_delete" on public.messages for delete to anon using (tru
 grant select, insert, delete on public.messages to anon;
 
 -- ---------- session de jeu ----------
--- Une seule ligne : le numéro de la session en cours. Le dashboard le change à chaque « Effacer toutes les données » :
+-- Une seule ligne : le numéro de la session en cours. Le dashboard le change à chaque « Terminer la partie » :
 -- les téléphones qui ont un autre numéro repartent de zéro.
 create table if not exists public.game_session (
   id int primary key check (id = 1),
