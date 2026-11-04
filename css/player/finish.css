@@ -34,3 +34,14 @@
 .recap { width: 100%; border-collapse: collapse; margin: 6px 0 16px; font-size: 15px; }
 .recap th, .recap td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; }
 .recap td:not(:first-child), .recap th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Enveloppe du Four Banal : texte aéré, deux éléments bien séparés, avertissement en évidence */
+.env-list { display: grid; gap: 10px; margin: 14px 0; text-align: left; }
+.env-item { display: flex; gap: 12px; align-items: flex-start; background: var(--soft); border-radius: 16px; padding: 12px 14px; }
+.env-item > span { flex: none; font-size: 26px; line-height: 1.2; }
+.env-item b { display: block; font-family: var(--display); }
+.env-item p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+.env-warn { margin: 6px 0 0; padding: 12px 14px; border-radius: 16px; background: #fff4d6; border: 2px solid var(--gold); font-weight: 800; color: var(--ink); }
+.env-warn small { display: block; margin-top: 4px; font-weight: 500; color: var(--muted); font-size: 14px; }
+.envelope-tag { margin: 12px 0; padding: 14px; border: 3px dashed var(--zone); border-radius: 18px; text-align: center; font-weight: 700; color: var(--muted); }
+.envelope-tag b { display: block; margin-top: 4px; font-family: var(--display); font-size: 34px; letter-spacing: .04em; color: var(--ink); text-transform: uppercase; }

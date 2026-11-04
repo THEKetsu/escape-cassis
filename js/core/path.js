@@ -25,7 +25,7 @@
       const variant = variantFor(team, zoneId);
       if (!zone || !zone[variant]) throw new Error(`Zone ${zoneId} / variante ${variant} introuvable (équipe ${teamId})`);
       zone[variant].forEach((step, i) => {
-        steps.push(Object.assign({}, step, {
+        const built = Object.assign({}, step, {
           key: `z${zoneId}-${variant}-${i}`,
           zoneId: String(zoneId),
           zoneName: zone.name,
@@ -33,7 +33,11 @@
           zoneStep: i,
           zoneSteps: zone[variant].length,
           variant,
-        }));
+        });
+        // step.last : texte, réponses, indices propres à l'équipe pour qui cette zone est la dernière (ex. destination finale)
+        if (step.last && zoneIndex === team.circuit.length - 1) Object.assign(built, step.last, { lastOverride: true });
+        delete built.last;
+        steps.push(built);
       });
     });
     const final = game.final || { steps: [] };

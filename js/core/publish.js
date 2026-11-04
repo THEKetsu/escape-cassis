@@ -21,6 +21,10 @@
         step.h = step.answers.map((a) => hash(normalize(a), salt));
         delete step.answers;
       }
+      if (step.last && step.last.answers) {
+        step.last.h = step.last.answers.map((a) => hash(normalize(a), salt));
+        delete step.last.answers;
+      }
     });
     const s = out.settings || {};
     if (s.masterCode) { s.masterHash = hash(normalize(s.masterCode), salt); delete s.masterCode; }
@@ -35,7 +39,10 @@
     const answers = {};
     Object.keys(game.zones || {}).forEach((zoneId) => {
       ['A', 'B'].forEach((v) => {
-        (game.zones[zoneId][v] || []).forEach((step, i) => { if (step.answers) answers[`z${zoneId}-${v}-${i}`] = step.answers; });
+        (game.zones[zoneId][v] || []).forEach((step, i) => {
+          if (step.answers) answers[`z${zoneId}-${v}-${i}`] = step.answers;
+          if (step.last && step.last.answers) answers[`z${zoneId}-${v}-${i}~last`] = step.last.answers; // pour l'équipe dont c'est la dernière zone
+        });
       });
     });
     ((game.final && game.final.steps) || []).forEach((step, i) => { if (step.answers) answers[`final-${i}`] = step.answers; });

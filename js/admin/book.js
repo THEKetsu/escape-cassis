@@ -48,7 +48,7 @@
   }
 
   function stepSolution(step) {
-    return step ? solution(step, step.key) : '';
+    return step ? solution(step, step.lastOverride ? step.key + '~last' : step.key) : '';
   }
 
   function bookHtml() {
@@ -56,6 +56,7 @@
       <li><span class="step-no">${i + 1}</span><div>
         <div>${TYPE_ICONS[step.type] || ''} <b>${esc(step.title || '')}</b>${i === 0 && key.startsWith('z') ? ' <small>(mène à la zone)</small>' : ''}</div>
         <div class="answer-line">${solution(step, key)}</div>
+        ${step.last && step.last.answers ? `<div class="answer-line">si c'est la dernière zone de l'équipe : ${solution(step.last, key + '~last')}</div>` : ''}
         ${(step.hints || []).length ? `<details><summary>${step.hints.length} indice(s)</summary><ol>${step.hints.map((h) => `<li>${h}</li>`).join('')}</ol></details>` : ''}
       </div></li>`;
     const zones = Object.keys(GAME.zones).map((z) => {

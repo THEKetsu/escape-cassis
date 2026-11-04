@@ -5,6 +5,11 @@
   const { E, Sync, GAME, S, $app, FINAL_COLOR, leaderboard, LIVE, TAKEOVER_MS } = A;
   const esc = window.Util.esc;
 
+  // Gabarit : {{equipe}} devient le nom de l'équipe dans le jeu (« Équipe 1 »), {{numero}} son numéro (enveloppes nominatives)
+  const tpl = (html) => String(html || '')
+    .split('{{equipe}}').join(esc(GAME.teams[A.state.team].name || A.state.team))
+    .split('{{numero}}').join(esc(String(A.state.team).replace(/\D/g, '')));
+
   function render() {
     clearInterval(A.tick);
     if (A.stopLobby) A.stopLobby();
@@ -208,13 +213,13 @@
       <main class="card anim">
         <div class="kicker"><span>📍 ${esc(step.zoneName)}</span><span>Énigme ${step.zoneStep + 1}/${step.zoneSteps}</span></div>
         <h1>${esc(step.title || '')}</h1>
-        <div class="text">${step.text || ''}</div>
+        <div class="text">${tpl(step.text)}</div>
         ${A.imagesHtml(step.images)}
         <div class="interaction">${interactionHtml(step)}</div>
         <p id="feedback" class="feedback" aria-live="polite"></p>
       </main>
       ${hintsHtml(step)}
-      <footer class="foot"><button class="link" data-action="master">🔑 Code organisation</button><p class="credits">version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p></footer>`;
+      <footer class="foot"><button class="link" data-action="master">🔑 Code organisation</button>${A.state.stepIndex > 0 ? '<button class="link" data-action="review">↩ Revoir l\'étape précédente</button>' : ''}<p class="credits">version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p></footer>`;
     startTimer();
     A.push();
 
@@ -248,7 +253,7 @@
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
         <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
         ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
-        <div class="text">${s.text || ''}${routing}</div>
+        <div class="text">${tpl(s.text)}${routing}</div>
         ${step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : ''}
         ${s.reveal ? `<p>Votre prochaine destination :</p><p class="big-code">${esc(s.reveal)}</p>` : ''}
         ${A.imagesHtml(s.images)}
@@ -308,5 +313,6 @@
     }
   }
 
+  A.tpl = tpl;
   Object.assign(A, { render, header, hintsHtml });
 })();

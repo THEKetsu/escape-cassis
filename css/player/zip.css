@@ -23,3 +23,12 @@
 .zip-info { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 6px; font-weight: 700; font-size: 15px; }
 .zip-letters b { letter-spacing: .15em; font-size: 17px; }
 .zip-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+/* chemin valide : coche verte sur la grille, bouton vert */
+.zip-board.valid { border-color: var(--green); box-shadow: 0 0 0 4px rgba(34, 160, 107, .35); }
+.zip-ok {
+  position: absolute; top: 8px; right: 8px; z-index: 4; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--green); color: #fff; font-size: 26px; font-weight: 900;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .3); animation: pop .35s cubic-bezier(.3, 1.6, .5, 1);
+}
+.btn.zip-validate.valid { background: var(--green); }

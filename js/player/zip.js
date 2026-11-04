@@ -68,6 +68,7 @@
     return `
       <div class="zip-board" style="--n:${n}">
         ${body.join('')}
+        <span class="zip-ok" hidden aria-label="Chemin valide">✓</span>
         <svg class="zip-lines" viewBox="0 0 ${n} ${n}" preserveAspectRatio="none">
           <g class="zip-walls">${walls}</g>
           <polyline id="zip-path" points="${pointsOf(z)}"/>
@@ -79,7 +80,7 @@
         <button class="btn" data-action="zip-undo">↩ Annuler</button>
         <button class="btn" data-action="zip-clear">Effacer</button>
       </div>
-      <button class="btn primary big" data-action="zip-validate">Valider mon chemin</button>`;
+      <button class="btn primary big zip-validate" data-action="zip-validate">Valider mon chemin</button>`;
   }
 
   // Met à jour compteur, lettres et tracé après chaque changement du chemin
@@ -90,6 +91,17 @@
     const line = document.getElementById('zip-path');
     if (!line) return;
     line.setAttribute('points', pointsOf(z));
+    // chemin valide : coche verte sur la grille, et le bouton passe au vert
+    const valid = E.zipCheck(z, cells).ok;
+    const board = document.querySelector('.zip-board');
+    if (board) board.classList.toggle('valid', valid);
+    const badge = document.querySelector('.zip-ok');
+    if (badge) badge.hidden = !valid;
+    const button = document.querySelector('.zip-validate');
+    if (button) {
+      button.classList.toggle('valid', valid);
+      button.textContent = valid ? '✅ Chemin valide : continuer' : 'Valider mon chemin';
+    }
     document.getElementById('zip-count').textContent = `${cells.length} / ${z.size * z.size} cases`;
     document.getElementById('zip-letters').textContent = E.zipLetters(z, cells).split('').join(' ') || '–';
     store(step);

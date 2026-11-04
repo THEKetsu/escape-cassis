@@ -48,6 +48,7 @@
       if (!STEP_TYPES.includes(step.type)) return errors.push(`${where} : type "${step.type}" inconnu`);
       if (!step.title) warnings.push(`${where} : pas de titre`);
       const hasAnswers = (step.answers && step.answers.length) || (step.h && step.h.length);
+      if (step.last && 'answers' in step.last && !(step.last.answers && step.last.answers.length)) errors.push(`${where} : last.answers est vide`);
       if (['text', 'number', 'qcm', 'multi', 'order', 'image-choice', 'qr'].includes(step.type) && !hasAnswers) errors.push(`${where} : aucune réponse acceptée`);
       if (['qcm', 'multi', 'order', 'image-choice'].includes(step.type)) {
         if (!step.options || step.options.length < 2) errors.push(`${where} : il faut au moins 2 options`);

@@ -57,7 +57,7 @@ test('carnet de réponses : chiffré dans game.js, lisible avec le code admin se
   const game = loadGame();
   const book = JSON.parse(JSON.stringify(E.answerBook(game))); // tableaux issus de vm : autre prototype
   assert.deepStrictEqual(book.answers['z3-A-3'], ['FOUR BANAL', 'LE FOUR BANAL', 'FOUR']);
-  assert.deepStrictEqual(book.answers['final-1'], ['ARRIVEE']);
+  assert.deepStrictEqual(book.answers['final-1'], ['TOP']);
   assert.strictEqual(book.answers['z3-B-2'], undefined); // étape info : pas de réponse
   assert.strictEqual(book.masterCode, 'CALANQUE');
   const sandbox = { window: {} };
@@ -367,4 +367,37 @@ test('salle d\'attente : seule l\'organisation donne le départ (jamais de déma
   assert.strictEqual(E.lobbyDecision(null, false), 'wait'); // pas de table : l'équipe n'ose pas démarrer seule
   assert.strictEqual(E.lobbyDecision({ epoch: 'e', startedAt: undefined }, false), 'wait'); // table sans colonne : idem
   assert.strictEqual(E.lobbyDecision(null, true), 'wait'); // serveur injoignable : on attend de pouvoir lire
+});
+
+test('dernière zone : la zone 5 donne TERRAIN DE PÉTANQUE à l\'équipe pour qui c\'est la dernière, CASSIS aux autres', () => {
+  const game = loadGame();
+  const pub = E.publish(game);
+  const salt = game.settings.salt;
+  const step = (g, team, zone, i) => E.buildPath(g, team).find((s) => s.zoneId === String(zone) && s.zoneStep === i);
+  const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
+  const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
+  const reserve = (s) => s.text.replace(/<[^>]+>/g, ' ').match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
+  const dest = letters('TERRAIN DE PETANQUE');
+  // E1 (zone 5A en dernier) et E7 (zone 5B en dernier) : la destination finale
+  const e1 = step(game, 'E1', 5, 1);
+  const e7 = step(game, 'E7', 5, 2);
+  assert.ok(e1.lastOverride && e7.lastOverride);
+  assert.strictEqual(remove(reserve(e1), 'CROSSE POISSON POISSON'), dest);
+  assert.strictEqual(remove(reserve(e7), 'PORT'), dest);
+  ['E1', 'E7'].forEach((t) => {
+    const s = t === 'E1' ? step(pub, 'E1', 5, 1) : step(pub, 'E7', 5, 2);
+    assert.ok(E.checkAnswer('terrain de pétanque', s, salt));
+    assert.ok(E.checkAnswer('Les terrains de pétanque', s, salt));
+    assert.ok(!E.checkAnswer('cassis', s, salt));
+  });
+  // les autres équipes (zone 5 au milieu du parcours) : le mot CASSIS, puis la destination annoncée par l'application
+  const e2 = step(pub, 'E2', 5, 1);
+  assert.ok(!E.buildPath(game, 'E2').find((s) => s.zoneId === '5' && s.zoneStep === 1).lastOverride);
+  assert.ok(E.checkAnswer('cassis', e2, salt) && !E.checkAnswer('terrain de pétanque', e2, salt));
+  // le blason s'écrit de beaucoup de façons
+  const b = step(pub, 'E1', 5, 0);
+  ['1 crosse + 2 poissons', 'Une crosse et deux poissons', '2 poissons et 1 crosse', 'deux poissons, une crosse', 'je vois une crosse et 2 poissons !'].forEach((v) => assert.ok(E.checkAnswer(v, b, salt), v));
+  assert.ok(!E.checkAnswer('une crosse et trois poissons', b, salt));
+  // l'arrivée finale : le code est TOP
+  assert.ok(E.checkAnswer('top', E.buildPath(pub, 'E1').find((s) => s.key === 'final-1'), salt));
 });
