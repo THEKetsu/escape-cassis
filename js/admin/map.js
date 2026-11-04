@@ -40,7 +40,7 @@
 
   // Où en est l'équipe, en une ligne (liste de la carte et infobulles)
   function whereText(info, loc) {
-    if (!info.st || !info.st.startedAt) return info.status === 'registered' ? 'prête au départ' : 'pas encore partie';
+    if (!info.st || !info.st.startedAt) return info.status === 'ready' ? 'prête au départ' : info.status === 'registered' ? 'connectée' : 'pas encore partie';
     if (info.st.finishedAt) return 'arrivée 🏁';
     const where = loc && loc.enRoute ? `vers ${info.step.zoneName}` : info.step.zoneName;
     const age = loc && loc.live ? ` · GPS ${Math.max(0, Math.round((Date.now() - loc.at) / 1000))} s` : '';

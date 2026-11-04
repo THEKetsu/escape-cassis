@@ -82,6 +82,8 @@ create table if not exists public.game_session (
   epoch text not null check (char_length(epoch) between 1 and 40),
   updated_at timestamptz not null default now()
 );
+-- started_at : heure du départ donné par l'organisation (vide = salle d'attente : les équipes attendent le départ)
+alter table public.game_session add column if not exists started_at timestamptz;
 insert into public.game_session (id, epoch) values (1, '0') on conflict (id) do nothing;
 alter table public.game_session enable row level security;
 drop policy if exists "session_select" on public.game_session;

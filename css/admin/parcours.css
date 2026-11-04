@@ -38,6 +38,9 @@
 .ck-notes li { padding: 8px 12px; border-radius: 12px; background: rgba(255, 149, 0, .10); color: #7a4700; }
 .ck-notes li.err { background: rgba(255, 59, 48, .10); color: var(--red); font-weight: 600; }
 
+button.go { background: var(--green); color: #fff; font-weight: 700; box-shadow: 0 6px 18px rgba(52, 199, 89, .4); }
+button.go:hover { background: #2fb350; }
+
 .broadcast textarea { width: 100%; font: inherit; padding: 12px; border-radius: 14px; border: 1px solid var(--sep); resize: vertical; }
 .broadcast form { display: grid; gap: 12px; }
 .check-only { font-size: 14px; color: var(--muted); }

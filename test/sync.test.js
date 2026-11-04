@@ -186,3 +186,41 @@ test('organisateur : message collectif envoyé en une seule requête, un message
   assert.ok(Array.isArray(calls[0].body) && calls[0].body.length === 2);
   assert.deepStrictEqual(saved.map((m) => m.team), ['E1', 'E2']);
 });
+
+test('session : lecture du départ (salle d\'attente), table absente et colonne absente', async () => {
+  const wait = loadSync(() => ({ json: [{ epoch: 'e1', started_at: null }] }));
+  const waiting = await wait.Sync.loadSession(); // salle d'attente
+  assert.strictEqual(waiting.epoch, 'e1');
+  assert.strictEqual(waiting.startedAt, null);
+  assert.ok(wait.calls[0].url.includes('select=epoch,started_at'));
+  const running = loadSync(() => ({ json: [{ epoch: 'e1', started_at: '2026-11-04T14:00:00Z' }] }));
+  assert.strictEqual((await running.Sync.loadSession()).startedAt, '2026-11-04T14:00:00Z');
+  assert.strictEqual(await loadSync(() => ({ status: 404, json: {} })).Sync.loadSession(), null); // pas de table
+  const noColumn = loadSync((url) => (url.includes('started_at') ? { status: 400, json: { code: '42703' } } : { json: [{ epoch: 'e1' }] }));
+  const old = await noColumn.Sync.loadSession(); // supabase.sql pas relancé
+  assert.strictEqual(old.epoch, 'e1');
+  assert.strictEqual(old.startedAt, undefined);
+});
+
+test('organisateur : démarrer la partie enregistre l\'heure du départ ; terminer la remet en salle d\'attente', async () => {
+  const start = loadSync((url, options) => ({ json: [{ epoch: 'e', started_at: JSON.parse(options.body).started_at }] }));
+  const at = await start.Sync.startGame();
+  assert.strictEqual(start.calls[0].options.method, 'PATCH');
+  assert.ok(Date.parse(at) > 0 && Date.now() - Date.parse(at) < 5000);
+  // terminer : nouveau numéro et started_at remis à vide
+  const end = loadSync((url, options) => (options.method === 'PATCH' ? { json: [{ epoch: 'n' }] } : { json: [] }));
+  await end.Sync.resetAll();
+  assert.strictEqual(end.calls[0].body.started_at, null);
+  // serveur sans colonne started_at : le numéro de session est quand même changé
+  let first = true;
+  const old = loadSync((url, options) => {
+    if (options.method !== 'PATCH') return { json: [] };
+    if (first) { first = false; return { status: 400, json: {} }; }
+    return { json: [{ epoch: 'n' }] };
+  });
+  await old.Sync.resetAll();
+  const patches = old.calls.filter((c) => c.options.method === 'PATCH');
+  assert.strictEqual(patches.length, 2);
+  assert.ok(!('started_at' in patches[1].body));
+  await assert.rejects(loadSync(() => ({ status: 400, json: {} })).Sync.startGame(), /colonne started_at absente/);
+});

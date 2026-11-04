@@ -8,6 +8,11 @@
 - Cliquer sur « Terminer la partie » (dashboard) pour repartir d'une base vide après les tests.
 - Charger les téléphones d'organisation et prévoir des batteries externes : le GPS vide vite les batteries.
 
+## Départ
+- Chaque capitaine scanne son QR code, saisit le nom de l'équipe et touche **Rejoindre la partie** : l'équipe entre dans la salle d'attente et voit les autres équipes.
+- Quand tout le monde est prêt : dashboard → **▶️ Démarrer la partie**. Les téléphones passent tout seuls à la première énigme (chrono lancé).
+- Une équipe qui arrive après le départ démarre dès qu'elle touche « Rejoindre la partie ». Si le bouton « Démarrer » n'apparaît pas, relancer `supabase.sql` (colonne `started_at`) : sans elle, chaque équipe démarre dès qu'elle rejoint.
+
 ## Pendant le jeu
 
 | Problème | Que faire |

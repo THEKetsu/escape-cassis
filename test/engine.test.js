@@ -360,3 +360,11 @@ test('carte du joueur : les lieux se dévoilent au fil des énigmes résolues', 
   assert.strictEqual(show({ stepIndex: last(2), phase: 'success' }), '1:done 3:done 4:done 5:done 2:done final:next'); // dernière zone résolue : la finale
   assert.strictEqual(show({ stepIndex: path.length - 1, finishedAt: 5, phase: 'done' }), '1:done 3:done 4:done 5:done 2:done final:done');
 });
+
+test('salle d\'attente : démarrer tout de suite, attendre le départ, ou attendre si le serveur ne répond pas', () => {
+  assert.strictEqual(E.lobbyDecision({ epoch: 'e', startedAt: null }, false), 'wait'); // départ pas encore donné
+  assert.strictEqual(E.lobbyDecision({ epoch: 'e', startedAt: '2026-11-04T14:00:00Z' }, false), 'begin'); // déjà lancée : on entre directement
+  assert.strictEqual(E.lobbyDecision(null, false), 'begin'); // pas de table : ancien fonctionnement
+  assert.strictEqual(E.lobbyDecision({ epoch: 'e', startedAt: undefined }, false), 'begin'); // table sans colonne : idem
+  assert.strictEqual(E.lobbyDecision(null, true), 'wait'); // serveur injoignable : on attend de pouvoir lire
+});

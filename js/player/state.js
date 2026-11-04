@@ -15,7 +15,7 @@
 
   function newState(team) {
     return {
-      team, teamName: '', startedAt: null, finishedAt: null,
+      team, teamName: '', joined: false, startedAt: null, finishedAt: null,
       stepIndex: 0, stepStartedAt: null, phase: 'step',
       hints: {}, hintsTotal: 0, penalty: 0, skips: 0, wrong: 0, wrongOnStep: 0,
       log: [], updatedAt: Date.now(),

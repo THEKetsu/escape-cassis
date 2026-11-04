@@ -6,6 +6,7 @@
 
   async function refresh() {
     try {
+      try { A.session = await Sync.loadSession(); } catch (e) { /* lu au prochain tour */ }
       const list = await Sync.loadAll();
       A.rows = {};
       list.forEach((r) => { A.rows[r.team] = { state: r.data && r.data.state, updatedAt: Date.parse(r.updated_at) }; });
@@ -25,7 +26,7 @@
     const now = Date.now();
     const info = { t, st, path, row, team: GAME.teams[t] };
     if (!st || !st.startedAt) {
-      info.status = row ? 'registered' : 'idle';
+      info.status = st && st.joined ? 'ready' : row ? 'registered' : 'idle';
       return info;
     }
     info.step = path[st.stepIndex];
@@ -41,7 +42,8 @@
 
   const STATUS = {
     idle: ['⏳', 'Pas connectée', 'idle'],
-    registered: ['📱', 'Prête', 'idle'],
+    registered: ['📱', 'Connectée', 'idle'],
+    ready: ['✅', 'Prête', 'idle'],
     playing: ['🏃', 'En jeu', 'playing'],
     stuck: ['🆘', 'Bloquée ?', 'stuck'],
     offline: ['📵', 'Sans signal', 'offline'],

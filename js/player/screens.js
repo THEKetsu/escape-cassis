@@ -7,9 +7,10 @@
 
   function render() {
     clearInterval(A.tick);
+    if (A.stopLobby) A.stopLobby();
     window.scrollTo(0, 0);
     if (!A.state) return renderNoTeam();
-    if (!A.state.startedAt) return renderWelcome();
+    if (!A.state.startedAt) return A.state.joined ? A.renderLobby() : renderWelcome();
     if (A.state.phase === 'done') return renderFinished();
     if (A.state.phase === 'success') return renderSuccess(A.current());
     renderStep(A.current());
@@ -128,7 +129,7 @@
           <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express">
         </label>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
-        ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">C\'est parti ! 🚀</button>'}
+        ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">Rejoindre la partie 🚀</button>'}
         <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p>
       </main>`;
     if (Sync.enabled && !A.remote) {

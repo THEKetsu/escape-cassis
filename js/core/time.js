@@ -16,6 +16,15 @@
     return list[Math.min(level, list.length - 1)];
   }
 
+  // Inscription d'une équipe, d'après la session du serveur (null : pas de salle d'attente ; failed : serveur injoignable) :
+  // 'begin' = démarrer tout de suite (serveur sans salle d'attente, ou départ déjà donné) ;
+  // 'wait'  = rejoindre la salle d'attente (départ pas encore donné, ou serveur injoignable : on attend de pouvoir lire)
+  function lobbyDecision(session, failed) {
+    if (failed) return 'wait';
+    if (!session || session.startedAt === undefined) return 'begin';
+    return session.startedAt ? 'begin' : 'wait';
+  }
+
   function elapsedSeconds(state, now) {
     if (!state || !state.startedAt) return 0;
     return Math.max(0, Math.round(((state.finishedAt || now) - state.startedAt) / 1000));
@@ -35,5 +44,5 @@
     return h ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
   }
 
-  return { hintPenalty, elapsedSeconds, totalSeconds, formatDuration };
+  return { hintPenalty, lobbyDecision, elapsedSeconds, totalSeconds, formatDuration };
 });

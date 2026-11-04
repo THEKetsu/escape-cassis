@@ -81,6 +81,16 @@
     }).join('') + '</div>';
   }
 
+  // État du départ, à côté du titre : salle d'attente ou partie lancée (rien si le serveur n'a pas de salle d'attente)
+  function gameStatus() {
+    const s = A.session;
+    if (!s || s.startedAt === undefined) return '';
+    if (s.startedAt) return ` · 🟢 partie lancée à ${new Date(s.startedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+    const ready = teamIds.filter((t) => A.rows[t] && A.rows[t].state && A.rows[t].state.joined).length;
+    return ` · 🟡 salle d'attente : ${ready}/${teamIds.length} équipes prêtes`;
+  }
+  A.gameStatus = gameStatus;
+
   function render() {
     const infos = teamIds.map(A.teamInfo);
     const count = (s) => infos.filter((i) => i.status === s).length;
@@ -88,10 +98,11 @@
       <header class="bar glass">
         <div class="title">
           <h1>${esc(GAME.title)}</h1>
-          <small>${A.fetchError ? `<span class="err">⚠️ ${esc(A.fetchError)}</span>` : `<span class="live-dot"></span>En direct · mis à jour à ${A.lastFetch ? new Date(A.lastFetch).toLocaleTimeString('fr-FR') : '…'}`} · version ${esc(A.VERSION)}</small>
+          <small>${A.fetchError ? `<span class="err">⚠️ ${esc(A.fetchError)}</span>` : `<span class="live-dot"></span>En direct · mis à jour à ${A.lastFetch ? new Date(A.lastFetch).toLocaleTimeString('fr-FR') : '…'}`} · version ${esc(A.VERSION)}${A.gameStatus()}</small>
         </div>
         <div class="meta">
           ${A.unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${A.unreadTotal()} message${A.unreadTotal() > 1 ? 's' : ''}</button>` : ''}
+          ${A.session && A.session.startedAt === null ? '<button data-action="start-game" class="go">▶️ Démarrer la partie</button>' : ''}
           <button data-action="broadcast" title="Écrire à toutes les équipes">📣 Message à tous</button>
           <button data-action="export" title="Télécharger le bilan de la partie (CSV)">📊 Export</button>
           <button data-action="book" class="dark">🔑 Réponses</button>

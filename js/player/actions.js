@@ -177,14 +177,32 @@
     }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 });
   }
 
-  function start() {
-    const input = document.getElementById('team-name');
-    A.state.teamName = input ? input.value.trim().slice(0, 30) : '';
+  // Démarre vraiment la partie : chrono et première énigme
+  function begin() {
+    A.state.joined = true;
     A.state.startedAt = A.state.stepStartedAt = Date.now();
     A.save();
     A.preloadImages();
     A.render();
-    A.updatePosition(); // demande l'autorisation au moment du clic sur « C'est parti »
+    A.updatePosition();
+  }
+
+  // « Rejoindre la partie » : démarre tout de suite (serveur sans salle d'attente, ou départ déjà donné),
+  // sinon l'équipe entre dans la salle d'attente et le départ vient de l'organisation (voir lobby.js)
+  async function start() {
+    const input = document.getElementById('team-name');
+    if (input) A.state.teamName = input.value.trim().slice(0, 30);
+    let session = null;
+    let failed = false;
+    if (A.Sync.enabled) {
+      try { session = await A.Sync.loadSession(); } catch (e) { failed = true; }
+    }
+    if (E.lobbyDecision(session, failed) === 'begin') return begin();
+    A.state.joined = true;
+    A.save();
+    // la permission GPS se demande ici, pendant le geste du joueur : la partie démarrera plus tard, sans clic
+    if (A.LIVE) navigator.geolocation.getCurrentPosition(() => {}, () => {}, { timeout: 10000 });
+    A.render();
   }
 
   function zoom(src) {
@@ -200,6 +218,7 @@
   }
 
   A.submit = submit; // appelé par l'écran d'étape pour un QR scanné
+  A.begin = begin;   // appelé par la salle d'attente quand l'organisation donne le départ
   A.solve = solve;   // appelés par l'étape zip, qui valide son propre chemin
   A.wrongAnswer = wrongAnswer;
 

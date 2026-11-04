@@ -55,16 +55,55 @@ window.Sync = (function () {
     }
   }
 
-  // Nouvelle session : change le numéro, les téléphones qui en avaient un autre repartent de zéro
-  async function newSession() {
-    const epoch = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  // Session en cours : numéro et heure du départ. null = pas de table ; startedAt undefined = table sans colonne started_at
+  // (supabase.sql pas relancé : pas de salle d'attente) ; startedAt null = salle d'attente, le départ n'est pas donné.
+  async function loadSession() {
+    try {
+      const res = await request(rest + 'game_session?id=eq.1&select=epoch,started_at', { headers: headers() });
+      const rows = await res.json();
+      return rows[0] ? { epoch: rows[0].epoch, startedAt: rows[0].started_at } : null;
+    } catch (e) {
+      if (e.message.includes(' 404')) return null;
+      if (e.message.includes(' 400')) {
+        const epoch = await loadEpoch();
+        return epoch ? { epoch, startedAt: undefined } : null;
+      }
+      throw e;
+    }
+  }
+
+  async function patchSession(fields) {
     const res = await request(rest + 'game_session?id=eq.1', {
       method: 'PATCH',
       headers: headers({ Prefer: 'return=representation' }),
-      body: JSON.stringify({ epoch, updated_at: new Date().toISOString() }),
+      body: JSON.stringify(fields),
     });
-    if (!(await res.json()).length) throw new Error('table game_session vide ou absente : relancez supabase.sql');
+    const rows = await res.json();
+    if (!rows.length) throw new Error('table game_session vide ou absente : relancez supabase.sql');
+    return rows[0];
+  }
+
+  // Nouvelle session : change le numéro (les téléphones qui en avaient un autre repartent de zéro) et remet la salle d'attente
+  async function newSession() {
+    const epoch = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const fields = { epoch, updated_at: new Date().toISOString() };
+    try {
+      await patchSession(Object.assign({ started_at: null }, fields));
+    } catch (e) {
+      if (!e.message.includes(' 400')) throw e;
+      await patchSession(fields); // sans colonne started_at
+    }
     return epoch;
+  }
+
+  // Donne le départ : toutes les équipes de la salle d'attente démarrent
+  async function startGame() {
+    try {
+      return (await patchSession({ started_at: new Date().toISOString() })).started_at;
+    } catch (e) {
+      if (e.message.includes(' 400')) throw new Error('colonne started_at absente : relancez supabase.sql');
+      throw e;
+    }
   }
 
   // « Terminer la partie » : d'abord le nouveau numéro (les téléphones n'écrivent plus rien), puis les lignes
@@ -115,5 +154,5 @@ window.Sync = (function () {
     return res.json();
   }
 
-  return { enabled, saveState, loadTeam, loadAll, loadEpoch, newSession, resetAll, deleteAll, sendMessage, sendMessages, loadMessages };
+  return { enabled, saveState, loadTeam, loadAll, loadEpoch, loadSession, startGame, newSession, resetAll, deleteAll, sendMessage, sendMessages, loadMessages };
 })();

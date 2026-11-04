@@ -22,49 +22,53 @@
 
   const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 
-  // Une tuile : icône, libellé, valeur courte, état (ok, info, warn, err) et, si ça coince, l'explication
+  // Sept tuiles seulement : icône, libellé, valeur courte, état (ok, info, warn, err) et, si ça coince, l'explication
   function items(infos) {
     const list = [];
     const add = (icon, label, value, level, detail) => list.push({ icon, label, value, level, detail });
 
+    // 1. serveur (et table de session : sans elle, « Terminer la partie » ne remet pas les téléphones à zéro)
     if (!A.lastFetch && !A.fetchError) add('📡', 'Serveur', 'connexion…', 'info');
     else if (A.fetchError) add('📡', 'Serveur', 'ne répond pas', 'err', `Supabase ne répond pas : ${esc(A.fetchError)}`);
+    else if (A.sessionTable === 'absent') add('📡', 'Serveur', 'à mettre à jour', 'warn', 'Table <code>game_session</code> absente : relancez <code>supabase.sql</code>, sinon « Terminer la partie » ne remet pas les téléphones à zéro.');
     else add('📡', 'Serveur', 'répond', 'ok');
 
-    if (A.sessionTable === 'absent') add('🔄', 'Remise à zéro', 'table absente', 'warn', 'Table <code>game_session</code> absente : relancez <code>supabase.sql</code>, sinon « Terminer la partie » ne remet pas les téléphones à zéro.');
-    else if (A.sessionTable === 'ok') add('🔄', 'Remise à zéro', 'disponible', 'ok');
-    else add('🔄', 'Remise à zéro', 'vérification…', 'info');
-
-    const seen = infos.filter((i) => i.row);
-    const missing = infos.filter((i) => !i.row).map((i) => i.team.name || i.t);
+    // 2. équipes connectées : un seul chiffre
+    const seen = infos.filter((i) => i.row).length;
     if (!A.lastFetch) add('👥', 'Équipes', '…', 'info');
-    else if (!seen.length) add('👥', 'Équipes', `0/${infos.length}`, 'warn', 'Aucune équipe n\'est encore connectée : chaque capitaine doit scanner son QR code.');
-    else add('👥', 'Équipes', `${seen.length}/${infos.length}`, missing.length ? 'info' : 'ok', missing.length ? `Pas encore connectées : ${esc(missing.join(', '))}.` : '');
+    else if (!seen) add('👥', 'Équipes', `0/${infos.length}`, 'warn', 'Aucune équipe n\'est encore connectée : chaque capitaine doit scanner son QR code.');
+    else add('👥', 'Équipes', `${seen}/${infos.length}`, seen === infos.length ? 'ok' : 'info');
 
-    const started = infos.filter((i) => i.st && i.st.startedAt);
-    add('🧹', 'Base de données', started.length ? plural(started.length, 'partie en cours', 'parties en cours') : 'propre', started.length ? 'info' : 'ok',
-      started.length ? 'Des parties sont déjà en cours (reste de test ?). Avant le départ : « Terminer la partie » pour repartir d\'une base propre.' : '');
+    // 3. départ
+    if (A.session !== undefined) {
+      if (!A.session || A.session.startedAt === undefined) add('🚦', 'Départ', 'immédiat', 'info', 'Pas de salle d\'attente : relancez <code>supabase.sql</code> pour que les équipes attendent votre départ.');
+      else if (A.session.startedAt) add('🚦', 'Départ', 'donné', 'ok');
+      else add('🚦', 'Départ', 'en attente', 'info', 'Les équipes attendent : cliquez « Démarrer la partie » pour donner le départ.');
+    }
 
+    // 4. version des téléphones
     const outdated = infos.filter((i) => i.st && i.st.version && VERSION !== 'dev' && i.st.version !== VERSION);
-    if (VERSION === 'dev') add('🏷️', 'Version', 'locale (dev)', 'info', 'Version locale : pas de game.js publié.');
+    if (VERSION === 'dev') add('🏷️', 'Version', 'locale (dev)', 'info');
     else if (outdated.length) add('🏷️', 'Version', plural(outdated.length, 'ancienne', 'anciennes'), 'warn', `Téléphones sur une ancienne version : ${esc(outdated.map((i) => i.t).join(', '))}. Recharger la page.`);
     else add('🏷️', 'Version', VERSION.replace(/^\d+\./, ''), 'ok');
 
+    // 5. parcours
     const n = A.parcoursConflicts.length;
     add('🧭', 'Parcours', n ? plural(n, 'conflit', 'conflits') : 'sans conflit', n ? 'warn' : 'ok', n ? 'Conflits de zone : voir la vue Parcours plus bas.' : '');
 
-    if (provisional.length || rulesProvisional) {
-      const total = provisional.length + (rulesProvisional ? 1 : 0);
-      add('✍️', 'Contenu', plural(total, 'à finir', 'à finir'), 'warn',
-        `Contenu provisoire à remplacer${provisional.length ? ` (${esc(provisional.slice(0, 4).join(' · '))}${provisional.length > 4 ? '…' : ''})` : ''}${rulesProvisional ? ' · consignes de l\'accueil à compléter (numéro de l\'organisation)' : ''}.`);
+    // 6. contenu : textes provisoires et lieux sans position sur la carte
+    const noPos = Object.keys(GAME.zones).filter((z) => GAME.zones[z].lat == null).map((z) => 'zone ' + z).concat(GAME.final && GAME.final.lat == null ? ['finale'] : []);
+    const todo = provisional.length + (rulesProvisional ? 1 : 0) + noPos.length;
+    if (todo) {
+      const parts = [];
+      if (provisional.length) parts.push(`contenu provisoire (${esc(provisional.slice(0, 4).join(' · '))}${provisional.length > 4 ? '…' : ''})`);
+      if (rulesProvisional) parts.push('consignes de l\'accueil à compléter (numéro de l\'organisation)');
+      if (noPos.length) parts.push(`pas de position sur la carte : ${esc(noPos.join(', '))}`);
+      add('✍️', 'Contenu', plural(todo, 'point à finir', 'points à finir'), 'warn', 'À finir : ' + parts.join(' · ') + '.');
     } else add('✍️', 'Contenu', 'complet', 'ok');
 
-    const noPos = Object.keys(GAME.zones).filter((z) => GAME.zones[z].lat == null).map((z) => 'zone ' + z).concat(GAME.final && GAME.final.lat == null ? ['finale'] : []);
-    add('📍', 'Carte', noPos.length ? plural(noPos.length, 'lieu sans position', 'lieux sans position') : 'complète', noPos.length ? 'warn' : 'ok',
-      noPos.length ? `Pas de position sur la carte pour : ${esc(noPos.join(', '))}.` : '');
-
+    // 7. sécurité
     add('🔒', 'contenu.js', A.leaked ? 'EN LIGNE' : 'non publié', A.leaked ? 'err' : 'ok', A.leaked ? 'contenu.js est en ligne : les réponses sont lisibles par tous. Supprimez-le du dépôt GitHub.' : '');
-    add('🔑', 'Réponses', A.book ? 'chargées' : 'non chargées', A.book ? 'ok' : 'warn', A.book ? '' : 'Carnet de réponses non chargé (code d\'accès à ressaisir ?).');
     return list;
   }
 

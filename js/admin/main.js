@@ -66,6 +66,18 @@
       if (action && action.dataset.action === 'refresh') return A.refresh();
       if (action && action.dataset.action === 'export') return A.exportCsv();
       if (action && action.dataset.action === 'broadcast') return A.showBroadcast();
+      if (action && action.dataset.action === 'start-game') {
+        const ready = Object.values(A.rows).filter((r) => r.state && r.state.joined).length;
+        const message = ready < teamIds.length
+          ? `${ready} équipe${ready > 1 ? 's' : ''} sur ${teamIds.length} ${ready > 1 ? 'ont' : 'a'} rejoint la salle d'attente.\nDonner le départ quand même ?`
+          : `Les ${teamIds.length} équipes sont prêtes. Donner le départ ?`;
+        if (!confirm(message)) return;
+        try {
+          await Sync.startGame();
+          A.session = await Sync.loadSession();
+        } catch (err) { alert(err.message); }
+        return A.render();
+      }
       if (action && action.dataset.action === 'qr') return A.showQr();
       if (action && action.dataset.action === 'book') return A.showBook();
       if (action && action.dataset.action === 'zoom-in') return A.zoomMap(1);
