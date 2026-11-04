@@ -92,6 +92,7 @@
         </div>
         <div class="meta">
           ${A.unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${A.unreadTotal()} message${A.unreadTotal() > 1 ? 's' : ''}</button>` : ''}
+          <button data-action="broadcast" title="Écrire à toutes les équipes">📣 Message à tous</button>
           <button data-action="export" title="Télécharger le bilan de la partie (CSV)">📊 Export</button>
           <button data-action="book" class="dark">🔑 Réponses</button>
           <button data-action="qr" class="primary">📱 QR codes équipes</button>
@@ -100,6 +101,7 @@
         </div>
       </header>
       <div id="warn"></div>
+      ${A.checksHtml(infos)}
       <section class="kpis">
         <div><span class="kpi-icon blue">🏃</span><b>${count('playing') + count('stuck') + count('offline')}</b><small>en jeu</small></div>
         <div class="${count('stuck') ? 'alert' : ''}"><span class="kpi-icon red">🆘</span><b>${count('stuck')}</b><small>bloquée(s) ?</small></div>
@@ -113,6 +115,10 @@
           <tr><th>Équipe</th><th>Statut</th><th>Circuit</th><th>Position</th><th>Sur l'étape</th><th>Indices</th><th>Pénalités</th><th>Total</th><th>Signal</th><th>Tchat</th></tr>
           ${infos.map(teamRow).join('')}
         </table></div>
+      </section>
+      <section>
+        <h2>Parcours <small>zone + variante de chaque équipe à chaque étape</small></h2>
+        ${A.parcoursHtml(infos)}
       </section>
       <div class="cols">
         <section><h2>Zones en ce moment</h2>${occupancy(infos)}</section>

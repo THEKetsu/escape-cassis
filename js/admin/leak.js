@@ -7,7 +7,7 @@
   function checkLeak() {
     if (leak === null && location.protocol.startsWith('http') && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
       leak = false;
-      fetch('contenu.js', { method: 'HEAD', cache: 'no-store' }).then((r) => { leak = r.ok; A.render(); }, () => {});
+      fetch('contenu.js', { method: 'HEAD', cache: 'no-store' }).then((r) => { leak = r.ok; A.leaked = leak; A.render(); }, () => {});
     }
     if (leak) {
       document.getElementById('warn').innerHTML =

@@ -98,6 +98,16 @@ window.Sync = (function () {
     return (await res.json())[0];
   }
 
+  // Même message pour plusieurs équipes (message collectif) : renvoie les messages enregistrés
+  async function sendMessages(list) {
+    const res = await request(msgBase + '?' + MSG_FIELDS, {
+      method: 'POST',
+      headers: headers({ Prefer: 'return=representation' }),
+      body: JSON.stringify(list),
+    });
+    return res.json();
+  }
+
   // Messages postérieurs à afterId, d'une équipe ou de toutes (team omis)
   async function loadMessages(team, afterId) {
     const filter = (team ? `team=eq.${encodeURIComponent(team)}&` : '') + `id=gt.${afterId || 0}`;
@@ -105,5 +115,5 @@ window.Sync = (function () {
     return res.json();
   }
 
-  return { enabled, saveState, loadTeam, loadAll, loadEpoch, newSession, resetAll, deleteAll, sendMessage, loadMessages };
+  return { enabled, saveState, loadTeam, loadAll, loadEpoch, newSession, resetAll, deleteAll, sendMessage, sendMessages, loadMessages };
 })();

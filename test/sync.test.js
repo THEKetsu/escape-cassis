@@ -178,3 +178,11 @@ test('téléphone : table game_session absente (404) = ancien comportement, pas 
   const { Sync } = loadSync(() => ({ status: 404, json: { code: 'PGRST205' } }));
   assert.strictEqual(await Sync.loadEpoch(), null);
 });
+
+test('organisateur : message collectif envoyé en une seule requête, un message par équipe', async () => {
+  const { Sync, calls } = loadSync((url, options) => ({ json: JSON.parse(options.body).map((m, i) => Object.assign({ id: i + 1 }, m)) }));
+  const saved = await Sync.sendMessages([{ team: 'E1', sender: 'admin', body: 'rdv 17h' }, { team: 'E2', sender: 'admin', body: 'rdv 17h' }]);
+  assert.strictEqual(calls.length, 1);
+  assert.ok(Array.isArray(calls[0].body) && calls[0].body.length === 2);
+  assert.deepStrictEqual(saved.map((m) => m.team), ['E1', 'E2']);
+});

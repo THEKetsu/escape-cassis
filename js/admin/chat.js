@@ -146,5 +146,5 @@
     }
   }
 
-  Object.assign(A, { unread, unreadTotal, chatCell, pollChat, openChat, closeChat, renderPanel });
+  Object.assign(A, { unread, unreadTotal, chatCell, pollChat, openChat, closeChat, renderPanel, addMessages });
 })();

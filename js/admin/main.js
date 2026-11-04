@@ -65,6 +65,7 @@
       const action = e.target.closest('[data-action]');
       if (action && action.dataset.action === 'refresh') return A.refresh();
       if (action && action.dataset.action === 'export') return A.exportCsv();
+      if (action && action.dataset.action === 'broadcast') return A.showBroadcast();
       if (action && action.dataset.action === 'qr') return A.showQr();
       if (action && action.dataset.action === 'book') return A.showBook();
       if (action && action.dataset.action === 'zoom-in') return A.zoomMap(1);
@@ -95,6 +96,10 @@
         A.render();
       }
     });
+    // L'écran est redessiné chaque seconde : on retient si le contrôle avant départ est ouvert ou replié
+    $root.addEventListener('toggle', (e) => {
+      if (e.target.matches && e.target.matches('.checks details')) A.checksOpen = e.target.open;
+    }, true);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && A.mapFull) {
         A.mapFull = false;
@@ -104,6 +109,8 @@
     A.refresh();
     A.pollChat();
     A.loadBook();
+    A.checkSessionTable();
+    setInterval(() => { if (A.sessionTable !== 'ok') A.checkSessionTable(); }, 30000);
     setInterval(A.refresh, REFRESH_MS);
     setInterval(A.render, 1000);
   }
