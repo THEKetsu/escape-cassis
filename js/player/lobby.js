@@ -23,7 +23,7 @@
       const ready = !!(st && (st.joined || st.startedAt));
       const name = ready ? A.teamName(t, st.teamName) : (GAME.teams[t].name || t);
       return `<li class="${ready ? 'ready' : ''} ${t === A.state.team ? 'me' : ''}">
-        <span class="avatar">${A.avatar(t)}</span>
+        <span class="avatar">${A.avatar(t, st)}</span>
         <span><b>${esc(name)}</b><small>${t === A.state.team ? 'vous · ' : ''}${ready ? '✅ prête' : 'pas encore arrivée'}</small></span>
       </li>`;
     }).join('');

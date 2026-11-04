@@ -133,6 +133,17 @@
     solve(step, true);
   }
 
+  // Emoji de l'équipe, choisi à l'accueil : gardé sans redessiner l'écran (le nom en cours de saisie reste)
+  function pickEmoji(el) {
+    const input = document.getElementById('team-name');
+    if (input) A.state.teamName = input.value.trim().slice(0, 30);
+    A.state.emoji = el.dataset.emoji;
+    A.save();
+    document.querySelectorAll('.emoji-pick .emoji').forEach((b) => b.classList.toggle('on', b === el));
+    const badge = document.getElementById('my-avatar');
+    if (badge) badge.textContent = A.state.emoji;
+  }
+
   // Taille du texte (3 niveaux), gardée sur le téléphone : utile en plein soleil
   const textSize = () => Number(localStorage.getItem('escape:textsize') || 0);
   function setTextSize(n) {
@@ -228,6 +239,7 @@
     switch (el.dataset.action) {
       case 'pick': A.setState(A.newState(el.dataset.team)); A.save(); A.render(); break;
       case 'start': start(); break;
+      case 'emoji': pickEmoji(el); break;
       case 'textsize': setTextSize((textSize() + 1) % 3); break;
       case 'unlock': unlock(); break;
       case 'reset-phone': resetPhone(); break;

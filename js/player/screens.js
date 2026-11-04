@@ -116,7 +116,7 @@
     $app.innerHTML = `
       <main class="card welcome anim">
         <div class="hero">${HERO}<button class="textsize-btn" data-action="textsize" aria-label="Taille du texte">Aa</button></div>
-        <div class="team-badge"><span class="avatar big">${A.avatar(state.team)}</span>${esc(A.teamName(state.team))}</div>
+        <div class="team-badge"><span class="avatar big" id="my-avatar">${A.avatar(state.team)}</span>${esc(A.teamName(state.team))}</div>
         <h1 class="display">${esc(GAME.title)}</h1>
         ${resume}
         <div class="text">${S.intro || ''}</div>
@@ -131,8 +131,11 @@
         </details>
         ${S.rules ? `<div class="rules"><b>À savoir</b>${S.rules}</div>` : ''}
         <label class="field">Nom de votre équipe
-          <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express">
+          <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express" value="${esc(state.teamName || '')}">
         </label>
+        <div class="field">Votre emoji
+          <div class="emoji-pick">${A.EMOJIS.map((e) => `<button type="button" class="emoji ${e === A.avatar(state.team) ? 'on' : ''}" data-action="emoji" data-emoji="${e}" aria-label="Choisir ${e}">${e}</button>`).join('')}</div>
+        </div>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
         ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">Rejoindre la partie 🚀</button>'}
         <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p>

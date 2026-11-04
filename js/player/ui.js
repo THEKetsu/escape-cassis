@@ -11,7 +11,10 @@
     return custom || GAME.teams[teamId].name || teamId;
   }
 
-  function avatar(teamId) {
+  // Emoji d'une équipe : celui qu'elle a choisi à l'accueil (state.emoji), sinon celui du contenu, sinon un par défaut
+  function avatar(teamId, state) {
+    const chosen = state ? state.emoji : (A.state && A.state.team === teamId ? A.state.emoji : null);
+    if (chosen) return esc(chosen);
     const team = GAME.teams[teamId];
     return team.emoji || AVATARS[Object.keys(GAME.teams).indexOf(teamId) % AVATARS.length];
   }

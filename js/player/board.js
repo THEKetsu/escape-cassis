@@ -21,7 +21,7 @@
         const pct = Math.round(r.progress * 100);
         return `<div class="board-row ${r.team === A.state.team ? 'me' : ''}">
           <span class="rank">${i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1}</span>
-          <span class="avatar">${A.avatar(r.team)}</span>
+          <span class="avatar">${A.avatar(r.team, r.team === A.state.team ? A.state : r.state)}</span>
           <div class="board-main"><b>${esc(A.teamName(r.team, r.state.teamName))}</b>
             <div class="bar-mini"><i style="width:${pct}%"></i></div></div>
           <span class="board-time">${r.done ? E.formatDuration(r.total) : pct + ' %'}</span>

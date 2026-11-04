@@ -28,6 +28,8 @@
     ZONE_COLORS: ['#1d8fb3', '#e76f51', '#2a9d8f', '#7b5ea7', '#d98b1f', '#3d7dd8', '#c2457a', '#5a8f29'],
     FINAL_COLOR: '#0b3954',
     AVATARS: ['🐬', '🦀', '🐙', '🐚', '⛵', '🐟', '🦑', '🌊', '🐠', '⚓'],
+    // emojis proposés à l'accueil (l'équipe choisit le sien en même temps que son nom)
+    EMOJIS: ['🐬', '🦀', '🐙', '🐚', '⛵', '🐟', '🦑', '🐠', '⚓', '🌊', '☀️', '🍋', '🫒', '🍷', '🌿', '🦩', '🐢', '🧭', '🗝️', '🦊', '🐝', '🦁', '🚀', '🔥'],
     leaderboard: Sync.enabled && S.showLeaderboard !== false,
     LIVE: !!S.liveLocation && Sync.enabled && !!navigator.geolocation,
 

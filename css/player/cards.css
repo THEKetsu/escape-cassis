@@ -39,6 +39,10 @@
   position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 5;
   box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
 }
+.emoji-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; margin-top: 8px; }
+.emoji-pick .emoji { height: 46px; border: 2px solid transparent; border-radius: 14px; background: var(--soft); font-size: 24px; cursor: pointer; transition: transform .1s; }
+.emoji-pick .emoji:active { transform: scale(.92); }
+.emoji-pick .emoji.on { border-color: var(--zone); background: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--zone) 20%, transparent); }
 .how { margin: 14px 0 0; text-align: left; }
 .how summary { cursor: pointer; font-weight: 700; color: var(--zone); padding: 6px 0; }
 .hero-art { display: block; width: 100%; height: auto; }
