@@ -68,6 +68,10 @@
         }
       }
       if (step.type === 'zip') {
+        Object.keys(step.after || {}).forEach((k) => {
+          const az = step.after[k].zip;
+          if (az && E.zipSolve(az, 2).length !== 1) errors.push(`${where} : zip de after.${k} : il faut exactement une solution`);
+        });
         const z = step.zip;
         if (!z || !z.size || !Array.isArray(z.marks) || z.marks.length < 2) errors.push(`${where} : zip { size, marks (au moins 2) } manquant`);
         else {

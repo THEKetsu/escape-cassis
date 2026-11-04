@@ -211,6 +211,29 @@ window.GAME = {
             "Le premier mot décrypté est : <b>PORT</b>",
             "Le message complet comporte trois mots :<p class=\"big-code\">_ _ _ _ &nbsp; _ _ &nbsp; _ _ _ _ _ _</p>"
           ],
+          "after": {
+            "final": {
+              "text": "<p>Un dernier message a été intercepté.</p><p class=\"big-code\">FQDDMUZ PQ BQFMZCGQ</p><p>Il a été chiffré à l'aide d'un <b>code César</b>, avec la même clé.</p><p>Décryptez maintenant le message.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "wrong": "❌ MESSAGE NON DÉCRYPTÉ<br>Votre clé est bien 12. Pour chaque lettre du message, comptez 12 lettres en arrière dans l'alphabet.<br>Essayez de nouveau.",
+              "hints": [
+                "Commencez par le premier mot : <b>FQDDMUZ</b><br>Avec une clé de 12 : F → T",
+                "Le premier mot décrypté est : <b>TERRAIN</b>",
+                "Le message complet comporte trois mots :<p class=\"big-code\">_ _ _ _ _ _ _ &nbsp; _ _ &nbsp; _ _ _ _ _ _ _ _</p>"
+              ],
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
+          },
           "success": {
             "title": "✅ MESSAGE DÉCRYPTÉ",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT DE CASSIS</p><p>Votre prochaine destination est le <b>Port de Cassis</b>.<br>Rendez-vous sur place pour poursuivre votre mission.</p>",
@@ -263,6 +286,28 @@ window.GAME = {
             "Commencez par la première lettre :<br>Y → S",
             "Le message complet comporte deux mots :<p class=\"big-code\">_ _ _ _ _ &nbsp; _ _ _ _ _ _</p>"
           ],
+          "after": {
+            "final": {
+              "text": "<p>Un dernier message a été intercepté :</p><p class=\"big-code\">ZKXXGOT JK VKZGTWAK</p><p>Il a été chiffré à l'aide d'un <b>code César</b>, avec la même clé.</p><p>Décryptez maintenant le message.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "wrong": "❌ MESSAGE NON DÉCRYPTÉ<br>Votre clé est bien 6. Pour chaque lettre du message, reculez de 6 positions dans l'alphabet.<br>Essayez de nouveau.",
+              "hints": [
+                "Commencez par la première lettre :<br>Z → T",
+                "Le message complet comporte trois mots :<p class=\"big-code\">_ _ _ _ _ _ _ &nbsp; _ _ &nbsp; _ _ _ _ _ _ _ _</p>"
+              ],
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
+          },
           "success": {
             "title": "✅ MESSAGE DÉCRYPTÉ",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">SAINT-MICHEL</p><p>Votre prochaine destination est :<br><b>L'ÉGLISE SAINT-MICHEL</b></p><p>Rendez-vous sur place pour poursuivre votre mission.</p>",
@@ -400,6 +445,28 @@ window.GAME = {
           "title": "La déduction",
           "text": "<p>Il reste maintenant un seul nom :</p><p class=\"big-code\">SAINT-MICHEL</p><p>Ce nom n'était pas là par hasard.<br>Il vous donne un indice sur votre prochaine destination.</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
           "wrong": "❌ DESTINATION NON IDENTIFIÉE<br>Reprenez la liste initiale :<br>Saint-Pierre, Frédéric Mistral, Saint-Michel<br>Vous avez déjà identifié les deux premiers.<br>Quel nom reste-t-il ?",
+          "after": {
+            "final": {
+              "text": "<p>Vous avez identifié les deux témoins : <b>Saint-Pierre</b>, le patron des pêcheurs, et <b>Frédéric Mistral</b>, le poète de la Provence.</p><p>Le troisième nom, Saint-Michel, vous l'avez déjà rencontré : votre parcours touche à sa fin.</p><p>Il vous reste à rejoindre l'endroit du port où l'on se retrouve pour un jeu provençal né en 1907 tout près d'ici, à La Ciotat, et que l'on joue « les pieds tanqués ».</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
+              "wrong": "❌ DESTINATION NON IDENTIFIÉE<br>« Pieds tanqués » : c'est l'origine du nom de ce jeu de boules.<br>Où y joue-t-on sur le port ?",
+              "hints": [
+                "Ce jeu se joue avec des boules en métal et un cochonnet.",
+                "Son nom vient du provençal « pèd tanca » : les pieds joints."
+              ],
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
+          },
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">L'ÉGLISE SAINT-MICHEL</p><p>Rendez-vous à l'<b>église Saint-Michel</b> pour poursuivre votre mission.</p>",
@@ -600,6 +667,141 @@ window.GAME = {
               "...U..."
             ]
           },
+          "after": {
+            "final": {
+              "zip": {
+                "size": 7,
+                "marks": [
+                  {
+                    "at": [
+                      1,
+                      3
+                    ],
+                    "icon": "portail"
+                  },
+                  {
+                    "at": [
+                      3,
+                      0
+                    ],
+                    "icon": "baies"
+                  },
+                  {
+                    "at": [
+                      6,
+                      4
+                    ],
+                    "icon": "oculus"
+                  },
+                  {
+                    "at": [
+                      0,
+                      4
+                    ],
+                    "icon": "croix"
+                  },
+                  {
+                    "at": [
+                      5,
+                      5
+                    ],
+                    "icon": "clocher"
+                  }
+                ],
+                "walls": [
+                  [
+                    1,
+                    2,
+                    "R"
+                  ],
+                  [
+                    1,
+                    3,
+                    "R"
+                  ],
+                  [
+                    2,
+                    2,
+                    "R"
+                  ],
+                  [
+                    4,
+                    2,
+                    "R"
+                  ],
+                  [
+                    2,
+                    2,
+                    "D"
+                  ],
+                  [
+                    4,
+                    5,
+                    "R"
+                  ],
+                  [
+                    3,
+                    1,
+                    "D"
+                  ],
+                  [
+                    2,
+                    0,
+                    "R"
+                  ],
+                  [
+                    5,
+                    4,
+                    "R"
+                  ],
+                  [
+                    4,
+                    2,
+                    "D"
+                  ],
+                  [
+                    0,
+                    1,
+                    "R"
+                  ],
+                  [
+                    5,
+                    0,
+                    "R"
+                  ],
+                  [
+                    3,
+                    2,
+                    "R"
+                  ],
+                  [
+                    5,
+                    2,
+                    "R"
+                  ],
+                  [
+                    1,
+                    6,
+                    "D"
+                  ],
+                  [
+                    4,
+                    3,
+                    "D"
+                  ]
+                ],
+                "letters": [
+                  "R....AT",
+                  "R.T....",
+                  "A.EN..E",
+                  "..IQUE.",
+                  "..N....",
+                  "...E..P",
+                  "...D..."
+                ]
+              }
+            }
+          },
           "hints": [
             "Votre objectif n'est pas seulement de relier les cinq repères.<br>Toutes les cases doivent être utilisées.",
             "Avant de tracer une longue ligne, vérifiez que vous ne créez pas une zone impossible à rejoindre plus tard.",
@@ -612,6 +814,24 @@ window.GAME = {
           "title": "Destination révélée",
           "text": "<p>Lorsque le chemin est terminé, lisez les lettres dans l'ordre où vous les avez rencontrées.</p><p>Elles forment le nom de votre prochaine destination.</p><p><b>Quelle destination avez-vous trouvée ?</b></p>",
           "wrong": "❌ DESTINATION INCORRECTE<br>Vérifiez votre chemin.<br>Si le Zip est correctement résolu, les lettres doivent former un lieu de Cassis.",
+          "after": {
+            "final": {
+              "text": "<p>Lorsque le chemin est terminé, lisez les lettres dans l'ordre où vous les avez rencontrées.</p><p>Elles forment le nom de votre <b>dernière</b> destination.</p><p><b>Quelle destination avez-vous trouvée ?</b></p>",
+              "wrong": "❌ DESTINATION INCORRECTE<br>Vérifiez votre chemin.<br>Si le Zip est correctement résolu, les lettres forment le lieu de la finale.",
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
+          },
           "success": {
             "title": "✅ PARCOURS TERMINÉ",
             "text": "<p>Votre chemin a révélé :</p><p class=\"big-code\">FOUR BANAL</p><p>Rendez-vous au <b>Four Banal</b> pour poursuivre votre mission.</p>",
@@ -1260,10 +1480,10 @@ window.GAME = {
       }
     ]
   },
-  "version": "2026.11.04-1441",
+  "version": "2026.11.04-1454",
   "answerBook": {
-    "salt": "SwkENT9XnR/gHqxYEHAYbw==",
-    "iv": "0PYp0xPcIst7qPRZ",
-    "data": "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"
+    "salt": "P0blD7yfX4l8b6ny6wmd9Q==",
+    "iv": "uoco/konTp7fIMWE",
+    "data": "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"
   }
 };

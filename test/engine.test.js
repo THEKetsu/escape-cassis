@@ -401,3 +401,54 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
   // l'arrivée finale : le code est TOP
   assert.ok(E.checkAnswer('top', E.buildPath(pub, 'E1').find((s) => s.key === 'final-1'), salt));
 });
+
+test('dernière zone : 1A, 1B, 2B et 3A mènent aux terrains de pétanque pour l\'équipe qui finit dessus', () => {
+  const game = loadGame();
+  const pub = E.publish(game);
+  const salt = game.settings.salt;
+  const at = (g, t, zone, i) => E.buildPath(g, t).find((s) => s.zoneId === String(zone) && s.zoneStep === i);
+  const decode = (text, key) => text.replace(/[A-Z]/g, (c) => String.fromCharCode(((c.charCodeAt(0) - 65 - key + 26) % 26) + 65));
+  const cipher = (s) => s.text.replace(/<[^>]+>/g, '|').split('|').find((x) => /^[A-Z ]{12,}$/.test(x.trim())).trim();
+  // E3 finit en 1A (clé 12), E4 en 1B (clé 6) : le message se déchiffre en TERRAIN DE PETANQUE
+  assert.strictEqual(decode(cipher(at(game, 'E3', 1, 2)), 12), 'TERRAIN DE PETANQUE');
+  assert.strictEqual(decode(cipher(at(game, 'E4', 1, 2)), 6), 'TERRAIN DE PETANQUE');
+  // E8 finit en 3A : la grille a une seule solution et ses lettres font lire TERRAIN DE PETANQUE
+  const z = at(game, 'E8', 3, 2).zip;
+  const sols = E.zipSolve(z, 3);
+  assert.strictEqual(sols.length, 1);
+  assert.strictEqual(E.zipLetters(z, sols[0]), 'TERRAINDEPETANQUE');
+  assert.strictEqual(z.marks.map((m) => m.icon).join(' '), 'portail baies oculus croix clocher'); // mêmes repères, même ordre
+  // les réponses de fin : terrains de pétanque, plus l'ancienne destination
+  [['E3', 1, 2, 'port de cassis'], ['E4', 1, 2, 'saint michel'], ['E5', 2, 2, 'saint michel'], ['E8', 3, 3, 'four banal']].forEach(([t, zone, i, old]) => {
+    const s = at(pub, t, zone, i);
+    assert.strictEqual(s.afterOverride, 'final', `${t} zone ${zone}`);
+    assert.ok(E.checkAnswer('les terrains de pétanque', s, salt), `${t} zone ${zone} : pétanque refusé`);
+    assert.ok(!E.checkAnswer(old, s, salt), `${t} zone ${zone} : l'ancienne destination est encore acceptée`);
+  });
+  // les autres équipes gardent leur énigme : E1 en 1A trouve toujours le port, E2 en 3A le Four Banal, E7 en 2B Saint-Michel
+  assert.ok(E.checkAnswer('port de cassis', at(pub, 'E1', 1, 2), salt));
+  assert.ok(E.checkAnswer('four banal', at(pub, 'E2', 3, 3), salt));
+  assert.ok(E.checkAnswer('saint michel', at(pub, 'E7', 2, 2), salt));
+  assert.notDeepStrictEqual(at(game, 'E2', 3, 2).zip, z);
+});
+
+test('cohérence du parcours : chaque énigme qui révèle un lieu annonce bien la zone suivante de l\'équipe', () => {
+  const game = loadGame();
+  const pub = E.publish(game);
+  const salt = game.settings.salt;
+  const name = { 1: 'place baragnon', 2: 'port de cassis', 3: 'saint michel', 4: 'four banal', 5: 'maison de l europe', final: 'terrain de petanque' };
+  const issues = [];
+  Object.keys(game.teams).forEach((t) => {
+    const path = E.buildPath(pub, t);
+    const circuit = game.teams[t].circuit.map(String);
+    circuit.forEach((z, zi) => {
+      if (z === '4') return; // l'enveloppe du Four Banal donne la destination
+      const next = zi === circuit.length - 1 ? 'final' : circuit[zi + 1];
+      const steps = path.filter((s) => s.zoneId === z && s.h);
+      const reveal = steps[steps.length - 1]; // dernière énigme à réponse de la zone : celle qui donne le lieu suivant
+      const ok = E.checkAnswer(name[next], reveal, salt) || (reveal.success && reveal.success.routing);
+      if (!ok) issues.push(`${t} zone ${z} n'annonce pas ${name[next]}`);
+    });
+  });
+  assert.deepStrictEqual(issues, []);
+});

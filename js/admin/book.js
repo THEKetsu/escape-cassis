@@ -56,7 +56,7 @@
       <li><span class="step-no">${i + 1}</span><div>
         <div>${TYPE_ICONS[step.type] || ''} <b>${esc(step.title || '')}</b>${i === 0 && key.startsWith('z') ? ' <small>(mène à la zone)</small>' : ''}</div>
         <div class="answer-line">${solution(step, key)}</div>
-        ${Object.keys(step.after || {}).map((k) => `<div class="answer-line">si la zone suivante est ${k === 'final' ? 'la finale' : 'la zone ' + esc(k)} : ${solution({}, `${key}~after-${k}`)}</div>`).join('')}
+        ${Object.keys(step.after || {}).map((k) => `<div class="answer-line">si la zone suivante est ${k === 'final' ? 'la finale' : 'la zone ' + esc(k)} : ${solution(Object.assign({}, step, step.after[k]), `${key}~after-${k}`)}</div>`).join('')}
         ${(step.hints || []).length ? `<details><summary>${step.hints.length} indice(s)</summary><ol>${step.hints.map((h) => `<li>${h}</li>`).join('')}</ol></details>` : ''}
       </div></li>`;
     const zones = Object.keys(GAME.zones).map((z) => {
