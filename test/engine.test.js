@@ -369,35 +369,35 @@ test('salle d\'attente : seule l\'organisation donne le départ (jamais de déma
   assert.strictEqual(E.lobbyDecision(null, true), 'wait'); // serveur injoignable : on attend de pouvoir lire
 });
 
-test('dernière zone : la zone 5 donne TERRAIN DE PÉTANQUE à l\'équipe pour qui c\'est la dernière, CASSIS aux autres', () => {
+test('zone 5 : la réponse est la destination propre à chaque équipe (zone suivante de son circuit, ou la finale)', () => {
   const game = loadGame();
   const pub = E.publish(game);
   const salt = game.settings.salt;
-  const step = (g, team, zone, i) => E.buildPath(g, team).find((s) => s.zoneId === String(zone) && s.zoneStep === i);
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
   const reserve = (s) => s.text.replace(/<[^>]+>/g, ' ').match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
-  const dest = letters('TERRAIN DE PETANQUE');
-  // E1 (zone 5A en dernier) et E7 (zone 5B en dernier) : la destination finale
-  const e1 = step(game, 'E1', 5, 1);
-  const e7 = step(game, 'E7', 5, 2);
-  assert.ok(e1.lastOverride && e7.lastOverride);
-  assert.strictEqual(remove(reserve(e1), 'CROSSE POISSON POISSON'), dest);
-  assert.strictEqual(remove(reserve(e7), 'PORT'), dest);
-  ['E1', 'E7'].forEach((t) => {
-    const s = t === 'E1' ? step(pub, 'E1', 5, 1) : step(pub, 'E7', 5, 2);
-    assert.ok(E.checkAnswer('terrain de pétanque', s, salt));
-    assert.ok(E.checkAnswer('Les terrains de pétanque', s, salt));
-    assert.ok(!E.checkAnswer('cassis', s, salt));
+  const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: 'FOUR BANAL', E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'PLACE BARAGNON', E7: 'TERRAIN DE PETANQUE', E8: 'PORT DE CASSIS' };
+  Object.keys(expected).forEach((t) => {
+    const variant = game.teams[t].variant[5];
+    const zi = variant === 'A' ? 1 : 2; // étape qui donne la destination (A : réserve, B : seconde élimination)
+    const find = (g) => E.buildPath(g, t).find((s) => s.zoneId === '5' && s.zoneStep === zi);
+    const st = find(game);
+    assert.ok(st.afterOverride, t + ' : pas de contenu propre à la zone suivante');
+    // la réserve de lettres, une fois les lettres du blason (ou de PORT) retirées, donne exactement la destination
+    assert.strictEqual(remove(reserve(st), variant === 'A' ? 'CROSSE POISSON POISSON' : 'PORT'), letters(expected[t]), t);
+    const ps = find(pub);
+    assert.ok(E.checkAnswer(expected[t], ps, salt), t + ' : ' + expected[t] + ' refusé');
+    assert.ok(!E.checkAnswer('cassis', ps, salt), t + ' : CASSIS ne doit plus être la réponse');
   });
-  // les autres équipes (zone 5 au milieu du parcours) : le mot CASSIS, puis la destination annoncée par l'application
-  const e2 = step(pub, 'E2', 5, 1);
-  assert.ok(!E.buildPath(game, 'E2').find((s) => s.zoneId === '5' && s.zoneStep === 1).lastOverride);
-  assert.ok(E.checkAnswer('cassis', e2, salt) && !E.checkAnswer('terrain de pétanque', e2, salt));
-  // le blason s'écrit de beaucoup de façons
-  const b = step(pub, 'E1', 5, 0);
-  ['1 crosse + 2 poissons', 'Une crosse et deux poissons', '2 poissons et 1 crosse', 'deux poissons, une crosse', 'je vois une crosse et 2 poissons !'].forEach((v) => assert.ok(E.checkAnswer(v, b, salt), v));
-  assert.ok(!E.checkAnswer('une crosse et trois poissons', b, salt));
+  assert.ok(E.checkAnswer('le terrain de pétanque', E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 1), salt));
+  // 2A : « Destination mystère » annonce la finale pour E2 (dernière zone), le Four Banal pour E8 (zone 4 ensuite)
+  const mystery = (g, t) => E.buildPath(g, t).find((s) => s.title === 'Destination mystère');
+  assert.ok(E.checkAnswer('terrains de pétanque', mystery(pub, 'E2'), salt) && !E.checkAnswer('four banal', mystery(pub, 'E2'), salt));
+  assert.ok(E.checkAnswer('four banal', mystery(pub, 'E8'), salt) && !E.checkAnswer('pétanque', mystery(pub, 'E8'), salt));
+  // le blason : toute formulation avec une crosse (ou un bâton) ET des poissons
+  const blason = E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 0);
+  ['1 crosse + 2 poissons', 'Une crosse et deux poissons', '2 poissons et 1 crosse', 'crosse et poissons', 'un bâton et des poissons', 'je vois une crosse, un poisson et un autre poisson'].forEach((v) => assert.ok(E.checkAnswer(v, blason, salt), v));
+  ['une crosse', 'deux poissons', 'trois étoiles', 'un chapeau et des fleurs'].forEach((v) => assert.ok(!E.checkAnswer(v, blason, salt), v));
   // l'arrivée finale : le code est TOP
   assert.ok(E.checkAnswer('top', E.buildPath(pub, 'E1').find((s) => s.key === 'final-1'), salt));
 });

@@ -231,8 +231,7 @@ window.GAME = {
           "wrong": "❌ Ce ne sont pas les bonnes initiales.<br>Cherchez le lieu qui conserve la mémoire de Cassis et observez attentivement l'inscription située au-dessus de l'entrée.",
           "hints": [
             "Vous cherchez le Musée de Cassis.",
-            "L'inscription au-dessus de l'entrée est composée de trois mots :<br><b>MUSÉE DE CASSIS</b>",
-            "Gardez uniquement la première lettre de chaque mot.<br>Vous obtenez :<p class=\"big-code\">M – D – C</p>"
+            "L'inscription au-dessus de l'entrée est composée de trois mots :<br><b>MUSÉE DE CASSIS</b>"
           ],
           "success": {
             "title": "✅ INITIALES IDENTIFIÉES",
@@ -262,7 +261,6 @@ window.GAME = {
           "wrong": "❌ MESSAGE NON DÉCRYPTÉ<br>Votre clé est bien 6. Pour chaque lettre du message, reculez de 6 positions dans l'alphabet.<br>Essayez de nouveau.",
           "hints": [
             "Commencez par la première lettre :<br>Y → S",
-            "Le premier mot décrypté est : <b>SAINT</b>",
             "Le message complet comporte deux mots :<p class=\"big-code\">_ _ _ _ _ &nbsp; _ _ _ _ _ _</p>"
           ],
           "success": {
@@ -336,6 +334,24 @@ window.GAME = {
           "title": "Destination mystère",
           "text": "<p>Votre prochaine destination se trouve dans le vieux Cassis.</p><p>Autrefois, les habitants s'y rendaient pour faire cuire leur pain.</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
           "wrong": "❌ DESTINATION INCORRECTE<br>Cherchez un ancien lieu collectif lié à la cuisson du pain.<br>Son nom contient le mot : <b>FOUR</b>",
+          "after": {
+            "final": {
+              "text": "<p>Votre prochaine destination est la <b>dernière</b> de votre parcours.</p><p>Sur le port, on s'y retrouve pour jouer en lançant des boules.</p><p><b>Quel lieu devez-vous rejoindre ?</b></p>",
+              "wrong": "❌ DESTINATION INCORRECTE<br>Cherchez un lieu du port où l'on joue avec des boules.<br>Son nom contient le mot : <b>PÉTANQUE</b>",
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
+          },
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">FOUR BANAL</p><p>Rendez-vous au <b>Four Banal</b> pour poursuivre votre mission.</p>",
@@ -421,7 +437,7 @@ window.GAME = {
         {
           "type": "order",
           "title": "Trouver l'ordre",
-          "text": "<p>Vous avez devant vous cinq repères architecturaux.</p><p><b>Quel est leur ordre correct ?</b></p>",
+          "text": "<p>Vous avez devant vous cinq repères architecturaux.</p><p><b>Rangez-les dans l'ordre où ils se lisent sur la façade de l'église, du premier au dernier.</b></p>",
           "options": [
             "OCULUS",
             "CLOCHER / HORLOGE",
@@ -589,11 +605,7 @@ window.GAME = {
             "Avant de tracer une longue ligne, vérifiez que vous ne créez pas une zone impossible à rejoindre plus tard.",
             "Les murs sont là pour vous aider autant que pour vous bloquer.<br>Observez les passages où vous n'aurez qu'une seule possibilité.",
             "Vous devez arriver au clocher / horloge seulement après avoir parcouru les quatre autres repères."
-          ],
-          "success": {
-            "title": "✅ CHEMIN VALIDÉ",
-            "text": "<p>Votre chemin passe par les 49 cases.</p><p>Lisez les lettres rencontrées, dans l'ordre : elles forment un lieu de Cassis.</p>"
-          }
+          ]
         },
         {
           "type": "text",
@@ -622,7 +634,7 @@ window.GAME = {
         {
           "type": "order",
           "title": "Trouver l'ordre",
-          "text": "<p>Replacez les cinq éléments dans l'ordre correct.</p>",
+          "text": "<p>Vous avez devant vous cinq repères architecturaux.</p><p><b>Rangez-les dans l'ordre où ils se lisent sur la façade de l'église, du premier au dernier.</b></p>",
           "options": [
             "OCULUS",
             "CLOCHER / HORLOGE",
@@ -785,11 +797,7 @@ window.GAME = {
             "Attention aux zones que vous risquez d'enfermer trop tôt.",
             "Les cinq repères donnent l'ordre général, mais toutes les cases doivent être parcourues.",
             "Si votre chemin arrive au clocher alors qu'il reste des cases libres, votre parcours est incorrect."
-          ],
-          "success": {
-            "title": "✅ CHEMIN VALIDÉ",
-            "text": "<p>Votre chemin passe par les 49 cases.</p><p>Lisez les lettres rencontrées, dans l'ordre : elles forment un lieu de Cassis.</p>"
-          }
+          ]
         },
         {
           "type": "text",
@@ -907,7 +915,6 @@ window.GAME = {
           "type": "text",
           "title": "Mission 5 — Le message du blason",
           "text": "<p>Vous approchez de la fin de votre parcours.</p><p>Votre prochaine destination est cachée juste devant vous.</p><p>Observez attentivement les <b>armoiries</b> situées au-dessus de l'entrée.</p><p><b>Quels éléments y reconnaissez-vous ?</b></p>",
-          "match": "contains",
           "wrong": "❌ OBSERVATION INCORRECTE<br>Ne cherchez pas une inscription.<br>Regardez directement les symboles représentés sur les armoiries.<br>Réessayez.",
           "hints": [
             "Vous devez identifier trois éléments.",
@@ -920,69 +927,25 @@ window.GAME = {
           },
           "h": [
             "1f3bc479c12191c9",
-            "c92a5de4226f7916",
             "dd076bf53300efbd",
-            "a433001ecd9a56e7",
-            "f332e1f2f163bb4f",
-            "60fc63353f787250",
-            "d097553eee3e3c0a",
-            "18806ea798eeb8f5",
-            "3346f472cf4e5b33",
-            "43bbabd3dd8a58a4",
-            "16ca96a293531053",
-            "c87f9000f2d44205",
-            "f05984127301ae99",
-            "e8c31fb424a38851",
-            "0fac31af65dc527b",
-            "61d0dfb768b20dc9",
-            "9b5614ff3300c838",
-            "296f8e4648500484",
-            "696e10e6a1dfa536",
-            "d9c3339cd330fded",
-            "acebbf5ac9e9d08b",
-            "9c14b483852d677f",
-            "82914a4ba7590c91",
-            "5293be13ed96becd",
-            "7556078fa0461949",
-            "af717ef109d262ae",
             "ff2dee767bdb43d4",
+            "9b5614ff3300c838",
+            "a433001ecd9a56e7",
             "e4efeb7e400ddee0",
-            "8188ebeed1daac1a",
-            "6aa1e0ad7f393fe5",
-            "2da40ff500d3d0fd",
-            "8f2f275f171e201e",
-            "a6166937610c08d2",
-            "478e93546fc756a4",
-            "3f908f149f721892",
-            "d52ab03b3b847941",
-            "d98be8667eb77700",
-            "63a61d10d499a673",
-            "5917c3e5e2873c57",
-            "475d3e8cafe2b49f",
-            "995c6fe7826ed914",
-            "0780376127dd1798",
-            "8b6f7df04bed5b48",
-            "0723360fe5f39b1f",
-            "6dc196ae866d0343",
-            "f385f4ceb4da65fe",
-            "3023fa6021d6e958",
-            "f05ef9b4a2ba1d45",
-            "fc4e2084893f6102",
-            "fc630bbd493b3ab5",
-            "128fb3e43f08a4d6",
-            "d75360fb110ba3fd",
-            "163a0570374f448e",
-            "a673d423e7ed9a45",
-            "d383da262f414572",
-            "0d6a95710087d697",
-            "242a4b2533743e93",
-            "33a66f360e063310",
-            "217fcb14bfff6eab",
-            "f9d58dc4fda8cb34",
-            "cb179959a76ccd7e",
-            "21aa21a9d7639102",
-            "d4b075277c140e18",
-            "9d0881b12468cbd7"
+            "32621e8772a4774b"
+          ],
+          "gh": [
+            [
+              "2f2642068cc6871d",
+              "75bb48ca2efca90f",
+              "728a1c1ee767b7ff",
+              "8a18f99cb1098350",
+              "8c06caa8709eff69"
+            ],
+            [
+              "0005d2c31b26642e",
+              "c7f36c1f388d7242"
+            ]
           ]
         },
         {
@@ -1000,24 +963,101 @@ window.GAME = {
             "text": "<p>Vous avez trouvé le mot :</p><p class=\"big-code\">CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
             "routing": true
           },
-          "last": {
-            "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">R S O O Q N T D E P N O R P U S R C A O S T O I A I E E N S N E E P S S I</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre destination finale.</p>",
-            "hints": [
-              "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
-              "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
-              "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
-            ],
-            "h": [
-              "cab91489a859b505",
-              "cab91489a859b505",
-              "881b27a5045117bf",
-              "a02e581f895d2ac1",
-              "76698bf284309631",
-              "32c38040debd5e7c",
-              "0127ee232eadacb1",
-              "27f846c4240e328d",
-              "1babb03ef46e0021"
-            ]
+          "after": {
+            "1": {
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">O A S S R S P R N E L A I I O A C E S G S O P P N O C N S O O B N</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+              "hints": [
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+                "Les lettres restantes commencent par former :<br><b>PLACE…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PLACE BARAGNON</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "090f7dbba7c29d30",
+                "9244e998d8be526c",
+                "0a792bcc53efb9ff"
+              ]
+            },
+            "2": {
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">S I O P A E S N E O O P S D R S S T I S S O C S O P I N C O R S</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+              "hints": [
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+                "Les lettres restantes commencent par former :<br><b>PORT…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT DE CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "8d24517e0969ae5b",
+                "60301863596af296",
+                "01d2ee85c4d4dc95",
+                "1bf224fd1f2e80b8",
+                "2806ba3f9393a056"
+              ]
+            },
+            "3": {
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">S O S E I E G I S O O C P E T R S I I A N O M S C O S I E L P S H N S N L</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+              "hints": [
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+                "Les lettres restantes commencent par former :<br><b>ÉGLISE…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">ÉGLISE SAINT-MICHEL</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "82f5225885538351",
+                "24cc3925d643e9d5",
+                "662a402ef8d1b1c9"
+              ]
+            },
+            "4": {
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">R P N S N A R F S E A O O S O L B I O S O S I P S U N O C</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre prochaine destination.</p>",
+              "hints": [
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+                "Les lettres restantes commencent par former :<br><b>FOUR…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">FOUR BANAL</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "97487b5e42ae8708",
+                "3e96a4ee6377f85d",
+                "fce3ff48e0219f1a"
+              ]
+            },
+            "final": {
+              "text": "<p>Dans la réserve suivante, retirez <b>exactement</b> toutes les lettres nécessaires pour écrire :</p><p class=\"big-code\">CROSSE<br>POISSON<br>POISSON</p><p>Voici votre réserve :</p><p class=\"big-code\">O N E P P Q O I A C I S S R S A S T T S E N R P O S O E R E O D N E I N U</p><p>Une fois toutes les lettres du blason retirées, il vous restera certaines lettres.<br>Réorganisez-les : elles forment le nom de votre destination finale.</p>",
+              "hints": [
+                "Commencez par barrer les lettres de :<br><b>C R O S S E</b>",
+                "Retirez ensuite deux fois :<br><b>P O I S S O N</b>",
+                "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
+              ],
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
           },
           "h": [
             "53ff32eaedcb23cc"
@@ -1029,7 +1069,6 @@ window.GAME = {
           "type": "text",
           "title": "Mission 5 — Le blason à double fond",
           "text": "<p>La fin approche.</p><p>Mais avant de rejoindre votre destination finale, vous allez devoir utiliser les <b>armoiries</b> de la Maison de l'Europe.</p><p>Observez-les attentivement.</p><p><b>Quels trois éléments voyez-vous ?</b></p>",
-          "match": "contains",
           "wrong": "❌ OBSERVATION INCORRECTE<br>Regardez les symboles représentés au-dessus de l'entrée.<br>Deux sont identiques.",
           "hints": [
             "Vous cherchez un objet associé à l'autorité religieuse.",
@@ -1042,69 +1081,25 @@ window.GAME = {
           },
           "h": [
             "1f3bc479c12191c9",
-            "c92a5de4226f7916",
             "dd076bf53300efbd",
-            "a433001ecd9a56e7",
-            "f332e1f2f163bb4f",
-            "60fc63353f787250",
-            "d097553eee3e3c0a",
-            "18806ea798eeb8f5",
-            "3346f472cf4e5b33",
-            "43bbabd3dd8a58a4",
-            "16ca96a293531053",
-            "c87f9000f2d44205",
-            "f05984127301ae99",
-            "e8c31fb424a38851",
-            "0fac31af65dc527b",
-            "61d0dfb768b20dc9",
-            "9b5614ff3300c838",
-            "296f8e4648500484",
-            "696e10e6a1dfa536",
-            "d9c3339cd330fded",
-            "acebbf5ac9e9d08b",
-            "9c14b483852d677f",
-            "82914a4ba7590c91",
-            "5293be13ed96becd",
-            "7556078fa0461949",
-            "af717ef109d262ae",
             "ff2dee767bdb43d4",
+            "9b5614ff3300c838",
+            "a433001ecd9a56e7",
             "e4efeb7e400ddee0",
-            "8188ebeed1daac1a",
-            "6aa1e0ad7f393fe5",
-            "2da40ff500d3d0fd",
-            "8f2f275f171e201e",
-            "a6166937610c08d2",
-            "478e93546fc756a4",
-            "3f908f149f721892",
-            "d52ab03b3b847941",
-            "d98be8667eb77700",
-            "63a61d10d499a673",
-            "5917c3e5e2873c57",
-            "475d3e8cafe2b49f",
-            "995c6fe7826ed914",
-            "0780376127dd1798",
-            "8b6f7df04bed5b48",
-            "0723360fe5f39b1f",
-            "6dc196ae866d0343",
-            "f385f4ceb4da65fe",
-            "3023fa6021d6e958",
-            "f05ef9b4a2ba1d45",
-            "fc4e2084893f6102",
-            "fc630bbd493b3ab5",
-            "128fb3e43f08a4d6",
-            "d75360fb110ba3fd",
-            "163a0570374f448e",
-            "a673d423e7ed9a45",
-            "d383da262f414572",
-            "0d6a95710087d697",
-            "242a4b2533743e93",
-            "33a66f360e063310",
-            "217fcb14bfff6eab",
-            "f9d58dc4fda8cb34",
-            "cb179959a76ccd7e",
-            "21aa21a9d7639102",
-            "d4b075277c140e18",
-            "9d0881b12468cbd7"
+            "32621e8772a4774b"
+          ],
+          "gh": [
+            [
+              "2f2642068cc6871d",
+              "75bb48ca2efca90f",
+              "728a1c1ee767b7ff",
+              "8a18f99cb1098350",
+              "8c06caa8709eff69"
+            ],
+            [
+              "0005d2c31b26642e",
+              "c7f36c1f388d7242"
+            ]
           ]
         },
         {
@@ -1140,24 +1135,101 @@ window.GAME = {
             "text": "<p>Vous avez trouvé le mot :</p><p class=\"big-code\">CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
             "routing": true
           },
-          "last": {
-            "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">N P T I T E P A Q R R E D R U N E A O E T</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
-            "hints": [
-              "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
-              "Votre destination se trouve justement sur le port.",
-              "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
-            ],
-            "h": [
-              "cab91489a859b505",
-              "cab91489a859b505",
-              "881b27a5045117bf",
-              "a02e581f895d2ac1",
-              "76698bf284309631",
-              "32c38040debd5e7c",
-              "0127ee232eadacb1",
-              "27f846c4240e328d",
-              "1babb03ef46e0021"
-            ]
+          "after": {
+            "1": {
+              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">N P P G E L O N O R T A R B A C A</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "hints": [
+                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
+                "C'est un lieu de Cassis.",
+                "Les lettres restantes commencent par former :<br><b>PLACE…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PLACE BARAGNON</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "090f7dbba7c29d30",
+                "9244e998d8be526c",
+                "0a792bcc53efb9ff"
+              ]
+            },
+            "2": {
+              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">O R C T I R O S E A D S P T P S</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "hints": [
+                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
+                "C'est un lieu de Cassis.",
+                "Les lettres restantes commencent par former :<br><b>PORT…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT DE CASSIS</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "8d24517e0969ae5b",
+                "60301863596af296",
+                "01d2ee85c4d4dc95",
+                "1bf224fd1f2e80b8",
+                "2806ba3f9393a056"
+              ]
+            },
+            "3": {
+              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">I I H E R A N L S P E E L G M I S T O T C</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "hints": [
+                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
+                "C'est un lieu de Cassis.",
+                "Les lettres restantes commencent par former :<br><b>ÉGLISE…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">ÉGLISE SAINT-MICHEL</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "82f5225885538351",
+                "24cc3925d643e9d5",
+                "662a402ef8d1b1c9"
+              ]
+            },
+            "4": {
+              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">U O O R R A L A F T B N P</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "hints": [
+                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
+                "C'est un lieu de Cassis.",
+                "Les lettres restantes commencent par former :<br><b>FOUR…</b>"
+              ],
+              "success": {
+                "title": "✅ DESTINATION IDENTIFIÉE",
+                "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">FOUR BANAL</p><p>Votre passage à la Maison de l'Europe est validé.</p>",
+                "routing": true
+              },
+              "h": [
+                "97487b5e42ae8708",
+                "3e96a4ee6377f85d",
+                "fce3ff48e0219f1a"
+              ]
+            },
+            "final": {
+              "text": "<p>Dans la réserve suivante, retirez <b>une fois chacune</b> des lettres :</p><p class=\"big-code\">P – O – R – T</p><p>Réserve :</p><p class=\"big-code\">A R P D N T E R R E E U N P I T T E A Q O</p><p>Une fois ces quatre lettres retirées, réorganisez toutes les lettres restantes.</p><p><b>Quelle destination obtenez-vous ?</b></p>",
+              "hints": [
+                "Après avoir retiré PORT, utilisez <b>toutes</b> les lettres qui restent.",
+                "C'est un lieu de Cassis.",
+                "Les lettres restantes commencent par former :<br><b>TERRAIN…</b>"
+              ],
+              "h": [
+                "cab91489a859b505",
+                "cab91489a859b505",
+                "881b27a5045117bf",
+                "a02e581f895d2ac1",
+                "76698bf284309631",
+                "32c38040debd5e7c",
+                "581a4dfad764829a",
+                "0127ee232eadacb1",
+                "27f846c4240e328d",
+                "1babb03ef46e0021"
+              ]
+            }
           },
           "h": [
             "53ff32eaedcb23cc"
@@ -1188,10 +1260,10 @@ window.GAME = {
       }
     ]
   },
-  "version": "2026.11.04-1422",
+  "version": "2026.11.04-1441",
   "answerBook": {
-    "salt": "Q2lfLeGjhKdcFQzOS/K4vA==",
-    "iv": "F7sYd2jP64ezKAdC",
-    "data": "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"
+    "salt": "SwkENT9XnR/gHqxYEHAYbw==",
+    "iv": "0PYp0xPcIst7qPRZ",
+    "data": "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"
   }
 };

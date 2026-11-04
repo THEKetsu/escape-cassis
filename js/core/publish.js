@@ -21,10 +21,15 @@
         step.h = step.answers.map((a) => hash(normalize(a), salt));
         delete step.answers;
       }
-      if (step.last && step.last.answers) {
-        step.last.h = step.last.answers.map((a) => hash(normalize(a), salt));
-        delete step.last.answers;
+      if (step.groups) {
+        step.gh = step.groups.map((g) => g.map((w) => hash(normalize(w), salt)));
+        delete step.groups;
       }
+      Object.keys(step.after || {}).forEach((k) => {
+        const o = step.after[k];
+        if (o.answers) { o.h = o.answers.map((a) => hash(normalize(a), salt)); delete o.answers; }
+        if (o.groups) { o.gh = o.groups.map((g) => g.map((w) => hash(normalize(w), salt))); delete o.groups; }
+      });
     });
     const s = out.settings || {};
     if (s.masterCode) { s.masterHash = hash(normalize(s.masterCode), salt); delete s.masterCode; }
@@ -41,7 +46,9 @@
       ['A', 'B'].forEach((v) => {
         (game.zones[zoneId][v] || []).forEach((step, i) => {
           if (step.answers) answers[`z${zoneId}-${v}-${i}`] = step.answers;
-          if (step.last && step.last.answers) answers[`z${zoneId}-${v}-${i}~last`] = step.last.answers; // pour l'équipe dont c'est la dernière zone
+          Object.keys(step.after || {}).forEach((k) => { // selon la zone qui suit dans le circuit de l'équipe
+            if (step.after[k].answers) answers[`z${zoneId}-${v}-${i}~after-${k}`] = step.after[k].answers;
+          });
         });
       });
     });

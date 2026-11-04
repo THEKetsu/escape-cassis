@@ -29,4 +29,5 @@
   A.render();
   A.pollChat();
   A.updatePosition();
+  if (A.state) A.push(); // la version de cette page est envoyée tout de suite : le dashboard ne garde pas l'ancienne
 })();

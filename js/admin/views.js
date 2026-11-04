@@ -35,7 +35,7 @@
     const lastSeen = info.row ? Math.round((Date.now() - info.row.updatedAt) / 1000) : null;
     const main = `
       <tr class="team ${cls}" data-team="${esc(info.t)}">
-        <td><b>${esc(info.team.name || info.t)}</b>${st && st.teamName ? `<br><small>${esc(st.teamName)}</small>` : ''}${st && st.version && A.VERSION !== 'dev' && st.version !== A.VERSION ? `<br><small class="err" title="Version du téléphone : ${esc(st.version)}">⚠️ ancienne version</small>` : ''}</td>
+        <td><b>${esc(info.team.name || info.t)}</b>${st && st.teamName ? `<br><small>${esc(st.teamName)}</small>` : ''}${st && st.version && A.VERSION !== 'dev' && st.version < A.VERSION ? `<br><small class="err" title="Version du téléphone : ${esc(st.version)}">⚠️ ancienne version</small>` : ''}</td>
         <td><span class="status ${cls}">${icon} ${label}</span></td>
         <td>${chips(info)}</td>
         <td>${position}</td>

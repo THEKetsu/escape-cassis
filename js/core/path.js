@@ -34,9 +34,12 @@
           zoneSteps: zone[variant].length,
           variant,
         });
-        // step.last : texte, réponses, indices propres à l'équipe pour qui cette zone est la dernière (ex. destination finale)
-        if (step.last && zoneIndex === team.circuit.length - 1) Object.assign(built, step.last, { lastOverride: true });
-        delete built.last;
+        // step.after : texte, réponses, indices propres à la zone qui suit dans le circuit de l'équipe
+        // (clé = numéro de la zone suivante, ou « final » si c'est la dernière) : une énigme qui révèle la destination
+        // donne ainsi la bonne destination à chaque équipe
+        const afterKey = zoneIndex === team.circuit.length - 1 ? 'final' : String(team.circuit[zoneIndex + 1]);
+        if (step.after && step.after[afterKey]) Object.assign(built, step.after[afterKey], { afterOverride: afterKey });
+        delete built.after;
         steps.push(built);
       });
     });

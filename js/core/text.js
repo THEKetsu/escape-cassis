@@ -65,9 +65,20 @@
     return (step.answers || []).map((a) => hash(normalize(a), salt));
   }
 
+  // step.groups : [[mots synonymes], [mots synonymes]…] : la saisie est bonne si elle contient, pour chaque groupe,
+  // au moins un de ses mots (ex. [['CROSSE', 'BATON'], ['POISSON', 'POISSONS']]). Publié haché (step.gh).
+  function groupHashes(step, salt) {
+    if (step.gh) return step.gh;
+    return (step.groups || []).map((g) => g.map((w) => hash(normalize(w), salt)));
+  }
+
   function checkAnswer(input, step, salt) {
     const expected = answerHashes(step, salt);
-    return candidates(input, step.match).some((c) => c && expected.includes(hash(c, salt)));
+    if (candidates(input, step.match).some((c) => c && expected.includes(hash(c, salt)))) return true;
+    const groups = groupHashes(step, salt);
+    if (!groups.length) return false;
+    const typed = new Set(words(input).map((w) => hash(w, salt)));
+    return groups.every((g) => g.some((h) => typed.has(h)));
   }
 
   // Code en clair (contenu.js local) ou haché (game.js publié)
