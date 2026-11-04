@@ -27,7 +27,8 @@
     const trail = circuit.map((_, i) => i).concat(circuit.length).map((i) => {
       const done = i < step.zoneIndex || (i === step.zoneIndex && zoneDone);
       const cur = !done && i === step.zoneIndex;
-      const label = done ? '✓' : i === circuit.length ? '🏁' : i + 1;
+      // zone et variante proposée à l'équipe : « 1a », « 2b »…
+      const label = i === circuit.length ? '🏁' : `${circuit[i]}${E.variantFor(GAME.teams[state.team], circuit[i]).toLowerCase()}`;
       return `<li class="${done ? 'done' : cur ? 'cur' : ''}">${label}</li>`;
     }).join('');
     return `
@@ -246,7 +247,8 @@
         <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
         ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
         <div class="text">${s.text || ''}${routing}</div>
-        ${step.type === 'zip' && state.zipLetters ? `<p class="big-code">${esc(state.zipLetters.split('').join(' '))}</p>` : ''}
+        ${step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : ''}
+        ${s.reveal ? `<p>Votre prochaine destination :</p><p class="big-code">${esc(s.reveal)}</p>` : ''}
         ${A.imagesHtml(s.images)}
         <button class="btn primary big" data-action="next">${s.button ? esc(s.button) : last ? '🏁 Voir le résultat' : 'Continuer ➜'}</button>
       </main>`;

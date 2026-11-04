@@ -29,7 +29,7 @@ tr.detail td { background: var(--fill-2); }
 
 .chips { display: flex; align-items: center; gap: 3px; white-space: nowrap; }
 .chips i { color: var(--faint); font-style: normal; font-size: 11px; }
-.chip { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--fill); color: var(--muted); }
+.chip { min-width: 24px; height: 24px; padding: 0 4px; border-radius: 12px; display: inline-grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--fill); color: var(--muted); }
 .chip.ok { background: var(--green); color: #fff; }
 .chip.cur { background: var(--blue); color: #fff; box-shadow: 0 0 0 3px rgba(0, 122, 255, .22); }
 

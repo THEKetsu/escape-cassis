@@ -6,6 +6,8 @@
 /* Écran de réussite : la carte descend un peu pour ne pas rester collée en haut d'un écran vide */
 .success { margin-top: clamp(12px, 9vh, 90px); padding-top: 30px; padding-bottom: 26px; }
 .success .text { color: var(--muted); }
+.zip-found { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+.zip-found b { letter-spacing: .12em; color: var(--ink); }
 .check { width: 104px; height: 104px; margin: 4px auto 6px; }
 .check svg { width: 100%; height: 100%; }
 .check circle { fill: var(--green); stroke: none; transform-origin: center; animation: pop .35s cubic-bezier(.3, 1.6, .5, 1); }

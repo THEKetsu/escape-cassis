@@ -19,7 +19,7 @@
     const currentZone = st && st.startedAt && !st.finishedAt ? info.step.zoneId : null;
     return '<div class="chips">' + circuit.map((z) => {
       const cls = z === currentZone ? 'cur' : doneZones.has(z) ? 'ok' : '';
-      return `<span class="chip ${cls}">${z === 'final' ? 'F' : esc(z)}</span>`;
+      return `<span class="chip ${cls}">${z === 'final' ? 'F' : esc(z) + E.variantFor(info.team, z).toLowerCase()}</span>`;
     }).join('<i>›</i>') + '</div>';
   }
 
