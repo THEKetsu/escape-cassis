@@ -109,9 +109,10 @@
   Object.assign(A, { push, setNet, updatePosition, endSession });
 
   setInterval(() => {
-    if (A.state && A.state.startedAt && !A.state.finishedAt) {
+    // signal de vie aussi à l'accueil et en salle d'attente : le dashboard sait quelles équipes sont réellement là
+    if (A.state && !A.state.finishedAt) {
       push();
-      updatePosition();
+      if (A.state.startedAt) updatePosition();
     }
   }, HEARTBEAT_MS);
 

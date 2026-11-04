@@ -15,11 +15,14 @@
     A.render();
   }
 
+  // Connectée = le téléphone a donné signe de vie récemment (une ligne restée sur le serveur ne suffit pas)
+  const fresh = (info) => !!info.row && Date.now() - info.row.updatedAt < A.OFFLINE_MS;
+
   // Pastille d'une équipe : jouant, prête (salle d'attente), connectée, absente
   function pill(info) {
     const st = info.st;
-    const cls = st && st.startedAt ? 'play' : info.status === 'ready' ? 'ready' : info.row ? 'on' : 'off';
-    const label = { play: 'en jeu', ready: 'prête (salle d\'attente)', on: 'connectée', off: 'pas encore connectée' }[cls];
+    const cls = !fresh(info) ? 'off' : st && st.startedAt ? 'play' : info.status === 'ready' ? 'ready' : 'on';
+    const label = { play: 'en jeu', ready: 'prête (salle d\'attente)', on: 'connectée', off: 'pas connectée en ce moment' }[cls];
     return `<span class="tp ${cls}" title="${esc((st && st.teamName) || info.team.name || info.t)} · ${label}">${esc(info.t)}</span>`;
   }
 
@@ -34,7 +37,7 @@
   }
 
   function checksHtml(infos) {
-    const connected = infos.filter((i) => i.row).length;
+    const connected = infos.filter(fresh).length;
     const notes = alerts().map(([level, text]) => `<li class="${level}">${text}</li>`).join('');
     return `<section class="checks">
       <div class="ck-teams">
