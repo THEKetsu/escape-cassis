@@ -18,6 +18,7 @@
   let cells = []; // chemin en cours (cases numérotées ligne × size + colonne)
   let dragging = null;
   let lastHit = -1;
+  let ignoring = false; // geste commencé sur une case déjà tracée (hors bout du chemin) : il ne modifie rien
 
   const current = () => {
     const step = A.state && A.path && A.state.startedAt ? A.current() : null;
@@ -73,7 +74,7 @@
         </svg>
       </div>
       <p class="zip-info"><span id="zip-count"></span> <span class="zip-letters">Lettres : <b id="zip-letters"></b></span></p>
-      <p class="help">Glissez le doigt de case en case. Touchez une case du chemin pour revenir à cet endroit.</p>
+      <p class="help">Glissez le doigt de case en case, depuis le bout de votre chemin. Il est gardé sur ce téléphone. « Annuler » recule d\'une case.</p>
       <div class="zip-actions">
         <button class="btn" data-action="zip-undo">↩ Annuler</button>
         <button class="btn" data-action="zip-clear">Effacer</button>
@@ -118,6 +119,13 @@
     const row = Math.floor(((e.clientY - rect.top) / rect.height) * n);
     if (col < 0 || row < 0 || col >= n || row >= n) return;
     const cell = row * n + col;
+    // Un geste ne peut reprendre qu'au bout du chemin (ou sur une case voisine libre) : toucher une ancienne case, par exemple
+    // en voulant faire défiler la page, ne raccourcit plus le chemin. Pour reculer : glisser en arrière depuis le bout, ou « Annuler ».
+    if (lastHit === -1 && cells.length && cell !== cells[cells.length - 1] && cells.includes(cell)) ignoring = true;
+    if (ignoring) {
+      lastHit = cell;
+      return;
+    }
     if (cell === lastHit) return;
     // un geste rapide peut sauter des cases : on les parcourt une à une quand il reste sur la même ligne ou colonne
     if (lastHit >= 0) {
@@ -138,6 +146,7 @@
     if (!board) return;
     e.preventDefault();
     lastHit = -1;
+    ignoring = false;
     dragging = { board, id: e.pointerId };
     try { board.setPointerCapture(e.pointerId); } catch (err) { /* pas de capture : on suit quand même les mouvements */ }
     touch(e, board);
@@ -145,7 +154,7 @@
   $app.addEventListener('pointermove', (e) => {
     if (dragging && e.pointerId === dragging.id) touch(e, dragging.board);
   });
-  ['pointerup', 'pointercancel'].forEach((name) => $app.addEventListener(name, () => { dragging = null; lastHit = -1; }));
+  ['pointerup', 'pointercancel'].forEach((name) => $app.addEventListener(name, () => { dragging = null; lastHit = -1; ignoring = false; }));
 
   const WHY = {
     start: () => 'Commencez par le premier repère.',
@@ -175,7 +184,7 @@
     const step = current();
     if (!el || !step) return;
     if (el.dataset.action === 'zip-undo') { cells.pop(); refresh(); }
-    if (el.dataset.action === 'zip-clear') { cells = []; refresh(); }
+    if (el.dataset.action === 'zip-clear' && (cells.length < 6 || confirm('Effacer tout le chemin tracé ?'))) { cells = []; refresh(); }
     if (el.dataset.action === 'zip-validate') validate();
   });
 
