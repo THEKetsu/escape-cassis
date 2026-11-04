@@ -32,6 +32,6 @@
 - Dashboard → **📊 Export** : le bilan en CSV (classement, durée, indices et erreurs par étape). À faire **avant** « Terminer la partie ».
 
 ## À compléter avant le jour J
-- Numéro de téléphone de l'organisation (aussi dans `rules` de `contenu.js`, affiché sur l'accueil des joueurs) : `______________`
+- Numéro de téléphone de l'organisation (aussi dans `rules` de `contenu.js`, affiché sur l'accueil des joueurs) : **07 51 61 76 23**
 - Point de rendez-vous de départ et heure : `______________`
 - Point de rendez-vous final : `______________`
