@@ -109,10 +109,6 @@
         A.render();
       }
     });
-    // L'écran est redessiné chaque seconde : on retient si le contrôle avant départ est ouvert ou replié
-    $root.addEventListener('toggle', (e) => {
-      if (e.target.matches && e.target.matches('.checks details')) A.checksOpen = e.target.open;
-    }, true);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && A.mapFull) {
         A.mapFull = false;

@@ -84,7 +84,8 @@
   // État du départ, à côté du titre : salle d'attente ou partie lancée (rien si le serveur n'a pas de salle d'attente)
   function gameStatus() {
     const s = A.session;
-    if (!s || s.startedAt === undefined) return '';
+    if (s === undefined) return '';
+    if (!s || s.startedAt === undefined) return ' · 🔴 départ impossible : relancez supabase.sql';
     if (s.startedAt) return ` · 🟢 partie lancée à ${new Date(s.startedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
     const ready = teamIds.filter((t) => A.rows[t] && A.rows[t].state && A.rows[t].state.joined).length;
     return ` · 🟡 salle d'attente : ${ready}/${teamIds.length} équipes prêtes`;

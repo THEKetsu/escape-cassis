@@ -12,29 +12,16 @@
 .pc.cur { background: var(--blue); color: #fff; box-shadow: 0 0 0 3px rgba(0, 122, 255, .22); }
 .pc.bad { outline: 3px solid var(--red); outline-offset: 1px; }
 
-/* contrôle avant le départ : tuiles à pastille de couleur */
-.checks details { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 18px; margin-bottom: 14px; }
-.checks summary { cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 14px; list-style: none; }
-.checks summary::-webkit-details-marker { display: none; }
-.checks summary small { color: var(--muted); font-weight: 600; }
-.ck-bar { flex: 1; max-width: 260px; height: 8px; border-radius: 4px; background: var(--fill); overflow: hidden; }
-.ck-bar i { display: block; height: 100%; border-radius: 4px; background: var(--green); transition: width .4s; }
-.ck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; margin-top: 14px; }
-.ck { position: relative; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: var(--fill-2); border: 1.5px solid transparent; }
-.ck-icon { flex: none; width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-size: 19px; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .08); }
-.ck-text { display: grid; line-height: 1.2; min-width: 0; }
-.ck-text b { font-size: 13px; }
-.ck-text small { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ck-dot { position: absolute; top: 9px; right: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--faint); }
-.ck.ok { background: rgba(52, 199, 89, .10); }
-.ck.ok .ck-dot { background: var(--green); box-shadow: 0 0 0 3px rgba(52, 199, 89, .25); }
-.ck.warn { background: rgba(255, 149, 0, .12); border-color: rgba(255, 149, 0, .45); }
-.ck.warn .ck-dot { background: var(--orange); box-shadow: 0 0 0 3px rgba(255, 149, 0, .3); }
-.ck.err { background: rgba(255, 59, 48, .12); border-color: rgba(255, 59, 48, .5); }
-.ck.err .ck-dot { background: var(--red); animation: ck-pulse 1.2s infinite; }
-.ck.err .ck-text small { color: var(--red); font-weight: 700; }
-@keyframes ck-pulse { 50% { box-shadow: 0 0 0 5px rgba(255, 59, 48, .25); } }
-.ck-notes { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; font-size: 13.5px; }
+/* équipes connectées : un chiffre et une pastille par équipe */
+.ck-teams { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 20px; margin-bottom: 14px; }
+.ck-count { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--orange); }
+.ck-count.all { color: var(--green); }
+.tp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tp { min-width: 38px; height: 30px; padding: 0 8px; border-radius: 15px; display: inline-grid; place-items: center; font-size: 13px; font-weight: 700; background: var(--fill); color: var(--faint); }
+.tp.on { background: rgba(0, 122, 255, .14); color: var(--blue); }
+.tp.ready { background: var(--green); color: #fff; }
+.tp.play { background: var(--blue); color: #fff; box-shadow: 0 0 0 3px rgba(0, 122, 255, .2); }
+.ck-notes { list-style: none; margin: -4px 0 14px; padding: 0; display: grid; gap: 6px; font-size: 13.5px; }
 .ck-notes li { padding: 8px 12px; border-radius: 12px; background: rgba(255, 149, 0, .10); color: #7a4700; }
 .ck-notes li.err { background: rgba(255, 59, 48, .10); color: var(--red); font-weight: 600; }
 

@@ -2,7 +2,7 @@
 (function () {
   const A = window.EscapePlayer;
   if (!A) return;
-  const { E, Sync, GAME, $app } = A;
+  const { E, Sync, GAME, S, SALT, $app } = A;
   const esc = window.Util.esc;
 
   const POLL_MS = 2000;
@@ -45,6 +45,8 @@
         stopLobby();
         return A.begin(); // l'organisation a donné le départ
       }
+      const note = document.getElementById('lobby-note');
+      if (note) note.hidden = !!(session && session.startedAt !== undefined); // serveur pas prêt : l'organisation doit relancer supabase.sql
       update(rows);
     } catch (e) {
       update(null); // hors connexion : on garde l'écran et on réessaie
@@ -62,13 +64,28 @@
         <div class="waiting" aria-hidden="true"><i></i><i></i><i></i></div>
         <p id="lobby-count" class="lobby-count"></p>
         <ul id="lobby-teams" class="lobby-teams"></ul>
-        <p class="help">Gardez cet écran ouvert : la partie démarre toute seule.</p>
+        <p id="lobby-note" class="lobby-note" hidden>⚠️ Le serveur n'est pas prêt pour donner le départ : prévenez l'organisation.</p>
+        <p class="help">Gardez cet écran ouvert : la partie démarre toute seule quand l'organisation donne le départ.</p>
+        <button class="link" data-action="lobby-start">🔑 Démarrer sans attendre (code organisation)</button>
       </main>`;
     update(null);
     stopLobby();
     poll();
     timer = setInterval(poll, POLL_MS);
   }
+
+  // Départ de secours (réseau coupé, serveur pas prêt) : réservé à l'organisation
+  $app.addEventListener('click', async (e) => {
+    if (!e.target.closest('[data-action="lobby-start"]')) return;
+    const code = await A.ask({
+      icon: '🔑', title: 'Départ de secours', input: 'Code organisation',
+      text: "Démarre cette équipe sans attendre le départ de l'organisation.", ok: 'Démarrer',
+    });
+    if (!code || !A.state || A.state.startedAt) return;
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    stopLobby();
+    A.begin();
+  });
 
   document.addEventListener('visibilitychange', () => { if (!document.hidden && timer) poll(); });
 

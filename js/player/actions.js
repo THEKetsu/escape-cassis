@@ -192,11 +192,10 @@
   async function start() {
     const input = document.getElementById('team-name');
     if (input) A.state.teamName = input.value.trim().slice(0, 30);
+    if (!A.Sync.enabled) return begin(); // jeu local, sans serveur : personne pour donner le départ
     let session = null;
     let failed = false;
-    if (A.Sync.enabled) {
-      try { session = await A.Sync.loadSession(); } catch (e) { failed = true; }
-    }
+    try { session = await A.Sync.loadSession(); } catch (e) { failed = true; }
     if (E.lobbyDecision(session, failed) === 'begin') return begin();
     A.state.joined = true;
     A.save();

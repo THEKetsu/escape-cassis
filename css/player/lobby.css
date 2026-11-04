@@ -6,6 +6,8 @@
 .waiting i:nth-child(2) { animation-delay: .15s; }
 .waiting i:nth-child(3) { animation-delay: .3s; }
 @keyframes lobby-bounce { 0%, 80%, 100% { transform: scale(.6); opacity: .4; } 40% { transform: scale(1); opacity: 1; } }
+.lobby-note { background: #fff4d6; border-radius: 14px; padding: 10px 12px; font-size: 14px; }
+.lobby .link { margin-top: 6px; color: var(--muted); }
 .lobby-count { margin: 0 0 10px; font-weight: 700; color: var(--muted); }
 .lobby-teams { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; text-align: left; }
 .lobby-teams li { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 16px; background: var(--soft); opacity: .6; }

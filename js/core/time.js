@@ -16,12 +16,12 @@
     return list[Math.min(level, list.length - 1)];
   }
 
-  // Inscription d'une équipe, d'après la session du serveur (null : pas de salle d'attente ; failed : serveur injoignable) :
-  // 'begin' = démarrer tout de suite (serveur sans salle d'attente, ou départ déjà donné) ;
-  // 'wait'  = rejoindre la salle d'attente (départ pas encore donné, ou serveur injoignable : on attend de pouvoir lire)
+  // Avec un serveur, seule l'organisation décide du départ : une équipe démarre uniquement quand le départ est donné.
+  // 'begin' = le départ est donné (ou l'équipe arrive après) ;
+  // 'wait'  = salle d'attente : départ pas encore donné, serveur injoignable ou pas prêt (supabase.sql à relancer).
+  // Sans serveur du tout (jeu local), l'application démarre tout de suite : voir start() dans actions.js.
   function lobbyDecision(session, failed) {
-    if (failed) return 'wait';
-    if (!session || session.startedAt === undefined) return 'begin';
+    if (failed || !session) return 'wait';
     return session.startedAt ? 'begin' : 'wait';
   }
 
