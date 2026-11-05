@@ -33,8 +33,8 @@
     const trail = circuit.map((_, i) => i).concat(circuit.length).map((i) => {
       const done = i < step.zoneIndex || (i === step.zoneIndex && zoneDone);
       const cur = !done && i === step.zoneIndex;
-      // zone et variante proposée à l'équipe : « 1a », « 2b »…
-      const label = i === circuit.length ? '🏁' : `${circuit[i]}${E.variantFor(GAME.teams[state.team], circuit[i]).toLowerCase()}`;
+      // numéro de la zone seulement : les joueurs ne doivent pas deviner qu'il existe des variantes (le dashboard les montre)
+      const label = i === circuit.length ? '🏁' : String(circuit[i]);
       return `<li class="${done ? 'done' : cur ? 'cur' : ''}">${label}</li>`;
     }).join('');
     return `
