@@ -42,10 +42,12 @@
   // Réponses en clair de chaque étape (clé = step.key de buildPath), et code organisation
   function answerBook(game) {
     const answers = {};
+    // étape sans réponse fixe (groups seuls, ex. notes d'un parfum) : le premier mot de chaque groupe
+    const plain = (step) => step.answers || (step.groups && step.groups.map((g) => g[0]));
     Object.keys(game.zones || {}).forEach((zoneId) => {
       ['A', 'B'].forEach((v) => {
         (game.zones[zoneId][v] || []).forEach((step, i) => {
-          if (step.answers) answers[`z${zoneId}-${v}-${i}`] = step.answers;
+          if (plain(step)) answers[`z${zoneId}-${v}-${i}`] = plain(step);
           Object.keys(step.after || {}).forEach((k) => { // selon la zone qui suit dans le circuit de l'équipe
             if (step.after[k].answers) answers[`z${zoneId}-${v}-${i}~after-${k}`] = step.after[k].answers;
           });

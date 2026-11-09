@@ -47,7 +47,9 @@
     allSteps(game).forEach(({ step, where }) => {
       if (!STEP_TYPES.includes(step.type)) return errors.push(`${where} : type "${step.type}" inconnu`);
       if (!step.title) warnings.push(`${where} : pas de titre`);
-      const hasAnswers = (step.answers && step.answers.length) || (step.h && step.h.length);
+      const groups = step.groups || step.gh || [];
+      const hasAnswers = (step.answers && step.answers.length) || (step.h && step.h.length) || groups.length;
+      if (step.atLeast && !(step.atLeast >= 1 && step.atLeast <= groups.length)) errors.push(`${where} : atLeast (${step.atLeast}) doit être entre 1 et le nombre de groupes (${groups.length})`);
       Object.keys(step.after || {}).forEach((k) => {
         if ('answers' in step.after[k] && !(step.after[k].answers && step.after[k].answers.length)) errors.push(`${where} : after.${k}.answers est vide`);
       });

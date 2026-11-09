@@ -5,14 +5,17 @@
   const { E, GAME, $app } = A;
   const esc = window.Util.esc;
 
+  // Pictogrammes des repères : .f = fond teinté, .s = plein
   const ICONS = {
-    croix: '<path d="M12 3v18M6 9h12"/>',
-    oculus: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
-    portail: '<path d="M6 21V12a6 6 0 0 1 12 0v9"/>',
-    baies: '<path d="M3 21v-7a4.5 4.5 0 0 1 9 0v7M12 21v-7a4.5 4.5 0 0 1 9 0v7"/>',
-    clocher: '<path d="M5 21V11l7-6 7 6v10z"/><circle cx="12" cy="14" r="2.5"/>',
+    croix: '<path class="s" d="M10.3 2h3.4v5.3H19v3.4h-5.3V22h-3.4V10.7H5V7.3h5.3z"/>',
+    oculus: '<circle class="f" cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.6 5.6l4.3 4.3M14.1 14.1l4.3 4.3M18.4 5.6l-4.3 4.3M9.9 14.1l-4.3 4.3"/>',
+    portail: '<path class="f" d="M5.5 20V11a6.5 6.5 0 0 1 13 0v9z"/><path d="M12 4.5V20M2.5 20h19"/><circle class="s" cx="10.4" cy="14" r="1"/><circle class="s" cx="13.6" cy="14" r="1"/>',
+    baies: '<path class="f" d="M3.5 19v-8a3.75 3.75 0 0 1 7.5 0v8zM13 19v-8a3.75 3.75 0 0 1 7.5 0v8z"/><path d="M2 19h20M12 8v11"/>',
+    clocher: '<path class="s" d="M12 1.5 6 8h12z"/><path class="f" d="M7 8h10v13H7z"/><circle cx="12" cy="13" r="3.2" fill="#fff"/><path d="M12 11.2V13l1.3 1"/><path d="M10.3 21v-2.8a1.7 1.7 0 0 1 3.4 0V21"/>',
   };
   const NAMES = { croix: 'la croix', oculus: 'l\'oculus', portail: 'le portail', baies: 'les baies', clocher: 'le clocher' };
+  const LABELS = { croix: 'Croix', oculus: 'Oculus', portail: 'Portail', baies: 'Baies jumelles', clocher: 'Clocher / horloge' };
+  const icon = (name) => `<svg viewBox="0 0 24 24" aria-label="${esc(LABELS[name] || name)}">${ICONS[name] || ''}</svg>`;
   const storeKey = (step) => `${A.STORE}:zip:${step.key}`;
 
   let cells = []; // chemin en cours (cases numérotées ligne × size + colonne)
@@ -55,11 +58,10 @@
     const body = [];
     for (let r = 0; r < n; r++) {
       for (let c = 0; c < n; c++) {
-        const icon = markAt.get(r * n + c);
+        const mark = markAt.get(r * n + c);
         const letter = ((z.letters || [])[r] || '')[c];
-        const inner = icon ? `<svg viewBox="0 0 24 24" aria-label="${esc(icon)}">${ICONS[icon] || ''}</svg>`
-          : letter && letter !== '.' ? `<b>${esc(letter)}</b>` : '';
-        body.push(`<div class="zc${icon ? ' mark' : ''}${icon && r * n + c === z.marks[0].at[0] * n + z.marks[0].at[1] ? ' start' : ''}">${inner}</div>`);
+        const inner = mark ? icon(mark) : letter && letter !== '.' ? `<b>${esc(letter)}</b>` : '';
+        body.push(`<div class="zc${mark ? ' mark' : ''}${mark && r * n + c === z.marks[0].at[0] * n + z.marks[0].at[1] ? ' start' : ''}">${inner}</div>`);
       }
     }
     const walls = (z.walls || []).map(([r, c, side]) => side === 'R'
@@ -74,6 +76,7 @@
           <polyline id="zip-path" points="${pointsOf(z)}"/>
         </svg>
       </div>
+      <ol class="zip-legend">${z.marks.map((m) => `<li>${icon(m.icon)}<span>${esc(LABELS[m.icon] || m.icon)}</span></li>`).join('')}</ol>
       <p class="zip-info"><span id="zip-count"></span> <span class="zip-letters">Lettres : <b id="zip-letters"></b></span></p>
       <p class="help">Glissez le doigt de case en case, depuis le bout de votre chemin. Il est gardé sur ce téléphone. « Annuler » recule d\'une case.</p>
       <div class="zip-actions">

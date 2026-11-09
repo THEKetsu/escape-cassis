@@ -18,7 +18,43 @@
     if (!A.state.startedAt) return A.state.joined ? A.renderLobby() : renderWelcome();
     if (A.state.phase === 'done') return renderFinished();
     if (A.state.phase === 'success') return renderSuccess(A.current());
+    if (briefingLeft()) return renderBriefing();
     renderStep(A.current());
+  }
+
+  // Avant la première énigme : les consignes (settings.briefing), puis la première destination de l'équipe
+  function briefingScreens() {
+    const first = GAME.zones[GAME.teams[A.state.team].circuit[0]];
+    return [
+      S.briefing && { title: 'Votre mission', text: S.briefing, button: 'C\'est compris ➜' },
+      first && {
+        title: 'Votre première destination',
+        text: `<p>Dirigez-vous vers votre première destination :</p><p class="lead"><b>${esc(first.where || first.name)}</b></p><p>C'est là que vous attend votre première énigme.</p>`,
+        button: 'Nous y sommes ➜', map: true,
+      },
+    ].filter(Boolean);
+  }
+
+  // Écrans de départ pas encore vus (seulement tant que la première énigme n'est pas commencée)
+  function briefingLeft() {
+    const state = A.state;
+    if (state.stepIndex !== 0 || state.phase !== 'step' || state.log.length) return 0;
+    return Math.max(0, briefingScreens().length - (state.briefing || 0));
+  }
+
+  function renderBriefing() {
+    const screen = briefingScreens()[A.state.briefing || 0];
+    A.setTheme(A.zoneColor(A.current()));
+    $app.innerHTML = `
+      ${header()}
+      <main class="card anim">
+        <h1>${esc(screen.title)}</h1>
+        <div class="text">${tpl(screen.text)}</div>
+        ${screen.map ? '<button class="btn" data-action="map">🗺️ Voir sur la carte</button>' : ''}
+        <button class="btn primary big" data-action="briefing-next">${esc(screen.button)}</button>
+      </main>`;
+    startTimer();
+    A.push();
   }
 
   function header() {
@@ -33,8 +69,8 @@
     const trail = circuit.map((_, i) => i).concat(circuit.length).map((i) => {
       const done = i < step.zoneIndex || (i === step.zoneIndex && zoneDone);
       const cur = !done && i === step.zoneIndex;
-      // numéro de la zone seulement : les joueurs ne doivent pas deviner qu'il existe des variantes (le dashboard les montre)
-      const label = i === circuit.length ? '🏁' : String(circuit[i]);
+      // rang dans le circuit (1, 2, 3…), ni le numéro réel de la zone ni sa variante : le dashboard les montre
+      const label = i === circuit.length ? '🏁' : String(i + 1);
       return `<li class="${done ? 'done' : cur ? 'cur' : ''}">${label}</li>`;
     }).join('');
     return `
@@ -317,5 +353,5 @@
   }
 
   A.tpl = tpl;
-  Object.assign(A, { render, header, hintsHtml });
+  Object.assign(A, { render, header, hintsHtml, briefingLeft });
 })();

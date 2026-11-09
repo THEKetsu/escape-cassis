@@ -188,6 +188,15 @@
     }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 5000 });
   }
 
+  // Écrans de départ (consignes, première destination) : le temps de la première énigme part du dernier
+  function nextBriefing() {
+    if (!A.briefingLeft()) return;
+    A.state.briefing = (A.state.briefing || 0) + 1;
+    if (!A.briefingLeft()) A.state.stepStartedAt = Date.now();
+    A.save();
+    A.render();
+  }
+
   // Démarre vraiment la partie : chrono et première énigme
   function begin() {
     A.state.joined = true;
@@ -257,6 +266,7 @@
       case 'board': A.showBoard(); break;
       case 'chat': A.showChat(); break;
       case 'next': advance(); A.save(); A.render(); break;
+      case 'briefing-next': nextBriefing(); break;
       case 'zoom': zoom(el.dataset.src); break;
     }
   });

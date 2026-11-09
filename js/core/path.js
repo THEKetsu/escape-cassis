@@ -40,6 +40,8 @@
         const afterKey = zoneIndex === team.circuit.length - 1 ? 'final' : String(team.circuit[zoneIndex + 1]);
         if (step.after && step.after[afterKey]) Object.assign(built, step.after[afterKey], { afterOverride: afterKey });
         delete built.after;
+        // {{zone}} : rang de la zone dans le circuit de l'équipe (« Mission 1 », « Mission 2 »…), pas son numéro dans contenu.js
+        ['title', 'text'].forEach((f) => { if (typeof built[f] === 'string') built[f] = built[f].split('{{zone}}').join(String(zoneIndex + 1)); });
         steps.push(built);
       });
     });

@@ -56,7 +56,7 @@ test('la version publiée valide les mêmes réponses sans les contenir', async 
 test('carnet de réponses : chiffré dans game.js, lisible avec le code admin seulement', async () => {
   const game = loadGame();
   const book = JSON.parse(JSON.stringify(E.answerBook(game))); // tableaux issus de vm : autre prototype
-  assert.deepStrictEqual(book.answers['z3-A-3'], ['FOUR BANAL', 'LE FOUR BANAL', 'FOUR']);
+  assert.deepStrictEqual(book.answers['z3-A-3'], ["L'EAU DE CASSIS", 'EAU DE CASSIS', "BOUTIQUE L'EAU DE CASSIS", "LA BOUTIQUE L'EAU DE CASSIS"]);
   assert.deepStrictEqual(book.answers['final-1'], ['TOP']);
   assert.strictEqual(book.answers['z3-B-2'], undefined); // étape info : pas de réponse
   assert.strictEqual(book.masterCode, 'CALANQUE');
@@ -83,6 +83,8 @@ test('parcours : ordre des zones et variante de chaque équipe', () => {
   assert.deepStrictEqual(zones.slice(0, 5).map((z) => p6.find((s) => s.zoneId === z).variant), ['B', 'A', 'A', 'A', 'A']);
   const keys = p6.map((s) => s.key);
   assert.strictEqual(new Set(keys).size, keys.length);
+  // les joueurs voient « Mission 1, 2, 3… » dans l'ordre de leur circuit, pas le numéro réel de la zone
+  assert.deepStrictEqual(p6.filter((s) => /^Mission/.test(s.title)).map((s) => s.title.split(' —')[0]), ['Mission 1', 'Mission 2', 'Mission 3', 'Mission 4', 'Mission 5']);
 });
 
 test('circuits : au plus 2 équipes par zone, jamais la même variante ensemble', () => {
@@ -288,7 +290,7 @@ test('classement à remettre dans l\'ordre : seule la bonne suite est acceptée,
 
 test('zip : une seule solution par grille, lettres dans l\'ordre du chemin, règles de déplacement', () => {
   const game = loadGame();
-  [['A', 'FOURBANAL'], ['B', 'MAISONDELEUROPE']].forEach(([v, word]) => {
+  [['A', 'EAUDECASSIS'], ['B', 'MAISONDELEUROPE']].forEach(([v, word]) => {
     const step = game.zones[3][v][2];
     assert.strictEqual(step.type, 'zip');
     const z = step.zip;
@@ -313,9 +315,17 @@ test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées p
   const salt = game.settings.salt;
   const ok = (step, v) => assert.ok(E.checkAnswer(v, step, salt), `${step.title} : « ${v} » devrait être accepté`);
   const ko = (step, v) => assert.ok(!E.checkAnswer(v, step, salt), `${step.title} : « ${v} » devrait être refusé`);
-  const four = game.zones[4];
-  ok(four.A[1], 'le fournier'); ko(four.A[1], 'boulanger');
-  ok(four.B[1], four.B[1].options[2]); ko(four.B[1], four.B[1].options[0]);
+  // zone 4 : au moins 2 notes du parfum, dans n'importe quelle phrase ; deux écritures d'une même note ne comptent qu'une fois
+  const pub = E.publish(game);
+  [game.zones[4], pub.zones[4]].forEach((four) => {
+    ok(four.A[1], 'citron, fleur d\'oranger'); ok(four.A[1], 'On sent du pamplemousse et de la fève tonka !'); ok(four.A[1], 'Vétiver ambre');
+    ko(four.A[1], 'citron'); ko(four.A[1], 'fleur d\'oranger, fleurs d\'oranger'); ko(four.A[1], 'vanille, jasmin'); ko(four.A[1], 'fleur');
+    ok(four.B[1], 'jasmin vanille'); ok(four.B[1], 'praliné et musc blanc'); ko(four.B[1], 'jasmin'); ko(four.B[1], 'citron, coriandre');
+  });
+  assert.strictEqual(pub.zones[4].A[1].groups, undefined); // notes publiées hachées
+  assert.ok(E.answerBook(game).answers['z4-A-1'].includes('CORIANDRE')); // le dashboard les montre en clair
+  game.zones[4].A[1].atLeast = 20;
+  assert.ok(E.validate(game).errors.some((e) => e.includes('atLeast')));
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
   const text = (step) => step.text.replace(/<[^>]+>/g, ' ');
@@ -375,7 +385,7 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
   const reserve = (s) => s.text.replace(/<[^>]+>/g, ' ').match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
-  const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: 'FOUR BANAL', E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'PLACE BARAGNON', E7: 'TERRAIN DE PETANQUE', E8: 'PORT DE CASSIS' };
+  const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: "L'EAU DE CASSIS", E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'PLACE BARAGNON', E7: 'TERRAIN DE PETANQUE', E8: 'PORT DE CASSIS' };
   Object.keys(expected).forEach((t) => {
     const variant = game.teams[t].variant[5];
     const zi = 1; // étape qui donne la destination : la réserve de lettres (5A et 5B)
@@ -389,10 +399,10 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
     assert.ok(!E.checkAnswer('cassis', ps, salt), t + ' : CASSIS ne doit plus être la réponse');
   });
   assert.ok(E.checkAnswer('le terrain de pétanque', E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 1), salt));
-  // 2A : « Destination mystère » annonce la finale pour E2 (dernière zone), le Four Banal pour E8 (zone 4 ensuite)
+  // 2A : « Destination mystère » annonce la finale pour E2 (dernière zone), L'Eau de Cassis pour E8 (zone 4 ensuite)
   const mystery = (g, t) => E.buildPath(g, t).find((s) => s.title === 'Destination mystère');
-  assert.ok(E.checkAnswer('terrains de pétanque', mystery(pub, 'E2'), salt) && !E.checkAnswer('four banal', mystery(pub, 'E2'), salt));
-  assert.ok(E.checkAnswer('four banal', mystery(pub, 'E8'), salt) && !E.checkAnswer('pétanque', mystery(pub, 'E8'), salt));
+  assert.ok(E.checkAnswer('terrains de pétanque', mystery(pub, 'E2'), salt) && !E.checkAnswer("l'eau de cassis", mystery(pub, 'E2'), salt));
+  assert.ok(E.checkAnswer("l'eau de cassis", mystery(pub, 'E8'), salt) && !E.checkAnswer('pétanque', mystery(pub, 'E8'), salt));
   // le blason : toute formulation avec une crosse (ou un bâton) ET des poissons
   const blason = E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 0);
   ['1 crosse + 2 poissons', 'Une crosse et deux poissons', '2 poissons et 1 crosse', 'crosse et poissons', 'un bâton et des poissons', 'je vois une crosse, un poisson et un autre poisson'].forEach((v) => assert.ok(E.checkAnswer(v, blason, salt), v));
@@ -418,15 +428,15 @@ test('dernière zone : 1A, 1B, 2B et 3A mènent aux terrains de pétanque pour l
   assert.strictEqual(E.zipLetters(z, sols[0]), 'TERRAINDEPETANQUE');
   assert.strictEqual(z.marks.map((m) => m.icon).join(' '), 'portail baies oculus croix clocher'); // mêmes repères, même ordre
   // les réponses de fin : terrains de pétanque, plus l'ancienne destination
-  [['E3', 1, 2, 'port de cassis'], ['E4', 1, 2, 'saint michel'], ['E5', 2, 2, 'saint michel'], ['E8', 3, 3, 'four banal']].forEach(([t, zone, i, old]) => {
+  [['E3', 1, 2, 'port de cassis'], ['E4', 1, 2, 'saint michel'], ['E5', 2, 2, 'saint michel'], ['E8', 3, 3, 'eau de cassis']].forEach(([t, zone, i, old]) => {
     const s = at(pub, t, zone, i);
     assert.strictEqual(s.afterOverride, 'final', `${t} zone ${zone}`);
     assert.ok(E.checkAnswer('les terrains de pétanque', s, salt), `${t} zone ${zone} : pétanque refusé`);
     assert.ok(!E.checkAnswer(old, s, salt), `${t} zone ${zone} : l'ancienne destination est encore acceptée`);
   });
-  // les autres équipes gardent leur énigme : E1 en 1A trouve toujours le port, E2 en 3A le Four Banal, E7 en 2B Saint-Michel
+  // les autres équipes gardent leur énigme : E1 en 1A trouve toujours le port, E2 en 3A L'Eau de Cassis, E7 en 2B Saint-Michel
   assert.ok(E.checkAnswer('port de cassis', at(pub, 'E1', 1, 2), salt));
-  assert.ok(E.checkAnswer('four banal', at(pub, 'E2', 3, 3), salt));
+  assert.ok(E.checkAnswer('eau de cassis', at(pub, 'E2', 3, 3), salt));
   assert.ok(E.checkAnswer('saint michel', at(pub, 'E7', 2, 2), salt));
   assert.notDeepStrictEqual(at(game, 'E2', 3, 2).zip, z);
 });
@@ -435,13 +445,13 @@ test('cohérence du parcours : chaque énigme qui révèle un lieu annonce bien 
   const game = loadGame();
   const pub = E.publish(game);
   const salt = game.settings.salt;
-  const name = { 1: 'place baragnon', 2: 'port de cassis', 3: 'saint michel', 4: 'four banal', 5: 'maison de l europe', final: 'terrain de petanque' };
+  const name = { 1: 'place baragnon', 2: 'port de cassis', 3: 'saint michel', 4: "l'eau de cassis", 5: 'maison de l europe', final: 'terrain de petanque' };
   const issues = [];
   Object.keys(game.teams).forEach((t) => {
     const path = E.buildPath(pub, t);
     const circuit = game.teams[t].circuit.map(String);
     circuit.forEach((z, zi) => {
-      if (z === '4') return; // l'enveloppe du Four Banal donne la destination
+      if (z === '4') return; // l'enveloppe remise à L'Eau de Cassis donne la destination
       const next = zi === circuit.length - 1 ? 'final' : circuit[zi + 1];
       const steps = path.filter((s) => s.zoneId === z && s.h);
       const reveal = steps[steps.length - 1]; // dernière énigme à réponse de la zone : celle qui donne le lieu suivant

@@ -65,11 +65,18 @@
     return (step.answers || []).map((a) => hash(normalize(a), salt));
   }
 
-  // step.groups : [[mots synonymes], [mots synonymes]…] : la saisie est bonne si elle contient, pour chaque groupe,
-  // au moins un de ses mots (ex. [['CROSSE', 'BATON'], ['POISSON', 'POISSONS']]). Publié haché (step.gh).
+  // step.groups : [[synonymes], [synonymes]…] : la saisie est bonne si elle contient, pour chaque groupe,
+  // au moins un de ses mots ou expressions (ex. [['CROSSE', 'BATON'], ['POISSON', 'POISSONS']]). Publié haché (step.gh).
+  // step.atLeast : il suffit de ce nombre de groupes trouvés (ex. 2 notes d'un parfum parmi 12).
   function groupHashes(step, salt) {
     if (step.gh) return step.gh;
     return (step.groups || []).map((g) => g.map((w) => hash(normalize(w), salt)));
+  }
+
+  // Nombre de groupes dont la saisie contient au moins un mot ou une expression
+  function groupsFound(input, step, salt) {
+    const typed = new Set(candidates(input, 'contains').map((c) => hash(c, salt)));
+    return groupHashes(step, salt).filter((g) => g.some((h) => typed.has(h))).length;
   }
 
   function checkAnswer(input, step, salt) {
@@ -77,8 +84,7 @@
     if (candidates(input, step.match).some((c) => c && expected.includes(hash(c, salt)))) return true;
     const groups = groupHashes(step, salt);
     if (!groups.length) return false;
-    const typed = new Set(words(input).map((w) => hash(w, salt)));
-    return groups.every((g) => g.some((h) => typed.has(h)));
+    return groupsFound(input, step, salt) >= (step.atLeast || groups.length);
   }
 
   // Code en clair (contenu.js local) ou haché (game.js publié)
@@ -89,5 +95,5 @@
     return !!plain && value === normalize(plain);
   }
 
-  return { STEP_TYPES, words, normalize, hash, candidates, checkAnswer, codeMatches };
+  return { STEP_TYPES, words, normalize, hash, candidates, groupsFound, checkAnswer, codeMatches };
 });

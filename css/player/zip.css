@@ -10,7 +10,17 @@
   border: 1px solid var(--line); font-size: clamp(15px, 5.2vw, 24px); color: var(--ink);
 }
 .zc b { font-weight: 800; }
-.zc svg { width: 62%; height: 62%; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.zc svg, .zip-legend svg { width: 80%; height: 80%; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.zc svg .f, .zip-legend svg .f { fill: color-mix(in srgb, var(--zone) 30%, #fff); }
+.zc svg .s, .zip-legend svg .s { fill: var(--ink); stroke: none; }
+/* légende : les repères dans l'ordre, avec leur nom */
+.zip-legend {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 12px;
+  margin: 0 0 10px; padding: 0; list-style: none; counter-reset: mark; font-size: 13px; font-weight: 700;
+}
+.zip-legend li { display: flex; align-items: center; gap: 4px; counter-increment: mark; }
+.zip-legend li::before { content: counter(mark); color: var(--zone); font-weight: 900; }
+.zip-legend svg { width: 26px; height: 26px; }
 .zc.mark { background: color-mix(in srgb, var(--zone) 10%, #fff); }
 .zc.start { box-shadow: inset 0 0 0 3px var(--zone); }
 .zip-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }

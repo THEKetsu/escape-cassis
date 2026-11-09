@@ -22,10 +22,12 @@
     const tiles = view.tiles.map((t) => `<img alt="" src="https://tile.openstreetmap.org/${t.z}/${t.x}/${t.y}.png"
       style="left:${pct(t.left, W)};top:${pct(t.top, H)};width:calc(${pct(256, W)} + 1px);height:calc(${pct(256, H)} + 1px)">`).join('');
     const accuracy = pos && pos.acc ? `<span class="pmap-acc" style="${at(pos)};width:${pct(2 * pos.acc / view.metersPerPixel(pos.lat), W)};aspect-ratio:1"></span>` : '';
+    const circuit = GAME.teams[state.team].circuit.map(String);
     const pins = zones.map((z) => {
       const name = z.id === 'final' ? (GAME.final.name || 'Final') : GAME.zones[z.id].name;
+      // rang de la zone dans le circuit de l'équipe, comme dans le bandeau
       return `<div class="pmap-pin ${z.status}" style="${at(z.point)}">
-        <b>${z.id === 'final' ? '🏁' : z.status === 'done' ? '✓' : esc(z.id)}</b><small>${esc(name)}</small><i>${LABEL[z.status]}</i></div>`;
+        <b>${z.id === 'final' ? '🏁' : z.status === 'done' ? '✓' : circuit.indexOf(z.id) + 1}</b><small>${esc(name)}</small><i>${LABEL[z.status]}</i></div>`;
     }).join('');
     return `<div class="pmap-frame" style="aspect-ratio:${W} / ${H}">
         <div class="pmap-tiles">${tiles}</div>${accuracy}${pins}

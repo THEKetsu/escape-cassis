@@ -35,6 +35,7 @@
     const list = answers.length
       ? `<b>${esc(answers[0])}</b>${answers.length > 1 ? ` <small>(aussi : ${answers.slice(1).map(esc).join(', ')})</small>` : ''}`
       : '';
+    if (step.atLeast && answers.length) return `au moins <b>${step.atLeast}</b> parmi : ${answers.map(esc).join(', ')}`;
     switch (step.type) {
       case 'info': return `<small>pas de réponse : bouton « ${esc(step.button || 'Continuer')} »</small>`;
       case 'zip': {
@@ -54,7 +55,7 @@
   function bookHtml() {
     const stepRow = (step, key, i) => `
       <li><span class="step-no">${i + 1}</span><div>
-        <div>${TYPE_ICONS[step.type] || ''} <b>${esc(step.title || '')}</b>${i === 0 && key.startsWith('z') ? ' <small>(mène à la zone)</small>' : ''}</div>
+        <div>${TYPE_ICONS[step.type] || ''} <b>${esc((step.title || '').split('{{zone}}').join('N'))}</b>${i === 0 && key.startsWith('z') ? ' <small>(mène à la zone)</small>' : ''}</div>
         <div class="answer-line">${solution(step, key)}</div>
         ${Object.keys(step.after || {}).map((k) => `<div class="answer-line">si la zone suivante est ${k === 'final' ? 'la finale' : 'la zone ' + esc(k)} : ${solution(Object.assign({}, step, step.after[k]), `${key}~after-${k}`)}</div>`).join('')}
         ${(step.hints || []).length ? `<details><summary>${step.hints.length} indice(s)</summary><ol>${step.hints.map((h) => `<li>${h}</li>`).join('')}</ol></details>` : ''}
