@@ -49,6 +49,7 @@
       if (!step.title) warnings.push(`${where} : pas de titre`);
       const groups = step.groups || step.gh || [];
       const hasAnswers = (step.answers && step.answers.length) || (step.h && step.h.length) || groups.length;
+      if (step.oneByOne && !groups.length) errors.push(`${where} : oneByOne demande des groups (une réponse = un groupe)`);
       if (step.atLeast && !(step.atLeast >= 1 && step.atLeast <= groups.length)) errors.push(`${where} : atLeast (${step.atLeast}) doit être entre 1 et le nombre de groupes (${groups.length})`);
       Object.keys(step.after || {}).forEach((k) => {
         if ('answers' in step.after[k] && !(step.after[k].answers && step.after[k].answers.length)) errors.push(`${where} : after.${k}.answers est vide`);

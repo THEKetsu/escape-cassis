@@ -73,10 +73,24 @@
     return (step.groups || []).map((g) => g.map((w) => hash(normalize(w), salt)));
   }
 
-  // Nombre de groupes dont la saisie contient au moins un mot ou une expression
-  function groupsFound(input, step, salt) {
+  // Indices des groupes dont la saisie contient au moins un mot ou une expression
+  function groupsMatched(input, step, salt) {
     const typed = new Set(candidates(input, 'contains').map((c) => hash(c, salt)));
-    return groupHashes(step, salt).filter((g) => g.some((h) => typed.has(h))).length;
+    return groupHashes(step, salt).map((g, i) => (g.some((h) => typed.has(h)) ? i : -1)).filter((i) => i >= 0);
+  }
+
+  function groupsFound(input, step, salt) {
+    return groupsMatched(input, step, salt).length;
+  }
+
+  // step.oneByOne (avec groups) : une réponse à la fois. Classe la saisie d'après les groupes déjà trouvés (indices) :
+  // { status: 'new', groups } (nouveaux groupes trouvés), 'already' (rien de neuf) ou 'wrong' ; done : assez de groupes
+  function groupStep(input, step, salt, found) {
+    const matched = groupsMatched(input, step, salt);
+    const fresh = matched.filter((i) => !(found || []).includes(i));
+    const total = (found || []).length + fresh.length;
+    const status = fresh.length ? 'new' : matched.length ? 'already' : 'wrong';
+    return { status, groups: fresh, done: total >= (step.atLeast || groupHashes(step, salt).length) };
   }
 
   function checkAnswer(input, step, salt) {
@@ -95,5 +109,5 @@
     return !!plain && value === normalize(plain);
   }
 
-  return { STEP_TYPES, words, normalize, hash, candidates, groupsFound, checkAnswer, codeMatches };
+  return { STEP_TYPES, words, normalize, hash, candidates, groupsMatched, groupsFound, groupStep, checkAnswer, codeMatches };
 });

@@ -20,8 +20,27 @@
   function submit(value, el) {
     const step = A.current();
     if (!String(value).trim() || Date.now() < A.cooldownUntil) return;
+    if (step.oneByOne) return submitOne(step, value);
     if (E.checkAnswer(value, step, SALT)) return solve(step, false);
     wrongAnswer(el);
+  }
+
+  // Une réponse à la fois (step.oneByOne) : chaque bonne réponse est cochée en vert et la saisie revient vide,
+  // jusqu'au nombre demandé (atLeast). Les réponses trouvées sont gardées dans state.found[step.key].
+  function submitOne(step, value) {
+    const state = A.state;
+    state.found = state.found || {};
+    const found = state.found[step.key] || [];
+    const r = E.groupStep(value, step, SALT, [].concat(...found.map((f) => f.g)));
+    if (r.status === 'wrong') return wrongAnswer();
+    if (r.status === 'already') return A.feedback('Vous avez déjà trouvé celle-ci : cherchez-en une autre.', 'bad');
+    state.found[step.key] = found.concat({ g: r.groups, text: String(value).trim().slice(0, 40) });
+    if (r.done) return solve(step, false);
+    A.save();
+    A.vibrate(60);
+    A.render();
+    const input = document.getElementById('answer');
+    if (input) input.focus();
   }
 
   // Choix multiple : les options cochées, dans l'ordre des options (pas celui des clics), séparées par " + "

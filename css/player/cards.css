@@ -17,12 +17,14 @@
 
 .text p { margin: 0 0 10px; }
 .big-code {
-  font-family: ui-monospace, "Cascadia Mono", "Courier New", monospace;
-  font-size: 25px; font-weight: 800; letter-spacing: 4px; text-align: center;
-  background: var(--soft); color: var(--ink);
-  padding: 18px 10px; border-radius: 14px; border: 2px dashed #d9cfbd;
+  font-family: var(--display);
+  font-size: 24px; font-weight: 800; letter-spacing: .08em; text-align: center;
+  background: color-mix(in srgb, var(--zone) 7%, #fff); color: var(--zone);
+  padding: 14px 12px; border-radius: 14px;
   word-break: break-word;
 }
+/* Phrase à dire (ex. en boutique) : même texte que le reste, simplement mise en citation */
+.say { font-style: italic; border-left: 3px solid var(--zone); padding: 2px 0 2px 12px; }
 .mirror { transform: scaleX(-1); }
 .demo { font-size: 13px; color: var(--coral); font-weight: 600; }
 

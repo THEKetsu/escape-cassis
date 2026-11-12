@@ -69,3 +69,11 @@
 .feedback.bad { color: var(--coral); }
 .shake { animation: shake .4s; }
 @keyframes shake { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+/* Une réponse à la fois : réponses trouvées cochées en vert, puis la case suivante */
+.found-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.found-list li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--soft); color: var(--muted); font-weight: 600; }
+.found-list li.ok { background: color-mix(in srgb, var(--green) 12%, #fff); color: var(--ink); text-transform: uppercase; animation: rise .3s; }
+.found-list li.cur { box-shadow: inset 0 0 0 2px var(--zone); color: var(--ink); }
+.found-list .tick { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 800; background: #fff; color: var(--muted); }
+.found-list li.ok .tick { background: var(--green); color: #fff; }

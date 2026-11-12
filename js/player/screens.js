@@ -30,7 +30,7 @@
       first && {
         title: 'Votre première destination',
         text: `<p>Dirigez-vous vers votre première destination :</p><p class="lead"><b>${esc(first.where || first.name)}</b></p><p>C'est là que vous attend votre première énigme.</p>`,
-        button: 'Nous y sommes ➜', map: true,
+        button: 'Nous y sommes ➜',
       },
     ].filter(Boolean);
   }
@@ -50,7 +50,6 @@
       <main class="card anim">
         <h1>${esc(screen.title)}</h1>
         <div class="text">${tpl(screen.text)}</div>
-        ${screen.map ? '<button class="btn" data-action="map">🗺️ Voir sur la carte</button>' : ''}
         <button class="btn primary big" data-action="briefing-next">${esc(screen.button)}</button>
       </main>`;
     startTimer();
@@ -224,12 +223,24 @@
         return '<button class="btn primary big" data-action="gps">📡 Vérifier notre position</button>' +
           ((step.answers || step.h) ? '<details class="fallback"><summary>Le GPS ne marche pas ?</summary>' +
             form('text', 'Code de secours') + '</details>' : '');
+      case 'text':
+        return step.oneByOne ? oneByOneHtml(step, form) : form('text', 'Votre réponse');
       case 'tap':
         return `<div class="tap" data-action="tap"><img src="${esc(step.image)}" alt="Touchez la bonne zone"></div>
           <p class="help">👆 Touchez l'image à l'endroit choisi.</p>`;
       default:
         return form('text', 'Votre réponse');
     }
+  }
+
+  // Une réponse à la fois : les réponses trouvées (coche verte), puis la saisie de la suivante
+  function oneByOneHtml(step, form) {
+    const found = (A.state.found && A.state.found[step.key]) || [];
+    const need = step.atLeast || (step.groups || step.gh || []).length;
+    const slots = Array.from({ length: need }, (_, i) => (found[i]
+      ? `<li class="ok"><span class="tick">✓</span>${esc(found[i].text)}</li>`
+      : `<li${i === found.length ? ' class="cur"' : ''}><span class="tick">${i + 1}</span>${i === found.length ? 'À trouver' : ''}</li>`)).join('');
+    return `<ol class="found-list">${slots}</ol>${form('text', `Réponse ${Math.min(found.length + 1, need)} sur ${need}`)}`;
   }
 
   function hintsHtml(step) {

@@ -322,6 +322,16 @@ test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées p
     ko(four.A[1], 'citron'); ko(four.A[1], 'fleur d\'oranger, fleurs d\'oranger'); ko(four.A[1], 'vanille, jasmin'); ko(four.A[1], 'fleur');
     ok(four.B[1], 'jasmin vanille'); ok(four.B[1], 'praliné et musc blanc'); ko(four.B[1], 'jasmin'); ko(four.B[1], 'citron, coriandre');
   });
+  // une note à la fois (oneByOne) : nouvelle note, note déjà trouvée, mauvaise note, et fin à la 2e, en clair comme haché
+  [game.zones[4].A[1], pub.zones[4].A[1]].forEach((step) => {
+    assert.ok(step.oneByOne);
+    const first = E.groupStep('citron', step, salt, []);
+    assert.deepStrictEqual([first.status, first.done], ['new', false]);
+    assert.strictEqual(E.groupStep('citrons', step, salt, first.groups).status, 'already');
+    assert.strictEqual(E.groupStep('vanille', step, salt, first.groups).status, 'wrong');
+    const second = E.groupStep('Coriandre !', step, salt, first.groups);
+    assert.deepStrictEqual([second.status, second.done], ['new', true]);
+  });
   assert.strictEqual(pub.zones[4].A[1].groups, undefined); // notes publiées hachées
   assert.ok(E.answerBook(game).answers['z4-A-1'].includes('CORIANDRE')); // le dashboard les montre en clair
   game.zones[4].A[1].atLeast = 20;

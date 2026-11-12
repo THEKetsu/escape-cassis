@@ -14,11 +14,11 @@ window.GAME = {
     "teamPicker": false,
     "showLeaderboard": true,
     "liveLocation": true,
-    "intro": "<p>Cassis cache ses secrets dans ses ruelles. Parcourez les zones dans l'ordre que le jeu vous indique, résolvez les énigmes et rejoignez le point final le plus vite possible.</p>",
+    "intro": "<p>Cassis cache ses secrets dans ses ruelles. Chaque énigme résolue vous permettra de débloquer la suivante : rejoignez le point final le plus vite possible.</p>",
     "rules": "<ul><li>Restez ensemble et respectez la circulation : traversez aux passages piétons.</li><li>Ne touchez pas, ne déplacez rien : tout se résout en observant.</li><li>Un souci ou un blocage ? Écrivez à l'organisation avec le bouton 💬, ou appelez le <a href=\"tel:+33751617623\"><b>07 51 61 76 23</b></a>.</li></ul>",
     "credits": "Créé par Quentin BENDER & Solène PACE",
     "finalMessage": "<p>Rejoignez le groupe pour l'énigme finale commune !</p>",
-    "briefing": "<p>Votre équipe va parcourir <b>5 zones</b> de Cassis, une énigme après l'autre.</p><p><b>Restez groupés</b> tout au long du parcours : ne vous dispersez pas et ne vous mélangez pas avec les autres équipes.</p><p>Chaque zone vous mènera à la suivante. Bonne mission !</p>",
+    "briefing": "<p>Votre équipe va parcourir Cassis, une énigme après l'autre.</p><p><b>Chaque énigme résolue vous permettra de débloquer la suivante</b>, jusqu'au point final.</p><p><b>Restez groupés</b> tout au long du parcours : ne vous dispersez pas et ne vous mélangez pas avec les autres équipes.</p><p>Bonne mission !</p>",
     "masterHash": "c6106b91c2340efa"
   },
   "teams": {
@@ -1043,29 +1043,29 @@ window.GAME = {
       "name": "L'Eau de Cassis",
       "lat": 43.21505,
       "lng": 5.53638,
-      "where": "la boutique L'Eau de Cassis, rue Saint-Clair",
+      "where": "La boutique & musée : L'Eau de Cassis, rue Saint-Clair",
       "lastSuccess": {
         "title": "✅ MESSAGE RÉCUPÉRÉ",
-        "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>🏁</span><div><b>Parcours terminé</b><p>Vous avez traversé les 5 zones. Rendez-vous aux <b>terrains de pétanque</b>.</p></div></div><div class=\"env-item\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p></div></div></div><p class=\"env-warn\">⚠️ GARDEZ VOTRE CARTE MYSTÈRE PRÉCIEUSEMENT<small>Ne la perdez pas : conservez-la avec votre équipe jusqu'à la fin.</small></p>",
+        "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>🏁</span><div><b>Parcours terminé</b><p>Vous avez traversé les 5 zones. Rendez-vous aux <b>terrains de pétanque</b>.</p></div></div><div class=\"env-item keep\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p><p class=\"keep-note\">⚠️ C'est cette <b>carte mystère</b> qu'il faut garder précieusement : ne la perdez pas, conservez-la avec votre équipe jusqu'à la fin.</p></div></div></div>",
         "button": "Rejoindre le point final"
       },
       "A": [
         {
           "type": "info",
           "title": "Mission {{zone}} — Escale à Séville",
-          "text": "<p>Votre prochaine étape ne se résoudra ni avec des chiffres, ni avec des lettres.</p><p>Cette fois, vous allez devoir faire confiance à <b>votre nez</b>.</p><p>Entrez dans la boutique <b>L'Eau de Cassis</b> et dites :</p><p class=\"big-code\">« Bonjour, nous sommes l'équipe {{numero}}. Nous venons pour l'épreuve Week-end à Séville. »</p><p>La personne présente vous fera sentir un parfum.</p><p>Votre mission : <b>identifiez au moins 2 notes olfactives.</b></p><p>Échangez entre vous avant de donner votre réponse.</p>",
+          "text": "<p>Votre prochaine étape ne se résoudra ni avec des chiffres, ni avec des lettres.</p><p>Cette fois, vous allez devoir faire confiance à <b>votre odorat</b>.</p><p>Entrez dans la boutique <b>L'Eau de Cassis</b> et dites :</p><p class=\"say\">« Bonjour, nous sommes l'équipe {{numero}}. Nous venons pour l'épreuve Week-end à Séville. »</p><p>La personne présente vous fera sentir un parfum.</p><p>Votre mission : <b>identifiez au moins 2 notes olfactives.</b></p><p>Échangez entre vous avant de donner votre réponse.</p>",
           "button": "Nous avons senti le parfum"
         },
         {
           "type": "text",
           "title": "Vos réponses",
-          "text": "<p><b>Quelles notes avez-vous reconnues ?</b></p><p>Écrivez-les à la suite, séparées par des virgules (au moins deux).</p>",
+          "text": "<p><b>Quelles notes avez-vous reconnues ?</b></p><p>Entrez-les <b>une par une</b> : il vous en faut deux.</p>",
+          "oneByOne": true,
           "atLeast": 2,
-          "wrong": "❌ PAS ENCORE<br>Vous avez besoin d'identifier au moins deux notes du parfum.<br>Sentez-le de nouveau et échangez avec votre équipe.<br>Pensez aux grandes familles :<br><b>agrumes — fleurs — épices — notes boisées — notes ambrées</b>",
+          "wrong": "❌ PAS ENCORE<br>Ce n'est pas une note de ce parfum.<br>Sentez-le de nouveau et échangez avec votre équipe.<br>Pensez aux grandes familles :<br><b>agrumes — fleurs — épices — notes boisées — notes ambrées</b>",
           "hints": [
             "Ce parfum est inspiré de l'Andalousie et des orangers en fleur.",
-            "Certaines notes sont très fraîches et citronnées.",
-            "Parmi les réponses possibles :<br><b>citron — fleur d'oranger — coriandre</b>"
+            "Certaines notes sont très fraîches et citronnées."
           ],
           "gh": [
             [
@@ -1124,7 +1124,7 @@ window.GAME = {
           "button": "J'ai récupéré mon enveloppe",
           "success": {
             "title": "✅ MESSAGE RÉCUPÉRÉ",
-            "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>📍</span><div><b>Votre prochaine destination</b><p>Suivez cette indication pour poursuivre votre parcours.</p></div></div><div class=\"env-item\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p></div></div></div><p class=\"env-warn\">⚠️ GARDEZ-LA PRÉCIEUSEMENT<small>Ne la perdez pas et conservez-la avec votre équipe jusqu'à la fin.</small></p>",
+            "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>📍</span><div><b>Votre prochaine destination</b><p>Suivez cette indication pour poursuivre votre parcours.</p></div></div><div class=\"env-item keep\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p><p class=\"keep-note\">⚠️ C'est cette <b>carte mystère</b> qu'il faut garder précieusement : ne la perdez pas, conservez-la avec votre équipe jusqu'à la fin.</p></div></div></div>",
             "button": "Continuer"
           }
         }
@@ -1133,19 +1133,19 @@ window.GAME = {
         {
           "type": "info",
           "title": "Mission {{zone}} — Escale à Rome",
-          "text": "<p>Une seconde fragrance protège votre message.</p><p>Entrez dans la boutique <b>L'Eau de Cassis</b> et dites :</p><p class=\"big-code\">« Bonjour, nous sommes l'équipe {{numero}}. Nous venons pour l'épreuve Week-end à Rome. »</p><p>La personne présente vous fera sentir le parfum.</p><p>Votre mission : <b>identifiez au moins 2 notes olfactives.</b></p><p>Échangez entre vous avant de donner votre réponse.</p>",
+          "text": "<p>Une seconde fragrance protège votre message.</p><p>Entrez dans la boutique <b>L'Eau de Cassis</b> et dites :</p><p class=\"say\">« Bonjour, nous sommes l'équipe {{numero}}. Nous venons pour l'épreuve Week-end à Rome. »</p><p>La personne présente vous fera sentir le parfum.</p><p>Votre mission : <b>identifiez au moins 2 notes olfactives.</b></p><p>Échangez entre vous avant de donner votre réponse.</p>",
           "button": "Nous avons senti le parfum"
         },
         {
           "type": "text",
           "title": "Vos réponses",
-          "text": "<p><b>Quelles notes avez-vous reconnues ?</b></p><p>Écrivez-les à la suite, séparées par des virgules (au moins deux).</p>",
+          "text": "<p><b>Quelles notes avez-vous reconnues ?</b></p><p>Entrez-les <b>une par une</b> : il vous en faut deux.</p>",
+          "oneByOne": true,
           "atLeast": 2,
-          "wrong": "❌ PAS ENCORE<br>Vous devez reconnaître au moins deux notes du parfum.<br>Sentez-le une nouvelle fois.<br>Demandez-vous si le parfum vous évoque plutôt :<br><b>des fleurs — quelque chose de gourmand — quelque chose de poudré</b>",
+          "wrong": "❌ PAS ENCORE<br>Ce n'est pas une note de ce parfum.<br>Sentez-le une nouvelle fois.<br>Demandez-vous si le parfum vous évoque plutôt :<br><b>des fleurs — quelque chose de gourmand — quelque chose de poudré</b>",
           "hints": [
             "Cette fragrance est très florale.",
-            "Elle comporte également des notes gourmandes.",
-            "Parmi les réponses possibles :<br><b>jasmin — vanille — praline</b>"
+            "Elle comporte également des notes gourmandes."
           ],
           "gh": [
             [
@@ -1195,7 +1195,7 @@ window.GAME = {
           "button": "J'ai récupéré mon enveloppe",
           "success": {
             "title": "✅ MESSAGE RÉCUPÉRÉ",
-            "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>📍</span><div><b>Votre prochaine destination</b><p>Suivez cette indication pour poursuivre votre parcours.</p></div></div><div class=\"env-item\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p></div></div></div><p class=\"env-warn\">⚠️ GARDEZ-LA PRÉCIEUSEMENT<small>Ne la perdez pas et conservez-la avec votre équipe jusqu'à la fin.</small></p>",
+            "text": "<p>Ouvrez votre enveloppe.</p><div class=\"env-list\"><div class=\"env-item\"><span>📍</span><div><b>Votre prochaine destination</b><p>Suivez cette indication pour poursuivre votre parcours.</p></div></div><div class=\"env-item keep\"><span>🃏</span><div><b>Une carte mystère</b><p>Elle pourrait vous servir à tout moment.</p><p class=\"keep-note\">⚠️ C'est cette <b>carte mystère</b> qu'il faut garder précieusement : ne la perdez pas, conservez-la avec votre équipe jusqu'à la fin.</p></div></div></div>",
             "button": "Continuer"
           }
         }
@@ -1564,10 +1564,10 @@ window.GAME = {
       }
     ]
   },
-  "version": "2026.11.09-0924",
+  "version": "2026.11.12-1602",
   "answerBook": {
-    "salt": "Qu2Ry5ohhq/C3UbqpbptOw==",
-    "iv": "7QgO+eNzql2O9up5",
-    "data": "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"
+    "salt": "euqs8tbAUryydqiQysTOyg==",
+    "iv": "798chu51A+sR1DZW",
+    "data": "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"
   }
 };
