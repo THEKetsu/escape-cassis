@@ -69,7 +69,8 @@
     }).join('');
     const final = GAME.final && GAME.final.steps.length
       ? `<section class="book-zone"><h3>🏁 ${esc(GAME.final.name || 'Final')}</h3><ol class="book-steps">
-          ${GAME.final.steps.map((step, i) => stepRow(step, `final-${i}`, i)).join('')}</ol></section>` : '';
+          ${GAME.final.steps.map((step, i) => stepRow(step, `final-${i}`, i)).join('')}
+          ${GAME.final.finale ? stepRow(GAME.final.finale, 'finale', 1) : ''}</ol></section>` : '';
     return `<p>🔑 Code organisation (fait passer une étape, +${E.formatDuration(S.skipPenalty || 0)}) : <b>${esc(A.book.masterCode || '–')}</b></p>${zones}${final}`;
   }
 

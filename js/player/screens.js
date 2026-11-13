@@ -1,4 +1,4 @@
-/* Écrans du jeu : accueil, étape, réussite, fin de partie. */
+/* Écrans du jeu : accueil, lancement, étape, réussite. Récit, règles et transition de zone : mission.js ; fin de partie : finale.js. */
 (function () {
   const A = window.EscapePlayer;
   if (!A) return;
@@ -13,24 +13,32 @@
   function render() {
     clearInterval(A.tick);
     if (A.stopLobby) A.stopLobby();
+    if (A.stopFinale) A.stopFinale();
     window.scrollTo(0, 0);
     if (!A.state) return renderNoTeam();
-    if (!A.state.startedAt) return A.state.joined ? A.renderLobby() : renderWelcome();
-    if (A.state.phase === 'done') return renderFinished();
-    if (A.state.phase === 'success') return renderSuccess(A.current());
+    if (!A.state.startedAt) {
+      if (A.state.joined) return A.renderLobby();
+      return A.state.prelude ? A.renderPrelude() : renderWelcome();
+    }
+    if (A.state.phase === 'done') return A.renderEnd();
+    if (A.state.phase === 'success') return A.state.transition ? A.renderZoneDone(A.current()) : renderSuccess(A.current());
     if (briefingLeft()) return renderBriefing();
     renderStep(A.current());
   }
 
-  // Avant la première énigme : les consignes (settings.briefing), puis la première destination de l'équipe
+  // Avant la première énigme : les consignes éventuelles (settings.briefing), puis le lancement propre à l'équipe
+  // (« ÉQUIPE 3 », sa première zone, le nombre de zones à valider)
   function briefingScreens() {
-    const first = GAME.zones[GAME.teams[A.state.team].circuit[0]];
+    const circuit = GAME.teams[A.state.team].circuit;
+    const first = GAME.zones[circuit[0]];
     return [
       S.briefing && { title: 'Votre mission', text: S.briefing, button: 'C\'est compris ➜' },
       first && {
-        title: 'Votre première destination',
-        text: `<p>Dirigez-vous vers votre première destination :</p><p class="lead"><b>${esc(first.where || first.name)}</b></p><p>C'est là que vous attend votre première énigme.</p>`,
-        button: 'Nous y sommes ➜',
+        title: 'ÉQUIPE {{numero}}',
+        text: `<p class="lead">Votre parcours vient d'être activé.</p>
+          <p>Vous devez maintenant rejoindre votre première zone :</p>${A.destinationHtml(first)}
+          <p><b>${circuit.length} zones à valider.</b></p><p class="mission-go">Votre temps commence maintenant.</p>`,
+        button: 'LANCER LA MISSION',
       },
     ].filter(Boolean);
   }
@@ -47,8 +55,8 @@
     A.setTheme(A.zoneColor(A.current()));
     $app.innerHTML = `
       ${header()}
-      <main class="card anim">
-        <h1>${esc(screen.title)}</h1>
+      <main class="card launch anim">
+        <h1 class="display">${tpl(esc(screen.title))}</h1>
         <div class="text">${tpl(screen.text)}</div>
         <button class="btn primary big" data-action="briefing-next">${esc(screen.button)}</button>
       </main>`;
@@ -126,6 +134,7 @@
       <main class="card welcome anim">
         <div class="hero">${HERO}</div>
         <h1 class="display">${esc(GAME.title)}</h1>
+        ${S.tagline ? `<p class="tagline">${esc(S.tagline)}</p>` : ''}
         <p class="lead">📷 Scannez le <b>QR code de votre équipe</b> pour commencer.</p>
         ${picker}
         <a class="admin-link" href="admin.html">🧭 Espace organisateur</a>
@@ -153,8 +162,9 @@
         <div class="hero">${HERO}<button class="textsize-btn" data-action="textsize" aria-label="Taille du texte">Aa</button></div>
         <div class="team-badge"><span class="avatar big" id="my-avatar">${A.avatar(state.team)}</span>${esc(A.teamName(state.team))}</div>
         <h1 class="display">${esc(GAME.title)}</h1>
+        ${S.tagline ? `<p class="tagline">${esc(S.tagline)}</p>` : ''}
         ${resume}
-        <div class="text">${S.intro || ''}</div>
+        ${S.intro ? `<div class="text">${S.intro}</div>` : ''}
         <details class="how">
           <summary>Comment ça marche ?</summary>
           <div class="tiles">
@@ -164,7 +174,6 @@
             <div><span>🏆</span><b>Classement</b><small>temps + pénalités</small></div>
           </div>
         </details>
-        ${S.rules ? `<div class="rules"><b>À savoir</b>${S.rules}</div>` : ''}
         <label class="field">Nom de votre équipe
           <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express" value="${esc(state.teamName || '')}">
         </label>
@@ -172,7 +181,7 @@
           <div class="emoji-pick">${A.EMOJIS.map((e) => `<button type="button" class="emoji ${e === A.avatar(state.team) ? 'on' : ''}" data-action="emoji" data-emoji="${e}" aria-label="Choisir ${e}">${e}</button>`).join('')}</div>
         </div>
         ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
-        ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="start">Rejoindre la partie 🚀</button>'}
+        ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="mission">COMMENCER LA MISSION</button>'}
         <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p>
       </main>`;
     if (Sync.enabled && !A.remote) {
@@ -261,7 +270,7 @@
     $app.innerHTML = `
       ${header()}
       <main class="card anim">
-        <div class="kicker"><span>📍 ${esc(step.zoneName)}</span><span>Énigme ${step.zoneStep + 1}/${step.zoneSteps}</span></div>
+        <div class="kicker">${step.zoneId === 'final' ? '<span>🏁 Point final</span>' : `<span>📍 ${esc(step.zoneName)}</span><span>Énigme ${step.zoneStep + 1}/${step.zoneSteps}</span>`}</div>
         <h1>${esc(step.title || '')}</h1>
         <div class="text">${tpl(step.text)}</div>
         ${A.imagesHtml(step.images)}
@@ -290,20 +299,13 @@
     // Dernière zone du circuit de l'équipe : écran propre à la zone (« rendez-vous à la finale »), au lieu d'annoncer un lieu déjà visité
     const lastZone = zoneDone && step.zoneIndex === circuit.length - 1;
     const s = lastZone && GAME.zones[step.zoneId].lastSuccess ? GAME.zones[step.zoneId].lastSuccess : (step.success || {});
-    // routing : après cette zone, l'application annonce la vraie destination de l'équipe (sa prochaine zone)
-    const nextZone = s.routing && zoneDone && !lastZone ? GAME.zones[circuit[step.zoneIndex + 1]] : null;
-    const routing = nextZone ? `<p>Prochaine destination :<br><b>${esc(nextZone.where || nextZone.name)}</b></p>` : '';
-    const left = GAME.teams[state.team].circuit.length - step.zoneIndex - 1;
-    const subtitle = zoneDone
-      ? (left ? `${esc(step.zoneName)} ✓ · encore ${left} zone${left > 1 ? 's' : ''}` : 'Toutes les zones sont faites, cap sur le final !')
-      : '';
+    // la destination suivante n'est pas annoncée ici : l'écran « ZONE VALIDÉE » qui suit s'en charge (mission.js)
     $app.innerHTML = `
       ${header()}
       <main class="card success anim">
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
-        <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : (zoneDone ? 'Zone terminée !' : 'Bien joué !')}</h1>
-        ${subtitle ? `<p class="lead">${subtitle}</p>` : ''}
-        <div class="text">${tpl(s.text)}${routing}</div>
+        <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : 'ÉTAPE VALIDÉE'}</h1>
+        <div class="text">${tpl(s.text)}</div>
         ${step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : ''}
         ${s.reveal ? `<p>Votre prochaine destination :</p><p class="big-code">${esc(s.reveal)}</p>` : ''}
         ${A.imagesHtml(s.images)}
@@ -313,56 +315,6 @@
     if (zoneDone) A.confetti();
   }
 
-  function badgesHtml(earned) {
-    const ids = earned.map((b) => b.id);
-    return '<div class="badges">' + E.BADGES.map((b) => `
-      <div class="badge ${ids.includes(b.id) ? 'on' : ''}" title="${esc(b.desc)}">
-        <span>${b.icon}</span><b>${esc(b.name)}</b><small>${esc(b.desc)}</small>
-      </div>`).join('') + '</div>';
-  }
-
-  function renderFinished() {
-    const state = A.state;
-    A.setTheme(FINAL_COLOR);
-    const elapsed = E.elapsedSeconds(state, Date.now());
-    const zones = [];
-    state.log.forEach((l) => {
-      let z = zones.find((x) => x.zone === l.zone);
-      if (!z) zones.push(z = { zone: l.zone, name: l.zoneName, sec: 0, hints: 0, skips: 0 });
-      z.sec += l.sec;
-      z.hints += l.hints;
-      if (l.skipped) z.skips++;
-    });
-    $app.innerHTML = `
-      <main class="card finished anim">
-        <div class="trophy">🏆</div>
-        <h1 class="display">Bravo ${esc(A.teamName(state.team, state.teamName))} !</h1>
-        <p class="lead" id="rank">${leaderboard ? 'Calcul du classement…' : ''}</p>
-        <div class="score">
-          <div><small>Temps de jeu</small><b>${E.formatDuration(elapsed)}</b></div>
-          <div><small>Pénalités</small><b>+${E.formatDuration(state.penalty)}</b></div>
-          <div class="total"><small>Temps final</small><b>${E.formatDuration(elapsed + state.penalty)}</b></div>
-        </div>
-        <h2>Vos badges</h2>
-        ${badgesHtml(E.earnedBadges(state, A.path))}
-        <h2>Votre parcours</h2>
-        <table class="recap">
-          <tr><th>Zone</th><th>Temps</th><th>Indices</th></tr>
-          ${zones.map((z) => `<tr><td>${esc(z.name)}${z.skips ? ' 🔑' : ''}</td><td>${E.formatDuration(z.sec)}</td><td>${z.hints}</td></tr>`).join('')}
-        </table>
-        <div class="text">${S.finalMessage || ''}</div>
-        ${leaderboard ? '<button class="btn" data-action="board">🏆 Voir le classement</button>' : ''}
-        ${Sync.enabled ? `<button class="btn chat-wide" data-action="chat">${A.chatButtonContent()} Écrire à l'organisation</button>` : ''}
-      </main>`;
-    if (leaderboard) {
-      A.loadRanking().then((ranked) => {
-        const i = ranked.findIndex((r) => r.team === A.state.team);
-        const el = document.getElementById('rank');
-        if (el && i >= 0) el.innerHTML = `Classement provisoire : <b>${i + 1}${i ? 'e' : 're'}</b> sur ${ranked.length}`;
-      }).catch(() => {});
-    }
-  }
-
   A.tpl = tpl;
-  Object.assign(A, { render, header, hintsHtml, briefingLeft });
+  Object.assign(A, { render, header, hintsHtml, briefingLeft, startTimer });
 })();

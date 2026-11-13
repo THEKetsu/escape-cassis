@@ -32,6 +32,8 @@
     if (A.leaked) list.push(['err', '🚨 contenu.js est en ligne : les réponses sont lisibles par tous. Supprimez-le du dépôt GitHub.']);
     if (!A.fetchError && (A.sessionTable === 'absent' || (A.session && A.session.startedAt === undefined))) {
       list.push(['err', '🚨 Départ impossible : relancez <code>supabase.sql</code> (colonne <code>started_at</code>). Les équipes attendent, mais vous ne pouvez pas encore donner le départ.']);
+    } else if (!A.fetchError && A.session && A.session.startedAt !== undefined && A.finale === undefined) {
+      list.push(['err', '🚨 Mission finale impossible à lancer : relancez <code>supabase.sql</code> (colonne <code>finale_at</code>).']);
     }
     return list;
   }

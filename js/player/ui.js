@@ -58,6 +58,11 @@
     if (kind === 'bad') restartAnimation(el, 'shake');
   }
 
+  // Mauvaise réponse : toujours « ❌ ACCÈS REFUSÉ », puis l'aide propre à l'énigme (step.wrong) ou le message commun
+  function refusedHtml(wrong) {
+    return '<b>❌ ACCÈS REFUSÉ</b><br>' + (wrong || 'Votre réponse ne permet pas encore de poursuivre.<br>Observez de nouveau et réessayez.');
+  }
+
   function restartAnimation(el, cls) {
     el.classList.remove(cls);
     void el.offsetWidth;
@@ -154,7 +159,7 @@
   }
 
   Object.assign(A, {
-    teamName, avatar, current, minutes, zoneColor, setTheme, vibrate, imagesHtml, feedback,
+    teamName, avatar, current, minutes, zoneColor, setTheme, vibrate, imagesHtml, feedback, refusedHtml,
     restartAnimation, preloadImages, sheet, ask, toast, confetti,
   });
 })();

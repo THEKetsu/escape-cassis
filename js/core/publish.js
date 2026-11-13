@@ -55,6 +55,7 @@
       });
     });
     ((game.final && game.final.steps) || []).forEach((step, i) => { if (step.answers) answers[`final-${i}`] = step.answers; });
+    if (game.final && game.final.finale && game.final.finale.answers) answers.finale = game.final.finale.answers;
     return { answers, masterCode: (game.settings && game.settings.masterCode) || '' };
   }
 

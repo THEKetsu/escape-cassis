@@ -86,7 +86,9 @@
     const s = A.session;
     if (s === undefined) return '';
     if (!s || s.startedAt === undefined) return ' · 🔴 départ impossible : relancez supabase.sql';
-    if (s.startedAt) return ` · 🟢 partie lancée à ${new Date(s.startedAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+    const hour = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    if (A.finale) return ` · 🎬 mission finale lancée à ${hour(A.finale)}`;
+    if (s.startedAt) return ` · 🟢 partie lancée à ${hour(s.startedAt)}`;
     const ready = teamIds.filter((t) => A.rows[t] && A.rows[t].state && A.rows[t].state.joined).length;
     return ` · 🟡 salle d'attente : ${ready}/${teamIds.length} équipes prêtes`;
   }
@@ -104,6 +106,7 @@
         <div class="meta">
           ${A.unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${A.unreadTotal()} message${A.unreadTotal() > 1 ? 's' : ''}</button>` : ''}
           ${A.session && A.session.startedAt === null ? '<button data-action="start-game" class="go">▶️ Démarrer la partie</button>' : ''}
+          ${A.session && A.session.startedAt && A.finale === null ? '<button data-action="launch-finale" class="go">🎬 Lancer la mission finale</button>' : ''}
           <button data-action="broadcast" title="Écrire à toutes les équipes">📣 Message à tous</button>
           <button data-action="export" title="Télécharger le bilan de la partie (CSV)">📊 Export</button>
           <button data-action="book" class="dark">🔑 Réponses</button>

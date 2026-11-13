@@ -87,11 +87,15 @@ window.Sync = (function () {
   async function newSession() {
     const epoch = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     const fields = { epoch, updated_at: new Date().toISOString() };
-    try {
-      await patchSession(Object.assign({ started_at: null }, fields));
-    } catch (e) {
-      if (!e.message.includes(' 400')) throw e;
-      await patchSession(fields); // sans colonne started_at
+    // du plus complet au plus ancien schéma : avec finale_at (mission finale), avec started_at (salle d'attente), sans
+    const tries = [{ started_at: null, finale_at: null }, { started_at: null }, {}];
+    for (let i = 0; i < tries.length; i++) {
+      try {
+        await patchSession(Object.assign({}, tries[i], fields));
+        return epoch;
+      } catch (e) {
+        if (!e.message.includes(' 400') || i === tries.length - 1) throw e;
+      }
     }
     return epoch;
   }
@@ -102,6 +106,28 @@ window.Sync = (function () {
       return (await patchSession({ started_at: new Date().toISOString() })).started_at;
     } catch (e) {
       if (e.message.includes(' 400')) throw new Error('colonne started_at absente : relancez supabase.sql');
+      throw e;
+    }
+  }
+
+  // Heure du lancement de la mission finale : null = pas encore lancée ; undefined = colonne finale_at absente (supabase.sql pas relancé)
+  async function loadFinale() {
+    try {
+      const res = await request(rest + 'game_session?id=eq.1&select=finale_at', { headers: headers() });
+      const rows = await res.json();
+      return rows[0] ? rows[0].finale_at : undefined;
+    } catch (e) {
+      if (e.message.includes(' 400') || e.message.includes(' 404')) return undefined;
+      throw e;
+    }
+  }
+
+  // « Lancer la mission finale » : débloque l'écran de la mission finale sur tous les téléphones
+  async function launchFinale() {
+    try {
+      return (await patchSession({ finale_at: new Date().toISOString() })).finale_at;
+    } catch (e) {
+      if (e.message.includes(' 400')) throw new Error('colonne finale_at absente : relancez supabase.sql');
       throw e;
     }
   }
@@ -154,5 +180,5 @@ window.Sync = (function () {
     return res.json();
   }
 
-  return { enabled, saveState, loadTeam, loadAll, loadEpoch, loadSession, startGame, newSession, resetAll, deleteAll, sendMessage, sendMessages, loadMessages };
+  return { enabled, saveState, loadTeam, loadAll, loadEpoch, loadSession, startGame, loadFinale, launchFinale, newSession, resetAll, deleteAll, sendMessage, sendMessages, loadMessages };
 })();

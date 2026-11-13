@@ -7,6 +7,7 @@
   async function refresh() {
     try {
       try { A.session = await Sync.loadSession(); } catch (e) { /* lu au prochain tour */ }
+      try { A.finale = await Sync.loadFinale(); } catch (e) { /* lu au prochain tour */ }
       const list = await Sync.loadAll();
       A.rows = {};
       list.forEach((r) => { A.rows[r.team] = { state: r.data && r.data.state, updatedAt: Date.parse(r.updated_at) }; });

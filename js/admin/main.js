@@ -78,6 +78,20 @@
         } catch (err) { alert(err.message); }
         return A.render();
       }
+      if (action && action.dataset.action === 'launch-finale') {
+        // les équipes arrivées (code d'arrivée saisi) attendent cet ordre ; les autres verront la mission finale en arrivant
+        const arrived = Object.values(A.rows).filter((r) => r.state && r.state.finishedAt).length;
+        const started = Object.values(A.rows).filter((r) => r.state && r.state.startedAt).length;
+        const message = arrived < started
+          ? `${arrived} équipe${arrived > 1 ? 's' : ''} sur ${started} ${arrived > 1 ? 'sont arrivées' : 'est arrivée'} au point final.
+Lancer la mission finale quand même ?`
+          : `Les ${arrived} équipes sont arrivées. Lancer la mission finale sur tous les téléphones ?`;
+        if (!confirm(message)) return;
+        try {
+          A.finale = await Sync.launchFinale();
+        } catch (err) { alert(err.message); }
+        return A.render();
+      }
       if (action && action.dataset.action === 'qr') return A.showQr();
       if (action && action.dataset.action === 'book') return A.showBook();
       if (action && action.dataset.action === 'zoom-in') return A.zoomMap(1);

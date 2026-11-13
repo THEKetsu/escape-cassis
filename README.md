@@ -110,7 +110,9 @@ Le dashboard publié s'ouvre sur `https://VOTRE-PSEUDO.github.io/escape-cassis/a
 - [ ] La veille : réveiller le projet Supabase, effacer les données de test (bouton en bas du dashboard).
 - [ ] Faire le parcours complet avec un téléphone (au moins une équipe A et une équipe B).
 - [ ] Imprimer les QR codes des équipes (+ 1 jeu de secours) et cacher les QR checkpoints.
-- [ ] Au briefing : un capitaine par équipe scanne son QR code, saisit un nom d'équipe et attend le top départ pour « Démarrer ».
+- [ ] Au briefing : un capitaine par équipe scanne son QR code, saisit un nom d'équipe, lit le récit et les règles, puis attend le départ donné depuis le dashboard (« Démarrer la partie »).
+- [ ] Relancer `supabase.sql` une fois (colonne `finale_at`) : sans elle, le bouton « Lancer la mission finale » du dashboard ne marche pas.
+- [ ] Au point final : donner le code d'arrivée à chaque équipe, puis, quand toutes sont là, « Lancer la mission finale » sur le dashboard.
 - [ ] Batterie : demander aux capitaines de partir chargés (2 h d'écran allumé, GPS…).
 - [ ] Garder le dashboard ouvert sur votre téléphone, avec le code organisation sous la main.
 

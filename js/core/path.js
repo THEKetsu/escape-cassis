@@ -68,6 +68,8 @@
       });
     });
     ((game.final && game.final.steps) || []).forEach((step, i) => out.push({ step, where: `Final étape ${i + 1}` }));
+    // énigme de la mission finale, commune à toutes les équipes (hors parcours : jouée après le chrono)
+    if (game.final && game.final.finale) out.push({ step: game.final.finale, where: 'Mission finale' });
     return out;
   }
 

@@ -11,7 +11,7 @@
     A.save();
     A.cooldownUntil = Date.now() + 2000;
     A.vibrate([60, 60, 60]);
-    A.feedback(A.current().wrong || '❌ Ce n\'est pas la bonne réponse.', 'bad');
+    A.feedback(A.refusedHtml(A.current().wrong), 'bad');
     const input = document.getElementById('answer');
     if (input) A.restartAnimation(input, 'error');
     if (el) el.classList.add('wrong');
@@ -104,7 +104,8 @@
     });
     state.wrongOnStep = 0;
     if (state.stepIndex === A.path.length - 1) state.finishedAt = now;
-    if (step.success || step.zoneStep === step.zoneSteps - 1) state.phase = 'success';
+    // la dernière étape du point final (code d'arrivée) mène directement à l'attente de la mission finale (finale.js)
+    if (step.success || (step.zoneStep === step.zoneSteps - 1 && step.zoneId !== 'final')) state.phase = 'success';
     else advance();
     A.save();
     A.vibrate(80);
@@ -114,12 +115,26 @@
     });
   }
 
+  // « Continuer » après la dernière énigme d'une zone : d'abord l'écran « ZONE VALIDÉE » et la nouvelle destination
+  // (sauf après la dernière zone du circuit : l'étape suivante est « PARCOURS TERMINÉ »)
+  function next() {
+    const state = A.state;
+    const step = A.current();
+    const circuit = GAME.teams[state.team].circuit;
+    const zoneDone = step.zoneId !== 'final' && step.zoneStep === step.zoneSteps - 1;
+    if (zoneDone && step.zoneIndex < circuit.length - 1 && !state.transition) state.transition = true;
+    else advance();
+    A.save();
+    A.render();
+  }
+
   function advance() {
     const state = A.state;
     if (state.stepIndex >= A.path.length - 1) {
       state.phase = 'done';
       return;
     }
+    delete state.transition;
     state.stepIndex++;
     state.phase = 'step';
     state.stepStartedAt = Date.now();
@@ -257,6 +272,7 @@
 
   A.submit = submit; // appelé par l'écran d'étape pour un QR scanné
   A.begin = begin;   // appelé par la salle d'attente quand l'organisation donne le départ
+  A.start = start;   // appelé par le dernier écran avant le départ (règles, mission.js)
   A.solve = solve;   // appelés par l'étape zip, qui valide son propre chemin
   A.wrongAnswer = wrongAnswer;
 
@@ -284,13 +300,14 @@
       case 'gps': checkGps(step); break;
       case 'board': A.showBoard(); break;
       case 'chat': A.showChat(); break;
-      case 'next': advance(); A.save(); A.render(); break;
+      case 'next': next(); break;
       case 'briefing-next': nextBriefing(); break;
       case 'zoom': zoom(el.dataset.src); break;
     }
   });
 
   $app.addEventListener('submit', (e) => {
+    if (e.target.dataset.form !== 'answer') return; // énigme de la mission finale : finale.js
     e.preventDefault();
     const input = e.target.querySelector('input');
     submit(input.value);

@@ -471,3 +471,20 @@ test('cohérence du parcours : chaque énigme qui révèle un lieu annonce bien 
   });
   assert.deepStrictEqual(issues, []);
 });
+
+test('mission finale : énigme commune hachée à la publication, réponse au carnet, hors parcours des équipes', () => {
+  const game = loadGame();
+  const pub = E.publish(game);
+  const salt = pub.settings.salt;
+  const finale = pub.final.finale;
+  assert.strictEqual(finale.answers, undefined); // MONSIEUR PRALINE n'est pas lisible dans game.js
+  assert.ok(E.checkAnswer('Monsieur Praline !', finale, salt));
+  assert.ok(E.checkAnswer('M. Praline', finale, salt));
+  assert.ok(!E.checkAnswer('Praline', finale, salt));
+  assert.ok(finale.reveal.includes('{{reponse}}')); // la révélation reprend le nom saisi
+  assert.ok(JSON.parse(JSON.stringify(E.answerBook(game))).answers.finale.includes('MONSIEUR PRALINE'));
+  // la mission finale n'entre pas dans le parcours (chrono arrêté au code d'arrivée, dernière étape)
+  const p = E.buildPath(game, 'E1');
+  assert.strictEqual(p[p.length - 1].key, 'final-1');
+  assert.ok(E.validate(game).errors.length === 0, E.validate(game).errors.join('\n'));
+});

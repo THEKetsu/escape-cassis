@@ -211,16 +211,39 @@ test('organisateur : démarrer la partie enregistre l\'heure du départ ; termin
   const end = loadSync((url, options) => (options.method === 'PATCH' ? { json: [{ epoch: 'n' }] } : { json: [] }));
   await end.Sync.resetAll();
   assert.strictEqual(end.calls[0].body.started_at, null);
-  // serveur sans colonne started_at : le numéro de session est quand même changé
-  let first = true;
+  assert.strictEqual(end.calls[0].body.finale_at, null); // mission finale remise à plus tard
+  // serveur sans colonne started_at (ni finale_at) : le numéro de session est quand même changé
   const old = loadSync((url, options) => {
     if (options.method !== 'PATCH') return { json: [] };
-    if (first) { first = false; return { status: 400, json: {} }; }
+    if ('started_at' in JSON.parse(options.body)) return { status: 400, json: {} };
     return { json: [{ epoch: 'n' }] };
   });
   await old.Sync.resetAll();
   const patches = old.calls.filter((c) => c.options.method === 'PATCH');
-  assert.strictEqual(patches.length, 2);
-  assert.ok(!('started_at' in patches[1].body));
+  assert.strictEqual(patches.length, 3);
+  assert.ok(!('started_at' in patches[2].body));
+  // serveur avec started_at mais sans finale_at : la salle d'attente est quand même remise
+  const mid = loadSync((url, options) => {
+    if (options.method !== 'PATCH') return { json: [] };
+    if ('finale_at' in JSON.parse(options.body)) return { status: 400, json: {} };
+    return { json: [{ epoch: 'n' }] };
+  });
+  await mid.Sync.resetAll();
+  const midPatches = mid.calls.filter((c) => c.options.method === 'PATCH');
+  assert.deepStrictEqual([midPatches.length, midPatches[1].body.started_at], [2, null]);
   await assert.rejects(loadSync(() => ({ status: 400, json: {} })).Sync.startGame(), /colonne started_at absente/);
+});
+
+test('mission finale : lecture (lancée, pas encore, colonne absente) et lancement par l\'organisation', async () => {
+  const waiting = loadSync(() => ({ json: [{ finale_at: null }] }));
+  assert.strictEqual(await waiting.Sync.loadFinale(), null);
+  assert.ok(waiting.calls[0].url.includes('select=finale_at'));
+  const launched = loadSync(() => ({ json: [{ finale_at: '2026-11-14T17:00:00Z' }] }));
+  assert.strictEqual(await launched.Sync.loadFinale(), '2026-11-14T17:00:00Z');
+  assert.strictEqual(await loadSync(() => ({ status: 400, json: {} })).Sync.loadFinale(), undefined); // supabase.sql pas relancé
+  const go = loadSync((url, options) => ({ json: [{ epoch: 'e', finale_at: JSON.parse(options.body).finale_at }] }));
+  const at = await go.Sync.launchFinale();
+  assert.strictEqual(go.calls[0].options.method, 'PATCH');
+  assert.ok(Date.now() - Date.parse(at) < 5000);
+  await assert.rejects(loadSync(() => ({ status: 400, json: {} })).Sync.launchFinale(), /colonne finale_at absente/);
 });
