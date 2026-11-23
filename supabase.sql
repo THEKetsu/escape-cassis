@@ -15,7 +15,7 @@ create table if not exists public.progress (
 -- "not valid" : les lignes déjà présentes ne sont pas revérifiées.
 alter table public.progress drop constraint if exists progress_team_known;
 alter table public.progress add constraint progress_team_known
-  check (team in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8')) not valid;
+  check (team in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7')) not valid;
 
 alter table public.progress drop constraint if exists progress_data_valid;
 alter table public.progress add constraint progress_data_valid
@@ -55,7 +55,7 @@ create index if not exists messages_team_id on public.messages (team, id);
 alter table public.messages drop constraint if exists messages_valid;
 alter table public.messages add constraint messages_valid
   check (
-    team in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8')  -- comme progress_team_known
+    team in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7')  -- comme progress_team_known
     and sender in ('team', 'admin')
     and char_length(body) between 1 and 1000
     and char_length(coalesce(step, '')) <= 200

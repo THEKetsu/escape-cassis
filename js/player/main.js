@@ -13,7 +13,7 @@
   const urlTeam = params.get('equipe');
   if (urlTeam) {
     if (!GAME.teams[urlTeam]) {
-      alert(`Équipe « ${urlTeam} » inconnue.`);
+      alert('Cette équipe n\'existe pas.');
     } else if (!A.state) {
       A.setState(A.newState(urlTeam));
       A.save();

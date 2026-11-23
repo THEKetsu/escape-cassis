@@ -78,9 +78,9 @@ test('parcours : ordre des zones et variante de chaque équipe', () => {
   const game = loadGame();
   const p6 = E.buildPath(game, 'E6');
   const zones = [...new Set(p6.map((s) => s.zoneId))];
-  assert.deepStrictEqual(zones, ['3', '5', '1', '2', '4', 'final']);
-  // variante choisie zone par zone : 3B, 5A, 1A, 2A, 4A
-  assert.deepStrictEqual(zones.slice(0, 5).map((z) => p6.find((s) => s.zoneId === z).variant), ['B', 'A', 'A', 'A', 'A']);
+  assert.deepStrictEqual(zones, ['4', '1', '2', '3', '5', 'final']);
+  // variante choisie zone par zone : 4A, 1A, 2B, 3B, 5B
+  assert.deepStrictEqual(zones.slice(0, 5).map((z) => p6.find((s) => s.zoneId === z).variant), ['A', 'A', 'B', 'B', 'B']);
   const keys = p6.map((s) => s.key);
   assert.strictEqual(new Set(keys).size, keys.length);
   // les joueurs voient « Mission 1, 2, 3… » dans l'ordre de leur circuit, pas le numéro réel de la zone
@@ -359,9 +359,9 @@ test('routage : dernière zone de chaque équipe = écran « finale » ; après 
   });
   const next = (t) => { const c = game.teams[t].circuit; const i = c.indexOf(5); return i === c.length - 1 ? 'finale' : c[i + 1]; };
   // table de routage après la Maison de l'Europe
-  assert.deepStrictEqual(Object.keys(game.teams).map(next), ['finale', 2, 4, 1, 1, 1, 'finale', 2]);
+  assert.deepStrictEqual(Object.keys(game.teams).map(next), ['finale', 2, 4, 1, 1, 'finale', 2]);
   // dernière zone de chaque équipe
-  assert.deepStrictEqual(Object.keys(game.teams).map((t) => game.teams[t].circuit.slice(-1)[0]), [5, 2, 1, 1, 2, 4, 5, 3]);
+  assert.deepStrictEqual(Object.keys(game.teams).map((t) => game.teams[t].circuit.slice(-1)[0]), [5, 2, 1, 1, 2, 5, 3]);
 });
 
 test('carte du joueur : les lieux se dévoilent au fil des énigmes résolues', () => {
@@ -395,7 +395,7 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
   const reserve = (s) => s.text.replace(/<[^>]+>/g, ' ').match(/(?:^|\s)((?:[A-Z] ){9,}[A-Z])(?=\s|$)/)[1];
-  const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: "L'EAU DE CASSIS", E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'PLACE BARAGNON', E7: 'TERRAIN DE PETANQUE', E8: 'PORT DE CASSIS' };
+  const expected = { E1: 'TERRAIN DE PETANQUE', E2: 'PORT DE CASSIS', E3: "L'EAU DE CASSIS", E4: 'PLACE BARAGNON', E5: 'PLACE BARAGNON', E6: 'TERRAIN DE PETANQUE', E7: 'PORT DE CASSIS' };
   Object.keys(expected).forEach((t) => {
     const variant = game.teams[t].variant[5];
     const zi = 1; // étape qui donne la destination : la réserve de lettres (5A et 5B)
@@ -409,10 +409,10 @@ test('zone 5 : la réponse est la destination propre à chaque équipe (zone sui
     assert.ok(!E.checkAnswer('cassis', ps, salt), t + ' : CASSIS ne doit plus être la réponse');
   });
   assert.ok(E.checkAnswer('le terrain de pétanque', E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 1), salt));
-  // 2A : « Destination mystère » annonce la finale pour E2 (dernière zone), L'Eau de Cassis pour E8 (zone 4 ensuite)
+  // 2A : « Destination mystère » annonce la finale pour E2 (dernière zone), L'Eau de Cassis pour E7 (zone 4 ensuite)
   const mystery = (g, t) => E.buildPath(g, t).find((s) => s.title === 'Destination mystère');
   assert.ok(E.checkAnswer('terrains de pétanque', mystery(pub, 'E2'), salt) && !E.checkAnswer("l'eau de cassis", mystery(pub, 'E2'), salt));
-  assert.ok(E.checkAnswer("l'eau de cassis", mystery(pub, 'E8'), salt) && !E.checkAnswer('pétanque', mystery(pub, 'E8'), salt));
+  assert.ok(E.checkAnswer("l'eau de cassis", mystery(pub, 'E7'), salt) && !E.checkAnswer('pétanque', mystery(pub, 'E7'), salt));
   // le blason : toute formulation avec une crosse (ou un bâton) ET des poissons
   const blason = E.buildPath(pub, 'E1').find((s) => s.zoneId === '5' && s.zoneStep === 0);
   ['1 crosse + 2 poissons', 'Une crosse et deux poissons', '2 poissons et 1 crosse', 'crosse et poissons', 'un bâton et des poissons', 'je vois une crosse, un poisson et un autre poisson'].forEach((v) => assert.ok(E.checkAnswer(v, blason, salt), v));
@@ -431,23 +431,23 @@ test('dernière zone : 1A, 1B, 2B et 3A mènent aux terrains de pétanque pour l
   // E3 finit en 1A (clé 12), E4 en 1B (clé 6) : le message se déchiffre en TERRAIN DE PETANQUE
   assert.strictEqual(decode(cipher(at(game, 'E3', 1, 2)), 12), 'TERRAIN DE PETANQUE');
   assert.strictEqual(decode(cipher(at(game, 'E4', 1, 2)), 6), 'TERRAIN DE PETANQUE');
-  // E8 finit en 3A : la grille a une seule solution et ses lettres font lire TERRAIN DE PETANQUE
-  const z = at(game, 'E8', 3, 2).zip;
+  // E7 finit en 3A : la grille a une seule solution et ses lettres font lire TERRAIN DE PETANQUE
+  const z = at(game, 'E7', 3, 2).zip;
   const sols = E.zipSolve(z, 3);
   assert.strictEqual(sols.length, 1);
   assert.strictEqual(E.zipLetters(z, sols[0]), 'TERRAINDEPETANQUE');
   assert.strictEqual(z.marks.map((m) => m.icon).join(' '), 'portail baies oculus croix clocher'); // mêmes repères, même ordre
   // les réponses de fin : terrains de pétanque, plus l'ancienne destination
-  [['E3', 1, 2, 'port de cassis'], ['E4', 1, 2, 'saint michel'], ['E5', 2, 2, 'saint michel'], ['E8', 3, 3, 'eau de cassis']].forEach(([t, zone, i, old]) => {
+  [['E3', 1, 2, 'port de cassis'], ['E4', 1, 2, 'saint michel'], ['E5', 2, 2, 'saint michel'], ['E7', 3, 3, 'eau de cassis']].forEach(([t, zone, i, old]) => {
     const s = at(pub, t, zone, i);
     assert.strictEqual(s.afterOverride, 'final', `${t} zone ${zone}`);
     assert.ok(E.checkAnswer('les terrains de pétanque', s, salt), `${t} zone ${zone} : pétanque refusé`);
     assert.ok(!E.checkAnswer(old, s, salt), `${t} zone ${zone} : l'ancienne destination est encore acceptée`);
   });
-  // les autres équipes gardent leur énigme : E1 en 1A trouve toujours le port, E2 en 3A L'Eau de Cassis, E7 en 2B Saint-Michel
+  // les autres équipes gardent leur énigme : E1 en 1A trouve toujours le port, E2 en 3A L'Eau de Cassis, E6 en 2B Saint-Michel
   assert.ok(E.checkAnswer('port de cassis', at(pub, 'E1', 1, 2), salt));
   assert.ok(E.checkAnswer('eau de cassis', at(pub, 'E2', 3, 3), salt));
-  assert.ok(E.checkAnswer('saint michel', at(pub, 'E7', 2, 2), salt));
+  assert.ok(E.checkAnswer('saint michel', at(pub, 'E6', 2, 2), salt));
   assert.notDeepStrictEqual(at(game, 'E2', 3, 2).zip, z);
 });
 

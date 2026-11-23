@@ -54,8 +54,8 @@ Tout se passe dans `contenu.js`, documenté en tête de fichier. Pour chaque zon
 ```js
 teams: {
   E1: { name: 'Équipe 1', circuit: [1, 2, 3, 4, 5], variant: 'A' },
-  E6: { name: 'Équipe 6', circuit: [1, 5, 4, 3, 2], variant: 'B' },
-  E7: { name: 'Équipe 7', circuit: [3, 2, 1, 5, 4], variant: { 3: 'A', 2: 'B', 1: 'B', 5: 'B', 4: 'B' } },
+  E5: { name: 'Équipe 5', circuit: [1, 5, 4, 3, 2], variant: 'B' },
+  E6: { name: 'Équipe 6', circuit: [3, 2, 1, 5, 4], variant: { 3: 'A', 2: 'B', 1: 'B', 5: 'B', 4: 'B' } },
 }
 ```
 
