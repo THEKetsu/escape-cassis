@@ -2,3 +2,5 @@
 contenu.js
 organisation/
 _shot-*.html
+# Archives de travail des photos (versions allégées en JPEG dans images/)
+images/*.zip
