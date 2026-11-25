@@ -87,7 +87,8 @@
   // { status: 'new', groups } (nouveaux groupes trouvés), 'already' (rien de neuf) ou 'wrong' ; done : assez de groupes
   function groupStep(input, step, salt, found) {
     const matched = groupsMatched(input, step, salt);
-    const fresh = matched.filter((i) => !(found || []).includes(i));
+    // une saisie ne compte que pour une seule note : « pamplemousse rose » ne vaut pas aussi « rose », « pain d'épices » pas aussi « épices »
+    const fresh = matched.filter((i) => !(found || []).includes(i)).slice(0, 1);
     const total = (found || []).length + fresh.length;
     const status = fresh.length ? 'new' : matched.length ? 'already' : 'wrong';
     return { status, groups: fresh, done: total >= (step.atLeast || groupHashes(step, salt).length) };

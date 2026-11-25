@@ -98,7 +98,7 @@ window.GAME = {
         "1": "A",
         "2": "B",
         "3": "B",
-        "4": "B",
+        "4": "C",
         "5": "A"
       }
     },
@@ -132,7 +132,7 @@ window.GAME = {
         "1": "A",
         "2": "B",
         "3": "A",
-        "4": "B",
+        "4": "C",
         "5": "B"
       }
     },
@@ -334,7 +334,6 @@ window.GAME = {
     },
     "2": {
       "name": "Port de Cassis",
-      "photo": "images/port-photo-b.jpg",
       "lat": 43.21447,
       "lng": 5.5387,
       "where": "le Port de Cassis, près de la statue de Calendal",
@@ -346,13 +345,14 @@ window.GAME = {
         {
           "type": "info",
           "title": "Mission {{zone}} — Le bon point de vue",
+          "photo": "images/port-photo-a.jpg",
           "text": "<p>Sur le port se trouve quelqu'un qui veille sur Cassis sans jamais quitter sa place.</p><p>Il est de pierre et se tient face au paysage.</p><p><b>Retrouvez Calendal.</b></p><p>Lorsque vous pensez l'avoir trouvé, poursuivez la mission.</p>",
           "button": "J'ai trouvé Calendal"
         },
         {
           "type": "image-choice",
           "title": "Observation",
-          "text": "<p><b>✅ ÉTAPE VALIDÉE</b> : Calendal est identifié.</p><p>Maintenant, changez de point de vue.</p><p>Placez-vous comme Calendal, dans le même sens que lui.</p><p>Observez attentivement ce qui se trouve :</p><ul><li>devant lui</li><li>derrière lui</li><li>à sa gauche</li><li>à sa droite</li></ul><p>Parmi les 4 propositions visuelles, une seule correspond exactement à ce que vous pouvez observer autour de vous.</p><p><b>Laquelle est correcte ?</b></p>",
+          "text": "<p><b>ÉTAPE VALIDÉE</b> : Calendal est identifié.</p><p>Maintenant, changez de point de vue.</p><p>Placez-vous <b>dans le même sens que Calendal</b> et regardez <b>là où il regarde</b>.</p><p>Parmi les 4 propositions visuelles, une seule correspond exactement à ce qu'il a devant lui.</p><p><b>Laquelle est correcte ?</b></p>",
           "options": [
             {
               "img": "images/port-photo-a.jpg",
@@ -371,12 +371,12 @@ window.GAME = {
               "label": "D"
             }
           ],
-          "wrong": "Ne vous fiez pas uniquement à votre mémoire.<br>Placez-vous réellement dans le même sens que Calendal et comparez les quatre directions avec les propositions.<br>Réessayez.",
+          "wrong": "Ne vous fiez pas à votre mémoire.<br>Placez-vous réellement dans le même sens que Calendal, regardez là où il regarde et comparez avec les propositions.<br>Réessayez.",
           "hints": [
             "Vous cherchez une statue en pierre située sur la promenade du port.",
             "Il s'agit de Calendal.",
             "Ne vous placez pas face à lui.<br>Placez-vous comme lui, en regardant dans la même direction.",
-            "Comparez une par une :<br>devant — derrière — gauche — droite<br>Une seule proposition correspond exactement à la réalité."
+            "Regardez là où il regarde : la bonne proposition montre exactement ce qu'il a devant lui.<br>Une seule proposition correspond à la réalité."
           ],
           "success": {
             "title": "✅ ÉTAPE VALIDÉE",
@@ -1051,6 +1051,7 @@ window.GAME = {
     },
     "4": {
       "name": "L'Eau de Cassis",
+      "badge": "Boutique",
       "lat": 43.21505,
       "lng": 5.53638,
       "where": "La boutique & musée : L'Eau de Cassis, rue Saint-Clair",
@@ -1064,7 +1065,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
-          "button": "JE SUIS ARRIVÉ"
+          "button": "NOUS SOMMES ARRIVÉS"
         },
         {
           "type": "info",
@@ -1115,7 +1116,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
-          "button": "JE SUIS ARRIVÉ"
+          "button": "NOUS SOMMES ARRIVÉS"
         },
         {
           "type": "info",
@@ -1143,8 +1144,7 @@ window.GAME = {
             ],
             [
               "6490083dba1398e2",
-              "ed3be39fd45f7f8d",
-              "dbc3f574a446acdb"
+              "ed3be39fd45f7f8d"
             ],
             [
               "dee3dcea90cdee06",
@@ -1169,7 +1169,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
-          "button": "JE SUIS ARRIVÉ"
+          "button": "NOUS SOMMES ARRIVÉS"
         },
         {
           "type": "info",
@@ -1589,10 +1589,10 @@ window.GAME = {
       ]
     }
   },
-  "version": "2026.11.25-1215",
+  "version": "2026.11.25-1235",
   "answerBook": {
-    "salt": "6zsl8S75c74xisRCR4gJoQ==",
-    "iv": "lWq07q9/nP3+4ICW",
-    "data": "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"
+    "salt": "/P76snO6qz9uDcngZiIo4w==",
+    "iv": "Ecle3k6Gu3+/htFu",
+    "data": "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"
   }
 };

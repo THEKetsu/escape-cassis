@@ -269,7 +269,7 @@
       ${A.PuzzleCard({
         photo: step.photo || (GAME.zones[step.zoneId] || {}).photo,
         back: A.state.stepIndex > 0 ? 'review' : '',
-        header: A.PuzzleHeader(step.zoneId === 'final' ? 'Point final' : `Zone ${step.zoneName}`, esc(step.title || '')),
+        header: A.PuzzleHeader(step.zoneId === 'final' ? 'Point final' : `Zone ${(GAME.zones[step.zoneId] || {}).badge || step.zoneName}`, esc(step.title || '')),
         body: `<div class="text">${tpl(step.text)}</div>
           ${A.imagesHtml(step.images)}
           <div class="interaction">${interactionHtml(step)}</div>
