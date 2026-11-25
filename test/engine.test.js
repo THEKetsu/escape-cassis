@@ -318,23 +318,23 @@ test('zones 4 et 5 : réponses attendues, anagrammes justes (lettres retirées p
   // zone 4 : au moins 2 notes du parfum, dans n'importe quelle phrase ; deux écritures d'une même note ne comptent qu'une fois
   const pub = E.publish(game);
   [game.zones[4], pub.zones[4]].forEach((four) => {
-    ok(four.A[1], 'citron, fleur d\'oranger'); ok(four.A[1], 'On sent du pamplemousse et de la fève tonka !'); ok(four.A[1], 'Vétiver ambre');
-    ko(four.A[1], 'citron'); ko(four.A[1], 'fleur d\'oranger, fleurs d\'oranger'); ko(four.A[1], 'vanille, jasmin'); ko(four.A[1], 'fleur');
-    ok(four.B[1], 'jasmin vanille'); ok(four.B[1], 'praliné et musc blanc'); ko(four.B[1], 'jasmin'); ko(four.B[1], 'citron, coriandre');
+    ok(four.A[2], 'cassis, litchi'); ok(four.A[2], 'On sent du Cassis et de la rose !'); ko(four.A[2], 'cassis'); ko(four.A[2], 'cassis, cassis'); ko(four.A[2], 'vanille, jasmin');
+    ok(four.B[2], 'Orange et cannelle'); ok(four.B[2], 'pain d epices, gingembre'); ko(four.B[2], 'orange');
+    ok(four.C[2], 'thé vert, menthe'); ok(four.C[2], 'citron citronnelle'); ko(four.C[2], 'The vert');
   });
   // une note à la fois (oneByOne) : nouvelle note, note déjà trouvée, mauvaise note, et fin à la 2e, en clair comme haché
-  [game.zones[4].A[1], pub.zones[4].A[1]].forEach((step) => {
+  [game.zones[4].A[2], pub.zones[4].A[2]].forEach((step) => {
     assert.ok(step.oneByOne);
-    const first = E.groupStep('citron', step, salt, []);
+    const first = E.groupStep('cassis', step, salt, []);
     assert.deepStrictEqual([first.status, first.done], ['new', false]);
-    assert.strictEqual(E.groupStep('citrons', step, salt, first.groups).status, 'already');
+    assert.strictEqual(E.groupStep('cassis !', step, salt, first.groups).status, 'already');
     assert.strictEqual(E.groupStep('vanille', step, salt, first.groups).status, 'wrong');
-    const second = E.groupStep('Coriandre !', step, salt, first.groups);
+    const second = E.groupStep('Litchi !', step, salt, first.groups);
     assert.deepStrictEqual([second.status, second.done], ['new', true]);
   });
-  assert.strictEqual(pub.zones[4].A[1].groups, undefined); // notes publiées hachées
-  assert.ok(E.answerBook(game).answers['z4-A-1'].includes('CORIANDRE')); // le dashboard les montre en clair
-  game.zones[4].A[1].atLeast = 20;
+  assert.strictEqual(pub.zones[4].A[2].groups, undefined); // notes publiées hachées
+  assert.ok(E.answerBook(game).answers['z4-A-2'].includes('LITCHI')); // le dashboard les montre en clair
+  game.zones[4].A[2].atLeast = 20;
   assert.ok(E.validate(game).errors.some((e) => e.includes('atLeast')));
   const letters = (t) => String(t).replace(/[^A-Z]/g, '').split('').sort().join('');
   const remove = (pool, rm) => { const p = letters(pool).split(''); letters(rm).split('').forEach((c) => p.splice(p.indexOf(c), 1)); return p.join(''); };
