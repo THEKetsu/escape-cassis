@@ -1,0 +1,154 @@
+/* Jeu : composants de la direction artistique (badge, carte, photos, pastilles, boutons, puces).
+   Chargé en dernier : il l'emporte sur les règles historiques. Les valeurs viennent de tokens.css. */
+
+.ico { width: 1.25em; height: 1.25em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* ---------- carte principale + photo ---------- */
+.hero-photo { position: relative; height: 250px; overflow: hidden; }
+.hero-photo .back-btn { position: absolute; top: 14px; left: 16px; }
+.hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.card {
+  background: var(--white); color: var(--text);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding: var(--space-lg) 26px var(--space-xl);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, .05);
+  margin-top: var(--space-md);
+}
+.card.over-photo { margin-top: -28px; position: relative; }
+.card .text, .card .lead { font-size: 17px; line-height: 1.55; color: var(--text); text-align: left; }
+.card .text p { margin: 0 0 var(--space-sm); }
+.card .text ul { margin: 0 0 var(--space-sm); padding-left: 20px; }
+.interaction { margin-top: var(--space-lg); }
+
+/* ---------- badge, titre, trait corail ---------- */
+.puzzle-header { text-align: center; }
+.zone-badge {
+  display: inline-block; margin: 0 0 var(--space-sm); padding: 6px 16px; border-radius: 999px;
+  background: var(--pink-soft); color: var(--navy); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.rule { display: block; width: 52px; height: 5px; margin: 14px auto 22px; border-radius: 999px; background: var(--coral); }
+.kicker span:first-child { color: var(--navy); }
+
+/* ---------- boutons ---------- */
+.btn { min-height: 48px; font-size: 16px; font-weight: 700; background: var(--bg); color: var(--navy); border: 1px solid var(--border); }
+.btn.primary { background: var(--navy); color: #fff; border-color: transparent; box-shadow: none; }
+.btn.big { height: 60px; padding: 0 var(--space-lg); font-size: 18px; gap: var(--space-sm); margin-top: var(--space-lg); text-transform: uppercase; letter-spacing: .03em; }
+.btn:disabled, .btn.primary:disabled { background: var(--disabled); color: #fff; cursor: not-allowed; transform: none; border-color: transparent; }
+.btn.close { background: var(--white); }
+.link { color: var(--muted); }
+.btn.hint-btn { background: var(--white); color: var(--navy); }
+.btn.hint-btn small { color: var(--muted); }
+
+.answer input, .field input, .sheet-input { border: 1px solid var(--border); font-size: 18px; font-weight: 600; padding: 14px 20px; }
+.answer input:focus, .field input:focus, .sheet-input:focus { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(242, 140, 140, .15); }
+.answer input.error { border-color: var(--coral); }
+.answer .btn { height: 52px; padding: 0 22px; }
+
+/* ---------- grille photo 2×2, pastilles A/B/C/D ---------- */
+.photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
+.photo-choice {
+  position: relative; padding: 0; margin: 0; aspect-ratio: 4 / 3; overflow: hidden; cursor: pointer;
+  border: 3px solid transparent; border-radius: 18px; background: var(--border);
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.photo-choice img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.letter {
+  width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: var(--pink-soft); color: var(--navy); font-size: 15px; font-weight: 700; flex: none;
+}
+.photo-choice .letter { position: absolute; top: 8px; left: 8px; }
+.photo-choice.selected { border-color: var(--coral); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(242, 140, 140, .15); }
+.photo-choice.selected .letter { background: var(--navy); color: #fff; }
+.photo-choice.wrong { opacity: .4; border-color: var(--coral); }
+
+.btn.choice { border: 3px solid transparent; background: var(--bg); border-radius: 18px; font-weight: 600; }
+.btn.choice.selected { border-color: var(--coral); background: var(--pink-faint); box-shadow: 0 4px 16px rgba(242, 140, 140, .15); }
+.btn.choice.selected .letter { background: var(--navy); color: #fff; }
+.img img { border-radius: 18px; }
+.img-num { background: var(--pink-soft); color: var(--navy); }
+
+/* ---------- réponses saisies (puces) ---------- */
+.answers-box { background: var(--pink-faint); border-radius: 20px; padding: 18px; margin-bottom: var(--space-md); }
+.answers-box h2 { margin: 0 0 var(--space-sm); font-size: 16px; }
+.chips { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xs); }
+.chip {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; padding: 10px 16px; border-radius: 999px;
+  background: var(--white); border: 1px solid var(--border); color: var(--navy); font-weight: 600; font-size: 15px;
+}
+.chip-x { display: inline-flex; border: 0; background: none; padding: 0; color: var(--muted); cursor: pointer; }
+.chip-x .ico { width: 14px; height: 14px; }
+.answers-empty, .answers-count { color: var(--muted); font-size: 14px; }
+.answers-count { margin: var(--space-sm) 0 0; text-align: right; }
+
+/* ---------- retour d'erreur, indices ---------- */
+.feedback.bad { color: var(--navy); background: var(--pink-faint); border: 1px solid var(--pink-soft); border-radius: 16px; padding: 12px 14px; text-align: left; font-weight: 500; }
+.feedback.bad b { font-size: 13px; letter-spacing: .06em; color: var(--coral); }
+.refused { background: var(--pink-faint); border-radius: 16px; padding: 12px 14px; }
+.refused b { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--coral); }
+.refused p { margin: 4px 0 0; }
+
+.hints { background: var(--white); color: var(--text); border: 1px solid var(--border); margin: var(--space-md) var(--space-md) 0; padding: 4px var(--space-md) var(--space-md); }
+.hints h2 { color: var(--navy); }
+.hint { background: var(--pink-faint); }
+.hint span { background: var(--pink-soft); color: var(--navy); }
+
+/* ---------- réussite ---------- */
+.success { margin-top: var(--space-md); }
+.check circle { fill: var(--navy); }
+.success .text { color: var(--text); }
+.big-code, .destination { background: var(--pink-faint); color: var(--navy); box-shadow: none; }
+.destination b, .mission-kicker, .tagline, .reveal .name { color: var(--navy); }
+.mission-go { color: var(--navy); }
+
+/* ---------- en-tête discret, boutons ronds ---------- */
+.top { color: var(--navy); padding: calc(var(--space-sm) + env(safe-area-inset-top)) var(--space-md) var(--space-sm); }
+.segments i { background: var(--border); }
+.segments i.done, .segments i.cur::after { background: var(--navy); }
+.avatar { background: var(--white); border: 1px solid var(--border); box-shadow: none; }
+.who b { font-size: 16px; font-weight: 700; }
+.pill { background: var(--white); color: var(--navy); border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0, 0, 0, .05); font-size: 14px; }
+.pill small { color: var(--coral); }
+.pill.icon { width: 40px; height: 40px; padding: 0; justify-content: center; font-size: 15px; }
+.net { background: var(--disabled); }
+.net.ok { background: var(--green); }
+.net.ko { background: var(--coral); }
+.trail li { width: 26px; height: 26px; background: var(--white); border: 1px solid var(--border); color: var(--muted); }
+.trail li + li::before { background: var(--border); }
+.trail li.done { background: var(--navy); border-color: var(--navy); color: #fff; }
+.trail li.cur { background: var(--pink-soft); border-color: var(--coral); color: var(--navy); box-shadow: none; }
+.chat-badge { background: var(--coral); }
+
+.back-btn {
+  width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--white); color: var(--navy);
+  display: grid; place-items: center; box-shadow: 0 2px 10px rgba(0, 0, 0, .12); cursor: pointer;
+}
+
+/* ---------- écrans sur fond clair (le fond n'est plus coloré par zone) ---------- */
+.review-box header, .pmap-card header { color: var(--navy); }
+.review-note, .pmap-hint { color: var(--muted); }
+.prelude > .link, .lobby .link { color: var(--muted); }
+.mission-alert, .notice, .lobby-note, .env-item.keep, .board-row.me { background: var(--pink-faint); box-shadow: none; }
+.mission-rules li::before { background: var(--navy); }
+.progress-bar i { background: var(--coral); }
+.tiles div, .mission-rules li, .lobby-teams li, .board-row, .score div, .badge, .env-item { background: var(--bg); }
+.badge.on { background: var(--pink-faint); box-shadow: inset 0 0 0 2px var(--coral); }
+.hero-art { display: none; }
+.team-badge { margin-top: 0; }
+.card.welcome, .card.lobby, .card.prelude, .card.launch, .card.finished, .card.finale { margin-top: var(--space-lg); border-radius: var(--radius-card); }
+.credits { color: var(--muted); opacity: .8; }
+.foot { padding: 0 var(--space-md); }
+
+/* ---------- icônes fines dans le texte ---------- */
+.btn .ico, .link .ico, .pill .ico, summary .ico { width: 1.15em; height: 1.15em; vertical-align: -.2em; }
+.link .ico { margin-right: 4px; }
+.sheet-icon { color: var(--navy); display: flex; justify-content: center; }
+.sheet-icon .ico { width: 40px; height: 40px; stroke-width: 1.5; }
+.scan-hint span, .tiles span, .finale-icon, .trophy { color: var(--navy); display: flex; }
+.scan-hint .ico, .tiles .ico { width: 26px; height: 26px; }
+.finale-icon, .trophy { justify-content: center; }
+.finale-icon .ico, .trophy .ico { width: 64px; height: 64px; stroke-width: 1.4; }
+.trail li .ico { width: 14px; height: 14px; }
+.toast-icon .ico { width: 22px; height: 22px; }
+.pmap-pin b .ico { width: 18px; height: 18px; }

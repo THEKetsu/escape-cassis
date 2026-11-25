@@ -35,7 +35,7 @@
       <main class="card prelude prelude-${screen.kind} anim">
         ${screen.kind === 'story' ? storyHtml() : rulesHtml()}
         <button class="btn primary big" data-action="prelude-next">${esc(screen.button)}</button>
-        <button class="link" data-action="prelude-back">← Retour</button>
+        <button class="link" data-action="prelude-back">${A.icon('undo')} Retour</button>
       </main>`;
   }
 
@@ -77,14 +77,15 @@
       <main class="card success zone-done anim">
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
         <h1 class="display">ZONE VALIDÉE</h1>
+        <i class="rule"></i>
         <p class="lead">Vous avez terminé cette étape.</p>
         <div class="progress"><div class="progress-bar"><i style="width:${Math.round((done / circuit.length) * 100)}%"></i></div>
           <b>Progression : ${done} / ${circuit.length}</b></div>
         <p class="analysis" id="analysis"><span class="spinner"></span>Analyse du prochain indice…</p>
         <div class="unlock" id="unlock" hidden>
-          <p class="unlock-label">🔓 NOUVELLE DESTINATION DÉBLOQUÉE</p>
+          <p class="unlock-label">Nouvelle destination débloquée</p>
           ${destinationHtml(next)}
-          <button class="btn primary big" data-action="next">POURSUIVRE LA MISSION</button>
+          ${A.PrimaryButton('Poursuivre la mission', 'next')}
         </div>
       </main>`;
     A.startTimer();

@@ -80,7 +80,7 @@
       <p class="zip-info"><span id="zip-count"></span> <span class="zip-letters">Lettres : <b id="zip-letters"></b></span></p>
       <p class="help">Glissez le doigt de case en case, depuis le bout de votre chemin. Il est gardé sur ce téléphone. « Annuler » recule d\'une case.</p>
       <div class="zip-actions">
-        <button class="btn" data-action="zip-undo">↩ Annuler</button>
+        <button class="btn" data-action="zip-undo">Annuler</button>
         <button class="btn" data-action="zip-clear">Effacer</button>
       </div>
       <button class="btn primary big zip-validate" data-action="zip-validate">Valider mon chemin</button>`;
@@ -103,7 +103,7 @@
     const button = document.querySelector('.zip-validate');
     if (button) {
       button.classList.toggle('valid', valid);
-      button.textContent = valid ? '✅ Chemin valide : continuer' : 'Valider mon chemin';
+      button.textContent = valid ? 'Chemin valide : continuer' : 'Valider mon chemin';
     }
     document.getElementById('zip-count').textContent = `${cells.length} / ${z.size * z.size} cases`;
     document.getElementById('zip-letters').textContent = E.zipLetters(z, cells).split('').join(' ') || '–';
@@ -186,7 +186,7 @@
     if (!res.ok) {
       const first = cells.length ? '' : NAMES[step.zip.marks[0].icon];
       A.wrongAnswer();
-      return A.feedback('❌ ' + (first ? `Commencez par ${first} : posez le doigt dessus.` : WHY[res.reason](step.zip, res)), 'bad');
+      return A.feedback('' + (first ? `Commencez par ${first} : posez le doigt dessus.` : WHY[res.reason](step.zip, res)), 'bad');
     }
     A.state.zipLetters = E.zipLetters(step.zip, cells);
     cells = [];

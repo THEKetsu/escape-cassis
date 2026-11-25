@@ -24,7 +24,7 @@
       const name = ready ? A.teamName(t, st.teamName) : (GAME.teams[t].name || t);
       return `<li class="${ready ? 'ready' : ''} ${t === A.state.team ? 'me' : ''}">
         <span class="avatar">${A.avatar(t, st)}</span>
-        <span><b>${esc(name)}</b><small>${t === A.state.team ? 'vous · ' : ''}${ready ? '✅ prête' : 'pas encore arrivée'}</small></span>
+        <span><b>${esc(name)}</b><small>${t === A.state.team ? 'vous · ' : ''}${ready ? 'prête' : 'pas encore arrivée'}</small></span>
       </li>`;
     }).join('');
   }
@@ -64,9 +64,9 @@
         <div class="waiting" aria-hidden="true"><i></i><i></i><i></i></div>
         <p id="lobby-count" class="lobby-count"></p>
         <ul id="lobby-teams" class="lobby-teams"></ul>
-        <p id="lobby-note" class="lobby-note" hidden>⚠️ Le serveur n'est pas prêt pour donner le départ : prévenez l'organisation.</p>
+        <p id="lobby-note" class="lobby-note" hidden>${A.icon('warn')} Le serveur n'est pas prêt pour donner le départ : prévenez l'organisation.</p>
         <p class="help">Gardez cet écran ouvert : la partie démarre toute seule quand l'organisation donne le départ.</p>
-        <button class="link" data-action="lobby-start">🔑 Démarrer sans attendre (code organisation)</button>
+        <button class="link" data-action="lobby-start">${A.icon('key')} Démarrer sans attendre (code organisation)</button>
       </main>`;
     update(null);
     stopLobby();
@@ -78,11 +78,11 @@
   $app.addEventListener('click', async (e) => {
     if (!e.target.closest('[data-action="lobby-start"]')) return;
     const code = await A.ask({
-      icon: '🔑', title: 'Départ de secours', input: 'Code organisation',
+      icon: A.icon('key'), title: 'Départ de secours', input: 'Code organisation',
       text: "Démarre cette équipe sans attendre le départ de l'organisation.", ok: 'Démarrer',
     });
     if (!code || !A.state || A.state.startedAt) return;
-    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>Code organisation incorrect</b></div>');
     stopLobby();
     A.begin();
   });

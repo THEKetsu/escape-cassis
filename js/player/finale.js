@@ -54,9 +54,9 @@
       <h2>Votre parcours</h2>
       <table class="recap">
         <tr><th>Zone</th><th>Temps</th><th>Indices</th></tr>
-        ${zones.map((z) => `<tr><td>${esc(z.name)}${z.skips ? ' 🔑' : ''}</td><td>${E.formatDuration(z.sec)}</td><td>${z.hints}</td></tr>`).join('')}
+        ${zones.map((z) => `<tr><td>${esc(z.name)}${z.skips ? ' *' : ''}</td><td>${E.formatDuration(z.sec)}</td><td>${z.hints}</td></tr>`).join('')}
       </table>
-      ${leaderboard ? '<button class="btn" data-action="board">🏆 Voir le classement</button>' : ''}`;
+      ${leaderboard ? `<button class="btn" data-action="board">${A.icon('trophy')} Voir le classement</button>` : ''}`;
   }
 
   function loadRank() {
@@ -86,7 +86,7 @@
   function renderResults() {
     $app.innerHTML = `
       <main class="card finished anim">
-        <div class="trophy">🏆</div>
+        <div class="trophy">${A.icon('trophy')}</div>
         <h1 class="display">Bravo ${esc(A.teamName(A.state.team, A.state.teamName))} !</h1>
         ${resultsHtml()}
         ${S.finalMessage ? `<div class="text">${S.finalMessage}</div>` : ''}
@@ -106,9 +106,9 @@
         <p class="mission-alert">ATTENDEZ LES AUTRES ÉQUIPES.</p>
         <p>Le dernier secret ne peut pas encore être révélé.</p>
         <div class="waiting" aria-hidden="true"><i></i><i></i><i></i></div>
-        <details class="results"><summary>📊 Votre parcours en chiffres</summary>${resultsHtml()}</details>
+        <details class="results"><summary>Votre parcours en chiffres</summary>${resultsHtml()}</details>
         ${chatHtml()}
-        <button class="link" data-action="finale-unlock">🔑 Lancer la mission finale (code organisation)</button>
+        <button class="link" data-action="finale-unlock">${A.icon('key')} Lancer la mission finale (code organisation)</button>
       </main>`;
     loadRank();
     if (Sync.enabled) {
@@ -137,7 +137,7 @@
   function renderBriefing() {
     $app.innerHTML = `
       <main class="card finale anim">
-        <div class="finale-icon">🎬</div>
+        <div class="finale-icon">${A.icon('play')}</div>
         <h1 class="display">${esc(F.introTitle || 'MISSION FINALE')}</h1>
         <div class="text">${A.tpl(F.intro || '')}</div>
         <button class="btn primary big" data-action="finale-start">${esc(F.button || 'COMMENCER LA FINALE')}</button>
@@ -147,7 +147,7 @@
   function renderRiddle() {
     $app.innerHTML = `
       <main class="card finale-riddle anim">
-        <div class="kicker"><span>🎬 Mission finale</span></div>
+        <div class="kicker"><span>Mission finale</span></div>
         <h1>${esc(F.title || '')}</h1>
         <div class="text">${A.tpl(F.text || '')}</div>
         ${A.imagesHtml(F.images)}
@@ -196,11 +196,11 @@
   // Lancement de secours (pas de serveur, réseau coupé) : réservé à l'organisation
   async function unlock() {
     const code = await A.ask({
-      icon: '🔑', title: 'Mission finale', input: 'Code organisation',
+      icon: A.icon('key'), title: 'Mission finale', input: 'Code organisation',
       text: 'Lance la mission finale sur ce téléphone sans attendre le dashboard.', ok: 'Lancer',
     });
     if (!code || !A.state || A.state.finaleAt) return;
-    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>Code organisation incorrect</b></div>');
     launch(Date.now());
   }
 

@@ -27,21 +27,21 @@
       const name = z.id === 'final' ? (GAME.final.name || 'Final') : GAME.zones[z.id].name;
       // rang de la zone dans le circuit de l'équipe, comme dans le bandeau
       return `<div class="pmap-pin ${z.status}" style="${at(z.point)}">
-        <b>${z.id === 'final' ? '🏁' : z.status === 'done' ? '✓' : circuit.indexOf(z.id) + 1}</b><small>${esc(name)}</small><i>${LABEL[z.status]}</i></div>`;
+        <b>${z.id === 'final' ? A.icon('flag') : z.status === 'done' ? '✓' : circuit.indexOf(z.id) + 1}</b><small>${esc(name)}</small><i>${LABEL[z.status]}</i></div>`;
     }).join('');
     return `<div class="pmap-frame" style="aspect-ratio:${W} / ${H}">
         <div class="pmap-tiles">${tiles}</div>${accuracy}${pins}
         ${pos ? `<span class="pmap-me" style="${at(pos)}" title="Votre position"></span>` : ''}
         <a class="pmap-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a>
       </div>
-      <p class="pmap-hint">${pos ? '🔵 Votre position (GPS du téléphone). ' : ''}Les lieux apparaissent au fil de vos énigmes résolues.</p>`;
+      <p class="pmap-hint">${pos ? 'Point bleu : votre position (GPS du téléphone). ' : ''}Les lieux apparaissent au fil de vos énigmes résolues.</p>`;
   }
 
   function showMap() {
     if (!A.state || !A.path || !A.state.startedAt) return;
     const overlay = document.createElement('div');
     overlay.className = 'overlay pmap';
-    overlay.innerHTML = `<div class="pmap-card"><header><b>🗺️ Carte</b><button class="btn close">✕ Fermer</button></header>${mapHtml()}</div>`;
+    overlay.innerHTML = `<div class="pmap-card"><header><b>Carte</b><button class="btn close">Fermer</button></header>${mapHtml()}</div>`;
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay || e.target.closest('.close')) overlay.remove();
     });

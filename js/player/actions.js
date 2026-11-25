@@ -50,6 +50,23 @@
     submit(picked.join(' + '));
   }
 
+  // Choix d'une photo (grille A/B/C/D) : une seule sélection, puis « Valider » (inactif tant que rien n'est choisi)
+  function pickImage(el) {
+    if (el.classList.contains('wrong')) return;
+    $app.querySelectorAll('.photo-choice').forEach((b) => {
+      const on = b === el;
+      b.classList.toggle('selected', on);
+      b.setAttribute('aria-pressed', on);
+    });
+    const go = $app.querySelector('[data-action="validate-image"]');
+    if (go) go.disabled = false;
+  }
+
+  function validateImage() {
+    const picked = $app.querySelector('.photo-choice.selected');
+    if (picked) submit(picked.dataset.value, picked);
+  }
+
   // Classement : chaque proposition touchée reçoit son rang (1, 2, 3…) ; la retirer renumérote les suivantes
   function orderPick(el) {
     const buttons = [...$app.querySelectorAll('.choice[data-value]')];
@@ -144,7 +161,7 @@
     const step = A.current();
     const shown = A.state.hints[step.key] || 0;
     const cost = E.hintPenalty(GAME, step, shown);
-    const ok = await A.ask({ icon: '💡', title: `Indice ${shown + 1}`, text: `Il ajoute <b>+${A.minutes(cost)}</b> à votre temps.`, ok: 'Voir l\'indice' });
+    const ok = await A.ask({ icon: A.icon('bulb'), title: `Indice ${shown + 1}`, text: `Il ajoute <b>+${A.minutes(cost)}</b> à votre temps.`, ok: 'Voir l\'indice' });
     if (!ok || A.current().key !== step.key) return;
     A.state.hints[step.key] = shown + 1;
     A.state.hintsTotal++;
@@ -157,11 +174,11 @@
   async function masterCode() {
     const step = A.current();
     const code = await A.ask({
-      icon: '🔑', title: 'Code organisation', input: 'Code',
+      icon: A.icon('key'), title: 'Code organisation', input: 'Code',
       text: `Fait passer cette étape (pénalité <b>+${A.minutes(S.skipPenalty || 0)}</b>).`, ok: 'Valider',
     });
     if (!code || A.current().key !== step.key) return;
-    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.feedback('🔑 Code organisation incorrect.', 'bad');
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.feedback('Code organisation incorrect.', 'bad');
     A.state.skips++;
     A.state.penalty += S.skipPenalty || 0;
     solve(step, true);
@@ -189,29 +206,29 @@
   // Remise à zéro d'un téléphone resté sur une ancienne partie : réservée à l'organisation
   async function resetPhone() {
     const code = await A.ask({
-      icon: '🔄', title: 'Réinitialiser ce téléphone', input: 'Code organisation',
+      icon: A.icon('refresh'), title: 'Réinitialiser ce téléphone', input: 'Code organisation',
       text: 'La partie enregistrée sur ce téléphone sera effacée : retour à l\'accueil.', ok: 'Réinitialiser',
     });
     if (!code) return;
-    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>Code organisation incorrect</b></div>');
     A.endSession();
   }
 
   // Reprise forcée d'une équipe encore en jeu ailleurs : réservée à l'organisation
   async function unlock() {
     const code = await A.ask({
-      icon: '🔑', title: 'Code organisation', input: 'Code',
+      icon: A.icon('key'), title: 'Code organisation', input: 'Code',
       text: 'Reprendre cette équipe sur ce téléphone. L\'autre téléphone ne doit plus jouer.', ok: 'Valider',
     });
     if (!code) return;
-    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>🔑 Code organisation incorrect</b></div>');
+    if (!E.codeMatches(code, S.masterCode, S.masterHash, SALT)) return A.toast('<div><b>Code organisation incorrect</b></div>');
     A.remoteLive = false;
     A.render();
   }
 
   function checkGps(step) {
     if (!navigator.geolocation) return A.feedback('Géolocalisation indisponible : utilisez le code de secours.', 'bad');
-    A.feedback('📡 Recherche de votre position…');
+    A.feedback('Recherche de votre position…');
     navigator.geolocation.getCurrentPosition((pos) => {
       const d = E.distance(pos.coords.latitude, pos.coords.longitude, step.lat, step.lng);
       const tolerance = (step.radius || 40) + Math.min(pos.coords.accuracy || 0, 50);
@@ -261,7 +278,7 @@
   function zoom(src) {
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
-    overlay.innerHTML = `<p class="zoom-hint">Touchez l'image pour l'agrandir ou la réduire</p><img src="${esc(src)}" alt=""><button class="btn close">✕ Fermer</button>`;
+    overlay.innerHTML = `<p class="zoom-hint">Touchez l'image pour l'agrandir ou la réduire</p><img src="${esc(src)}" alt=""><button class="btn close">Fermer</button>`;
     // un touché sur l'image alterne entre « à la largeur de l'écran » et « grande, à faire défiler » (grilles, plans)
     overlay.addEventListener('click', (e) => {
       if (e.target.tagName === 'IMG') overlay.classList.toggle('wide');
@@ -293,6 +310,8 @@
       case 'validate-order': validateOrder(step); break;
       case 'toggle': el.classList.toggle('selected'); el.setAttribute('aria-pressed', el.classList.contains('selected')); break;
       case 'validate-multi': validateMulti(step); break;
+      case 'pick-image': pickImage(el); break;
+      case 'validate-image': validateImage(); break;
       case 'choose': if (!el.classList.contains('wrong')) submit(el.dataset.value, el); break;
       case 'tap': tap(e, el); break;
       case 'hint': showHint(); break;

@@ -32,7 +32,7 @@
     const circuit = GAME.teams[A.state.team].circuit;
     const first = GAME.zones[circuit[0]];
     return [
-      S.briefing && { title: 'Votre mission', text: S.briefing, button: 'C\'est compris ➜' },
+      S.briefing && { title: 'Votre mission', text: S.briefing, button: 'C\'est compris' },
       first && {
         title: 'ÉQUIPE {{numero}}',
         text: `<p class="lead">Votre parcours vient d'être activé.</p>
@@ -77,7 +77,7 @@
       const done = i < step.zoneIndex || (i === step.zoneIndex && zoneDone);
       const cur = !done && i === step.zoneIndex;
       // rang dans le circuit (1, 2, 3…), ni le numéro réel de la zone ni sa variante : le dashboard les montre
-      const label = i === circuit.length ? '🏁' : String(i + 1);
+      const label = i === circuit.length ? A.icon('flag') : String(i + 1);
       return `<li class="${done ? 'done' : cur ? 'cur' : ''}">${label}</li>`;
     }).join('');
     return `
@@ -91,10 +91,10 @@
           <div class="top-actions">
             <span class="pill"><span id="net" class="net ${A.online === null ? '' : A.online ? 'ok' : 'ko'}"></span><span id="timer">${E.formatDuration(E.elapsedSeconds(state, Date.now()))}</span>
               ${state.penalty ? `<small>+${E.formatDuration(state.penalty)}</small>` : ''}</span>
-            <button class="pill icon" data-action="map" aria-label="Carte">🗺️</button>
+            <button class="pill icon" data-action="map" aria-label="Carte">${A.ICON_MAP}</button>
             <button class="pill icon" data-action="textsize" aria-label="Taille du texte">Aa</button>
             ${Sync.enabled ? A.chatButton() : ''}
-            ${leaderboard ? '<button class="pill icon" data-action="board" aria-label="Classement">🏆</button>' : ''}
+            ${leaderboard ? `<button class="pill icon" data-action="board" aria-label="Classement">${A.ICON_BOARD}</button>` : ''}
           </div>
         </div>
         <ol class="trail">${trail}</ol>
@@ -135,9 +135,9 @@
         <div class="hero">${HERO}</div>
         <h1 class="display">${esc(GAME.title)}</h1>
         ${S.tagline ? `<p class="tagline">${esc(S.tagline)}</p>` : ''}
-        <p class="lead">📷 Scannez le <b>QR code de votre équipe</b> pour commencer.</p>
+        <p class="lead">Scannez le <b>QR code de votre équipe</b> pour commencer.</p>
         ${picker}
-        <a class="admin-link" href="admin.html">🧭 Espace organisateur</a>
+        <a class="admin-link" href="admin.html">${A.icon('compass')} Espace organisateur</a>
       </main>`;
   }
 
@@ -150,11 +150,11 @@
     // sauf avec le code organisation.
     const resume = remote && remote.startedAt
       ? (A.remoteLive
-        ? `<div class="notice">🚫 Cette équipe est déjà en jeu sur un autre téléphone.
+        ? `<div class="notice">${A.icon('block')} Cette équipe est déjà en jeu sur un autre téléphone.
              <small>Un seul téléphone par équipe. Si l'autre téléphone est hors service, attendez 1 min 30 ou demandez à l'organisation.</small>
-             <button class="btn" data-action="unlock">🔑 Code organisation</button></div>`
+             <button class="btn" data-action="unlock">${A.icon('key')} Code organisation</button></div>`
         : `<div class="notice">Cette équipe a déjà une partie en cours (étape ${remote.stepIndex + 1}).
-             <button class="btn primary" data-action="resume">↩️ Reprendre la partie</button></div>`)
+             <button class="btn primary" data-action="resume">${A.icon('undo')} Reprendre la partie</button></div>`)
       : '';
     const hintCosts = (S.hintPenalties || []).map(A.minutes).join(' · ');
     $app.innerHTML = `
@@ -168,10 +168,10 @@
         <details class="how">
           <summary>Comment ça marche ?</summary>
           <div class="tiles">
-            <div><span>🧩</span><b>Énigmes</b><small>une à la fois, sur place</small></div>
-            <div><span>💡</span><b>Indices</b><small>${hintCosts ? '+' + hintCosts : 'disponibles'}</small></div>
-            <div><span>🏅</span><b>Badges</b><small>vitesse, sans faute…</small></div>
-            <div><span>🏆</span><b>Classement</b><small>temps + pénalités</small></div>
+            <div><span>${A.icon('puzzle')}</span><b>Énigmes</b><small>une à la fois, sur place</small></div>
+            <div><span>${A.icon('bulb')}</span><b>Indices</b><small>${hintCosts ? '+' + hintCosts : 'disponibles'}</small></div>
+            <div><span>${A.icon('medal')}</span><b>Badges</b><small>vitesse, sans faute…</small></div>
+            <div><span>${A.icon('trophy')}</span><b>Classement</b><small>temps + pénalités</small></div>
           </div>
         </details>
         <label class="field">Nom de votre équipe
@@ -180,7 +180,7 @@
         <div class="field">Votre emoji
           <div class="emoji-pick">${A.EMOJIS.map((e) => `<button type="button" class="emoji ${e === A.avatar(state.team) ? 'on' : ''}" data-action="emoji" data-emoji="${e}" aria-label="Choisir ${e}">${e}</button>`).join('')}</div>
         </div>
-        ${LIVE ? '<p class="help">📍 Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
+        ${LIVE ? '<p class="help">Pendant la partie, la position du téléphone est partagée avec l\'organisation pour vous suivre sur sa carte. Acceptez la localisation quand le téléphone la demande.</p>' : ''}
         ${remote && remote.startedAt ? '' : '<button class="btn primary big" data-action="mission">COMMENCER LA MISSION</button>'}
         <p class="credits">${S.credits ? esc(S.credits) + ' · ' : ''}version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p>
       </main>`;
@@ -222,21 +222,19 @@
       case 'zip':
         return A.zipHtml(step);
       case 'image-choice':
-        return '<div class="image-choices">' + step.options.map((o) =>
-          `<button class="image-choice" data-action="choose" data-value="${esc(o.label)}">
-             <img src="${esc(o.img)}" alt="${esc(o.label)}"><span>${esc(o.label)}</span></button>`).join('') + '</div>';
+        return A.PhotoGrid(step.options, 'pick-image') + A.PrimaryButton('Valider', 'validate-image', { disabled: true });
       case 'qr':
-        return '<div class="scan-hint"><span>📷</span>Ouvrez l\'appareil photo du téléphone et visez le QR code.</div>' +
+        return '<div class="scan-hint"><span>'+A.icon('scan')+'</span>Ouvrez l\'appareil photo du téléphone et visez le QR code.</div>' +
           form('text', 'ou tapez le code inscrit dessous');
       case 'gps':
-        return '<button class="btn primary big" data-action="gps">📡 Vérifier notre position</button>' +
+        return '<button class="btn primary big" data-action="gps">'+A.icon('gps')+' Vérifier notre position</button>' +
           ((step.answers || step.h) ? '<details class="fallback"><summary>Le GPS ne marche pas ?</summary>' +
             form('text', 'Code de secours') + '</details>' : '');
       case 'text':
         return step.oneByOne ? oneByOneHtml(step, form) : form('text', 'Votre réponse');
       case 'tap':
         return `<div class="tap" data-action="tap"><img src="${esc(step.image)}" alt="Touchez la bonne zone"></div>
-          <p class="help">👆 Touchez l'image à l'endroit choisi.</p>`;
+          <p class="help">Touchez l'image à l'endroit choisi.</p>`;
       default:
         return form('text', 'Votre réponse');
     }
@@ -246,10 +244,9 @@
   function oneByOneHtml(step, form) {
     const found = (A.state.found && A.state.found[step.key]) || [];
     const need = step.atLeast || (step.groups || step.gh || []).length;
-    const slots = Array.from({ length: need }, (_, i) => (found[i]
-      ? `<li class="ok"><span class="tick">✓</span>${esc(found[i].text)}</li>`
-      : `<li${i === found.length ? ' class="cur"' : ''}><span class="tick">${i + 1}</span>${i === found.length ? 'À trouver' : ''}</li>`)).join('');
-    return `<ol class="found-list">${slots}</ol>${form('text', `Réponse ${Math.min(found.length + 1, need)} sur ${need}`)}`;
+    const chips = found.length ? found.map((f) => A.AnswerChip(f.text)).join('') : '<span class="answers-empty">Aucune réponse pour le moment</span>';
+    return `<section class="answers-box"><h2>Vos réponses</h2><div class="chips">${chips}</div>
+      <p class="answers-count">${found.length}/${need}</p></section>${form('text', `Réponse ${Math.min(found.length + 1, need)} sur ${need}`)}`;
   }
 
   function hintsHtml(step) {
@@ -257,9 +254,9 @@
     if (!hints.length) return '';
     const shown = A.state.hints[step.key] || 0;
     let html = '<section class="hints" id="hints"><h2>Besoin d\'aide ?</h2>';
-    for (let i = 0; i < shown; i++) html += `<div class="hint"><span>${i + 1}</span><p>${hints[i]}</p></div>`;
+    for (let i = 0; i < shown; i++) html += A.HintCard(i + 1, hints[i]);
     if (shown < hints.length) {
-      html += `<button class="btn hint-btn" data-action="hint">💡 Indice ${shown + 1}/${hints.length}
+      html += `<button class="btn hint-btn" data-action="hint">Indice ${shown + 1}/${hints.length}
         <small>+${A.minutes(E.hintPenalty(GAME, step, shown))}</small></button>`;
     }
     return html + '</section>';
@@ -269,16 +266,17 @@
     A.setTheme(A.zoneColor(step));
     $app.innerHTML = `
       ${header()}
-      <main class="card anim">
-        <div class="kicker">${step.zoneId === 'final' ? '<span>🏁 Point final</span>' : `<span>📍 ${esc(step.zoneName)}</span><span>Énigme ${step.zoneStep + 1}/${step.zoneSteps}</span>`}</div>
-        <h1>${esc(step.title || '')}</h1>
-        <div class="text">${tpl(step.text)}</div>
-        ${A.imagesHtml(step.images)}
-        <div class="interaction">${interactionHtml(step)}</div>
-        <p id="feedback" class="feedback" aria-live="polite"></p>
-      </main>
+      ${A.PuzzleCard({
+        photo: step.photo || (GAME.zones[step.zoneId] || {}).photo,
+        back: A.state.stepIndex > 0 ? 'review' : '',
+        header: A.PuzzleHeader(step.zoneId === 'final' ? 'Point final' : `Zone ${step.zoneName}`, esc(step.title || '')),
+        body: `<div class="text">${tpl(step.text)}</div>
+          ${A.imagesHtml(step.images)}
+          <div class="interaction">${interactionHtml(step)}</div>
+          <p id="feedback" class="feedback" aria-live="polite"></p>`,
+      })}
       ${hintsHtml(step)}
-      <footer class="foot"><button class="link" data-action="master">🔑 Code organisation</button>${A.state.stepIndex > 0 ? '<button class="link" data-action="review">↩ Revoir l\'étape précédente</button>' : ''}<p class="credits">version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p></footer>`;
+      <footer class="foot"><button class="link" data-action="master">${A.icon('key')} Code organisation</button>${A.state.stepIndex > 0 ? `<button class="link" data-action="review">${A.icon('undo')} Revoir l'étape précédente</button>` : ''}<p class="credits">version ${esc(A.VERSION)} · <button class="link" data-action="reset-phone">réinitialiser</button></p></footer>`;
     startTimer();
     A.push();
 
@@ -302,15 +300,13 @@
     // la destination suivante n'est pas annoncée ici : l'écran « ZONE VALIDÉE » qui suit s'en charge (mission.js)
     $app.innerHTML = `
       ${header()}
-      <main class="card success anim">
-        <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
-        <h1 class="display">${s.title ? s.title.replace(/^\s*✅\s*/u, '') : 'ÉTAPE VALIDÉE'}</h1>
-        <div class="text">${tpl(s.text)}</div>
-        ${step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : ''}
-        ${s.reveal ? `<p>Votre prochaine destination :</p><p class="big-code">${esc(s.reveal)}</p>` : ''}
-        ${A.imagesHtml(s.images)}
-        <button class="btn primary big" data-action="next">${s.button ? esc(s.button) : last ? '🏁 Voir le résultat' : 'Continuer ➜'}</button>
-      </main>`;
+      ${A.SuccessScreen({
+        title: s.title ? s.title.replace(/^\s*✅\s*/u, '') : 'ÉTAPE VALIDÉE',
+        text: tpl(s.text),
+        extra: (step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : '') +
+          (s.reveal ? `<p>Votre prochaine destination :</p><p class="big-code">${esc(s.reveal)}</p>` : '') + A.imagesHtml(s.images),
+        button: A.PrimaryButton(s.button ? esc(s.button) : last ? 'Voir le résultat' : 'Continuer', 'next'),
+      })}`;
     startTimer();
     if (zoneDone) A.confetti();
   }

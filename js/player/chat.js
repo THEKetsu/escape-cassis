@@ -18,7 +18,7 @@
 
   function chatButtonContent() {
     const n = chatUnread();
-    return `💬<span id="chat-badge" class="chat-badge" ${n ? '' : 'hidden'}>${n}</span>`;
+    return `${A.ICON_CHAT}<span id="chat-badge" class="chat-badge" ${n ? '' : 'hidden'}>${n}</span>`;
   }
 
   function chatButton() {
@@ -58,7 +58,7 @@
     const incoming = fresh.filter((m) => m.sender === 'admin');
     if (fromPoll && chat.loaded && incoming.length) {
       A.vibrate([100, 60, 100]);
-      A.toast(`<span class="toast-icon">💬</span><div><b>Message de l'organisation</b><small>${esc(incoming[incoming.length - 1].body.slice(0, 90))}</small></div>`);
+      A.toast(`<span class="toast-icon">${A.icon('chat')}</span><div><b>Message de l'organisation</b><small>${esc(incoming[incoming.length - 1].body.slice(0, 90))}</small></div>`);
     }
     updateChatBadge();
   }
@@ -112,7 +112,7 @@
 
   function showChat() {
     chatSheet = A.sheet(`
-      <h2>💬 Organisation</h2>
+      <h2>Organisation</h2>
       <div class="chat-list"></div>
       <form class="chat-form">
         <textarea rows="2" maxlength="1000" placeholder="Votre message…"></textarea>

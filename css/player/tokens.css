@@ -1,14 +1,36 @@
-/* Jeu : variables de couleur, rayon et police */
+/* Jeu : tokens de design (couleurs, rayons, espacements, police). Source unique de la direction artistique. */
 
 :root {
-  --zone: #0b3954;          /* couleur de la zone en cours, changée par app.js */
-  --ink: #15202b;
-  --muted: #4a5560;
-  --line: #e4e8eb;
-  --soft: #f4f1ea;
-  --coral: #e76f51;
+  --navy: #17324D;
+  --pink-soft: #F6E3E7;
+  --pink-faint: #FDF3F5;
+  --coral: #F28C8C;
+  --bg: #F7F8FA;
+  --white: #FFFFFF;
+  --text: #172A3A;
+  --muted: #667085;
+  --border: #E5E7EB;
+  --disabled: #CBD2DC;
+
+  --radius-card: 28px;
+  --radius-photo: 18px;
+  --radius-button: 999px;
+
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  --font: Inter, Arial, sans-serif;
+
+  /* Alias historiques : les règles existantes les utilisent encore */
+  --zone: var(--navy);
+  --ink: var(--text);
+  --line: var(--border);
+  --soft: var(--bg);
   --green: #22a06b;
-  --gold: #ffcf4a;
-  --radius: 22px;
-  --display: ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --gold: var(--coral);
+  --radius: var(--radius-card);
+  --display: var(--font);
 }

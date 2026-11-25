@@ -16,9 +16,9 @@
     overlay.className = 'overlay review';
     overlay.innerHTML = `
       <div class="review-box">
-        <header><b>↩ Étape précédente</b><button class="btn close">✕ Fermer</button></header>
+        <header><b>Étape précédente</b><button class="btn close">Fermer</button></header>
         <article class="card">
-          <div class="kicker"><span>📍 ${esc(prev.zoneName)}</span><span>Énigme ${prev.zoneStep + 1}/${prev.zoneSteps}</span></div>
+          <div class="kicker"><span>${esc(prev.zoneName)}</span><span>Énigme ${prev.zoneStep + 1}/${prev.zoneSteps}</span></div>
           <h1>${esc((prev.title || '').replace(/^\s*✅\s*/u, ''))}</h1>
           <div class="text">${A.tpl(prev.text)}</div>
           ${A.imagesHtml(prev.images)}

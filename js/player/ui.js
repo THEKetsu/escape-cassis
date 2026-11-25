@@ -34,7 +34,8 @@
   }
 
   function setTheme(color) {
-    document.documentElement.style.setProperty('--zone', color);
+    // direction artistique unique : plus de couleur par zone, seule la barre du navigateur suit le bleu marine
+    color = '#17324D';
     const meta = document.querySelector('meta[name=theme-color]');
     if (meta) meta.content = color;
   }
@@ -60,7 +61,7 @@
 
   // Mauvaise réponse : toujours « ❌ ACCÈS REFUSÉ », puis l'aide propre à l'énigme (step.wrong) ou le message commun
   function refusedHtml(wrong) {
-    return '<b>❌ ACCÈS REFUSÉ</b><br>' + (wrong || 'Votre réponse ne permet pas encore de poursuivre.<br>Observez de nouveau et réessayez.');
+    return '<b>ACCÈS REFUSÉ</b><br>' + (wrong || 'Votre réponse ne permet pas encore de poursuivre.<br>Observez de nouveau et réessayez.');
   }
 
   function restartAnimation(el, cls) {

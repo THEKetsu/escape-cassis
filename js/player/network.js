@@ -46,7 +46,7 @@
     if (ended && ended.epoch) A.state.epoch = ended.epoch;
     A.save();
     A.render();
-    if (wasPlaying) A.toast('<span class="toast-icon">🔄</span><div><b>Partie réinitialisée</b><small>La session a été remise à zéro : retour à l\'accueil.</small></div>');
+    if (wasPlaying) A.toast(`<div><b>Partie réinitialisée</b><small>La session a été remise à zéro : retour à l'accueil.</small></div>`);
   }
 
   async function checkSession() {
