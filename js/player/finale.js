@@ -53,7 +53,7 @@
       ${badgesHtml(E.earnedBadges(state, A.path))}
       <h2>Votre parcours</h2>
       <table class="recap">
-        <tr><th>Zone</th><th>Temps</th><th>Indices</th></tr>
+        <tr><th>Lieu</th><th>Temps</th><th>Indices</th></tr>
         ${zones.map((z) => `<tr><td>${esc(z.name)}${z.skips ? ' *' : ''}</td><td>${E.formatDuration(z.sec)}</td><td>${z.hints}</td></tr>`).join('')}
       </table>
       ${leaderboard ? `<button class="btn" data-action="board">${A.icon('trophy')} Voir le classement</button>` : ''}`;

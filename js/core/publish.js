@@ -45,7 +45,7 @@
     // étape sans réponse fixe (groups seuls, ex. notes d'un parfum) : le premier mot de chaque groupe
     const plain = (step) => step.answers || (step.groups && step.groups.map((g) => g[0]));
     Object.keys(game.zones || {}).forEach((zoneId) => {
-      ['A', 'B'].forEach((v) => {
+      ['A', 'B', 'C'].forEach((v) => {
         (game.zones[zoneId][v] || []).forEach((step, i) => {
           if (plain(step)) answers[`z${zoneId}-${v}-${i}`] = plain(step);
           Object.keys(step.after || {}).forEach((k) => { // selon la zone qui suit dans le circuit de l'équipe

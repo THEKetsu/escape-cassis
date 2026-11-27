@@ -63,7 +63,7 @@
   function allSteps(game) {
     const out = [];
     Object.keys(game.zones || {}).forEach((zoneId) => {
-      ['A', 'B'].forEach((v) => {
+      ['A', 'B', 'C'].forEach((v) => {
         (game.zones[zoneId][v] || []).forEach((step, i) => out.push({ step, where: `Zone ${zoneId}${v} étape ${i + 1}` }));
       });
     });

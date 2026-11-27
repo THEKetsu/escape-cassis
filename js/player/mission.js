@@ -15,7 +15,7 @@
   }
 
   function storyHtml() {
-    return `<p class="mission-kicker">${esc(GAME.title)}</p><div class="text story-text">${S.story}</div>`;
+    return `${S.storyPhoto ? `<div class="story-photo"><img src="${esc(S.storyPhoto)}" alt=""></div>` : ''}<p class="mission-kicker">${esc(GAME.title)}</p><div class="text story-text">${S.story}</div>`;
   }
 
   function rulesHtml() {
@@ -57,8 +57,10 @@
   }
 
   // Destination mise en avant : le nom de la zone, et son « where » s'il apporte une précision (« près de la statue… »)
-  function destinationHtml(zone) {
+  // masque = true (écran de lancement) : une zone à badge (« Boutique ») garde son nom secret avant l'énigme
+  function destinationHtml(zone, masque) {
     if (!zone) return '';
+    if (masque && zone.badge) return `<div class="destination"><b>${esc(zone.badge)}</b></div>`;
     const name = zone.name || '';
     const where = zone.where || '';
     const extra = where && !E.normalize(where).endsWith(E.normalize(name));
@@ -76,7 +78,7 @@
       ${A.header()}
       <main class="card success zone-done anim">
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
-        <h1 class="display">ZONE VALIDÉE</h1>
+        <h1 class="display">LIEU VALIDÉ</h1>
         <i class="rule"></i>
         <p class="lead">Vous avez terminé cette étape.</p>
         <div class="progress"><div class="progress-bar"><i style="width:${Math.round((done / circuit.length) * 100)}%"></i></div>

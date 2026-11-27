@@ -63,7 +63,7 @@
     const zones = Object.keys(GAME.zones).map((z) => {
       const zone = GAME.zones[z];
       return `<section class="book-zone"><h3>${esc(z)} · ${esc(zone.name)}</h3><div class="book-variants">
-        ${['A', 'B'].filter((v) => zone[v]).map((v) => `<div><h4>Variante ${v}</h4><ol class="book-steps">
+        ${['A', 'B', 'C'].filter((v) => zone[v]).map((v) => `<div><h4>Variante ${v}</h4><ol class="book-steps">
           ${zone[v].map((step, i) => stepRow(step, `z${z}-${v}-${i}`, i)).join('')}</ol></div>`).join('')}
       </div></section>`;
     }).join('');

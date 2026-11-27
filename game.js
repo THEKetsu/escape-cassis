@@ -14,9 +14,10 @@ window.GAME = {
     "teamPicker": false,
     "showLeaderboard": true,
     "liveLocation": true,
-    "tagline": "7 équipes. 5 zones. Un secret à retrouver.",
+    "tagline": "7 équipes. 5 lieux. Un secret à retrouver.",
     "credits": "Créé par Quentin BENDER & Solène PACE",
-    "story": "<p>Il y a plusieurs années, un homme a parcouru Cassis à la recherche d'un secret.</p><p>Il voulait retrouver une saveur d'antan, liée aux souvenirs du Sud, puis la réinventer.</p><p>Au cours de son passage, il aurait laissé derrière lui des messages, des indices et des fragments.</p><p><b>Puis il a disparu.</b></p><p>Aujourd'hui, de nouvelles traces viennent d'être retrouvées.<br>Votre mission consiste à les suivre.</p><p><b>5 zones vous attendent.</b><br>Certaines découvertes vous permettront d'avancer.<br>D'autres pourront sembler inutiles.</p><p class=\"keep\">CONSERVEZ TOUT CE QUE VOUS TROUVEZ.</p><p class=\"quote\">Un secret n'est jamais confié à une seule personne.</p>",
+    "storyPhoto": "images/visuels/port-falaise.jpg",
+    "story": "<p>Il y a plusieurs années, un homme a parcouru Cassis à la recherche d'un secret.</p><p>Il voulait retrouver une saveur d'antan, liée aux souvenirs du Sud, puis la réinventer.</p><p>Au cours de son passage, il aurait laissé derrière lui des messages, des indices et des fragments.</p><p><b>Puis il a disparu.</b></p><p>Aujourd'hui, de nouvelles traces viennent d'être retrouvées. Votre mission consiste à les suivre.</p><p><b>5 lieux vous attendent.</b> Certaines découvertes vous permettront d'avancer. D'autres pourront sembler inutiles.</p><p class=\"keep\">CONSERVEZ TOUT CE QUE VOUS TROUVEZ.</p><p class=\"quote\">Retenez une chose : un secret n'est jamais confié à une seule personne.</p>",
     "rules": [
       {
         "title": "RESTEZ EN ÉQUIPE",
@@ -32,7 +33,7 @@ window.GAME = {
       },
       {
         "title": "SUIVEZ VOTRE PARCOURS",
-        "text": "Ne rejoignez jamais une zone qui ne vous a pas été indiquée."
+        "text": "Ne rejoignez jamais un lieu qui ne vous a pas été indiqué."
       },
       {
         "title": "GARDEZ VOS RÉPONSES POUR VOUS",
@@ -255,6 +256,7 @@ window.GAME = {
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">PORT DE CASSIS</p><p>Votre prochaine destination est le <b>Port de Cassis</b>.<br>Rendez-vous sur place pour poursuivre votre mission.</p>",
+            "photo": "images/visuels/port-falaise.jpg",
             "button": "Continuer la mission"
           },
           "h": [
@@ -330,6 +332,7 @@ window.GAME = {
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">SAINT-MICHEL</p><p>Votre prochaine destination est :<br><b>L'ÉGLISE SAINT-MICHEL</b></p><p>Rendez-vous sur place pour poursuivre votre mission.</p>",
+            "photo": "images/visuels/eglise-saint-michel.jpg",
             "button": "Continuer la mission"
           },
           "h": [
@@ -343,7 +346,7 @@ window.GAME = {
       "name": "Port de Cassis",
       "lat": 43.21447,
       "lng": 5.5387,
-      "where": "le Port de Cassis, près de la statue de Calendal",
+      "where": "le Port de Cassis",
       "lastSuccess": {
         "title": "✅ DESTINATION IDENTIFIÉE",
         "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">TERRAIN DE PÉTANQUE</p>"
@@ -419,6 +422,7 @@ window.GAME = {
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">L'EAU DE CASSIS</p><p>Rendez-vous à la boutique <b>L'Eau de Cassis</b>, rue Saint-Clair, pour poursuivre votre mission.</p>",
+            "photo": "images/visuels/boutique-facade-1.jpg",
             "button": "Continuer la mission"
           },
           "h": [
@@ -492,6 +496,7 @@ window.GAME = {
           "success": {
             "title": "✅ DESTINATION IDENTIFIÉE",
             "text": "<p>Vous avez trouvé :</p><p class=\"big-code\">L'ÉGLISE SAINT-MICHEL</p><p>Rendez-vous à l'<b>église Saint-Michel</b> pour poursuivre votre mission.</p>",
+            "photo": "images/visuels/eglise-saint-michel.jpg",
             "button": "Continuer la mission"
           },
           "h": [
@@ -1076,7 +1081,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "photo": "images/visuels/ruelle-bougainvilliers.jpg",
-          "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
+          "text": "<p>Votre parcours vous conduit vers une étape différente.</p><p>Ici, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p>",
           "button": "NOUS SOMMES ARRIVÉS"
         },
         {
@@ -1115,6 +1120,7 @@ window.GAME = {
         {
           "type": "info",
           "title": "✅ ÉPREUVE VALIDÉE",
+          "photo": "images/visuels/boutique-facade-2.jpg",
           "text": "<p>Vous avez correctement identifié au moins deux notes du parfum.</p><div class=\"envelope-tag\">✉️ Enveloppe à remettre<b>{{equipe}}</b></div><p><b>Présentez maintenant cet écran à la personne de la boutique.</b><br>Elle vous remettra l'enveloppe de votre équipe.</p>",
           "button": "ENVELOPPE RÉCUPÉRÉE",
           "success": {
@@ -1129,7 +1135,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "photo": "images/visuels/ruelle-bougainvilliers.jpg",
-          "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
+          "text": "<p>Votre parcours vous conduit vers une étape différente.</p><p>Ici, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p>",
           "button": "NOUS SOMMES ARRIVÉS"
         },
         {
@@ -1170,6 +1176,7 @@ window.GAME = {
         {
           "type": "info",
           "title": "✅ ÉPREUVE VALIDÉE",
+          "photo": "images/visuels/boutique-facade-2.jpg",
           "text": "<p>Vous avez correctement identifié au moins deux notes du parfum.</p><div class=\"envelope-tag\">✉️ Enveloppe à remettre<b>{{equipe}}</b></div><p><b>Présentez maintenant cet écran à la personne de la boutique.</b><br>Elle vous remettra l'enveloppe de votre équipe.</p>",
           "button": "ENVELOPPE RÉCUPÉRÉE",
           "success": {
@@ -1184,7 +1191,7 @@ window.GAME = {
           "type": "info",
           "title": "Mission {{zone}} — Une nouvelle trace",
           "photo": "images/visuels/ruelle-bougainvilliers.jpg",
-          "text": "<p>Votre parcours vous conduit vers une étape différente des précédentes.</p><p>Cette fois, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p><p>La personne qui vous accueille sait ce qu'elle doit vous remettre.</p>",
+          "text": "<p>Votre parcours vous conduit vers une étape différente.</p><p>Ici, aucun chiffre à décoder.<br>Aucune façade à analyser.</p><p>Pour continuer, vous allez devoir faire confiance à un autre sens : <b>votre odorat.</b></p><p>Dirigez-vous vers un endroit qui suscite les sens, rue Saint-Clair.</p><p>Lorsque vous arrivez sur place, entrez dans la boutique et indiquez simplement votre numéro d'équipe : <b>équipe {{numero}}</b>.</p>",
           "button": "NOUS SOMMES ARRIVÉS"
         },
         {
@@ -1199,28 +1206,29 @@ window.GAME = {
           "title": "Vos réponses",
           "text": "<p><b>Quelles notes avez-vous reconnues ?</b></p><p>Entrez-les <b>une par une</b> : il vous en faut deux.</p>",
           "oneByOne": true,
-          "groups": [
-            [
-              "CITRON",
-              "CITRONS"
-            ],
-            [
-              "CITRONNELLE"
-            ],
-            [
-              "MENTHE"
-            ],
-            [
-              "THE VERT",
-              "THE VERT"
-            ]
-          ],
           "atLeast": 2,
-          "wrong": "<p>Vous n'avez pas encore identifié suffisamment de notes correctes.</p><p>Reprenez le parfum.<br>Concentrez-vous sur les premières sensations, puis sur ce qui reste après quelques secondes.</p><p>Échangez entre vous et réessayez.</p>"
+          "wrong": "<p>Vous n'avez pas encore identifié suffisamment de notes correctes.</p><p>Reprenez le parfum.<br>Concentrez-vous sur les premières sensations, puis sur ce qui reste après quelques secondes.</p><p>Échangez entre vous et réessayez.</p>",
+          "gh": [
+            [
+              "1563f9722f7586fd",
+              "c8d4b08d1703cf3a"
+            ],
+            [
+              "011d6d2c97ee4444"
+            ],
+            [
+              "198d61738535f575"
+            ],
+            [
+              "1c86c483b27a7db2",
+              "1c86c483b27a7db2"
+            ]
+          ]
         },
         {
           "type": "info",
           "title": "✅ ÉPREUVE VALIDÉE",
+          "photo": "images/visuels/boutique-facade-2.jpg",
           "text": "<p>Vous avez correctement identifié au moins deux notes du parfum.</p><div class=\"envelope-tag\">✉️ Enveloppe à remettre<b>{{equipe}}</b></div><p><b>Présentez maintenant cet écran à la personne de la boutique.</b><br>Elle vous remettra l'enveloppe de votre équipe.</p>",
           "button": "ENVELOPPE RÉCUPÉRÉE",
           "success": {
@@ -1581,7 +1589,7 @@ window.GAME = {
         "type": "info",
         "title": "PARCOURS TERMINÉ",
         "photo": "images/visuels/petanque-port.jpg",
-        "text": "<p class=\"lead\">Vous avez validé vos 5 zones.</p><p><b>Mais votre mission n'est pas terminée.</b></p><p>Conservez tout ce que vous avez récupéré et rejoignez immédiatement :</p><div class=\"destination\"><b>Terrains de pétanque</b><small>quai Saint-Pierre, près de la place Montmorin</small></div><p>À votre arrivée, attendez les instructions du Maître du jeu.</p><p class=\"mission-alert\">Ne partagez encore aucun élément avec les autres équipes.</p>",
+        "text": "<p class=\"lead\">Vous avez validé vos 5 lieux.</p><p><b>Mais votre mission n'est pas terminée.</b></p><p>Conservez tout ce que vous avez récupéré et rejoignez immédiatement :</p><div class=\"destination\"><b>Terrains de pétanque</b><small>quai Saint-Pierre, près de la place Montmorin</small></div><p>À votre arrivée, attendez les instructions du Maître du jeu.</p><p class=\"mission-alert\">Ne partagez encore aucun élément avec les autres équipes.</p>",
         "button": "REJOINDRE LE POINT FINAL"
       },
       {
@@ -1611,10 +1619,10 @@ window.GAME = {
       ]
     }
   },
-  "version": "2026.11.27-0918",
+  "version": "2026.11.27-1119",
   "answerBook": {
-    "salt": "PdP0FMrkwXkuQXX2mJUz6g==",
-    "iv": "jnJkknOEWDKzVqWF",
-    "data": "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"
+    "salt": "8Y3GdSLu44M1A2n1ZvvjnA==",
+    "iv": "Zy+1FAOLDPHlFa2n",
+    "data": "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"
   }
 };

@@ -34,10 +34,11 @@
     return [
       S.briefing && { title: 'Votre mission', text: S.briefing, button: 'C\'est compris' },
       first && {
+        photo: (A.path[0] && A.path[0].photo) || first.photo,
         title: 'ÉQUIPE {{numero}}',
         text: `<p class="lead">Votre parcours vient d'être activé.</p>
-          <p>Vous devez maintenant rejoindre votre première zone :</p>${A.destinationHtml(first)}
-          <p><b>${circuit.length} zones à valider.</b></p><p class="mission-go">Votre temps commence maintenant.</p>`,
+          <p>Vous devez maintenant rejoindre votre premier lieu :</p>${A.destinationHtml(first, true)}
+          <p><b>${circuit.length} lieux à valider.</b></p><p class="mission-go">Votre temps commence maintenant.</p>`,
         button: 'LANCER LA MISSION',
       },
     ].filter(Boolean);
@@ -55,7 +56,8 @@
     A.setTheme(A.zoneColor(A.current()));
     $app.innerHTML = `
       ${header()}
-      <main class="card launch anim">
+      ${screen.photo ? `<div class="hero-photo"><img src="${esc(screen.photo)}" alt=""></div>` : ''}
+      <main class="card launch${screen.photo ? ' over-photo' : ''} anim">
         <h1 class="display">${tpl(esc(screen.title))}</h1>
         <div class="text">${tpl(screen.text)}</div>
         <button class="btn primary big" data-action="briefing-next">${esc(screen.button)}</button>
@@ -269,7 +271,7 @@
       ${A.PuzzleCard({
         photo: step.photo || (GAME.zones[step.zoneId] || {}).photo,
         back: A.state.stepIndex > 0 ? 'review' : '',
-        header: A.PuzzleHeader(step.zoneId === 'final' ? 'Point final' : `Zone ${(GAME.zones[step.zoneId] || {}).badge || step.zoneName}`, esc(step.title || '')),
+        header: A.PuzzleHeader(step.zoneId === 'final' ? 'Point final' : `Lieu ${(GAME.zones[step.zoneId] || {}).badge || step.zoneName}`, esc(step.title || '')),
         body: `<div class="text">${tpl(step.text)}</div>
           ${A.imagesHtml(step.images)}
           <div class="interaction">${interactionHtml(step)}</div>
@@ -301,6 +303,7 @@
     $app.innerHTML = `
       ${header()}
       ${A.SuccessScreen({
+        photo: s.photo,
         title: s.title ? s.title.replace(/^\s*✅\s*/u, '') : 'ÉTAPE VALIDÉE',
         text: tpl(s.text),
         extra: (step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : '') +

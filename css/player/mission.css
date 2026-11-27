@@ -52,3 +52,12 @@
 .reveal .gift { font-size: 64px; line-height: 1; margin: 10px 0; }
 .reveal .end { margin-top: 12px; font-family: var(--display); font-weight: 900; letter-spacing: .06em; color: var(--muted); }
 .finale-riddle { margin-top: calc(18px + env(safe-area-inset-top)); }
+
+/* ---------- photo du récit, deuxième couleur (bleu mer) ---------- */
+.story-photo { margin: -4px -4px 14px; border-radius: var(--radius-photo); overflow: hidden; height: 170px; }
+.story-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.launch.over-photo, .success.over-photo { margin-top: -28px; position: relative; }
+.mission-rules li:nth-child(even)::before { background: var(--sea); }
+.mission-rules li:nth-child(odd) { box-shadow: inset 3px 0 0 var(--coral); }
+.mission-rules li:nth-child(even) { box-shadow: inset 3px 0 0 var(--sea); }
+.story-text .keep { color: var(--sea); }

@@ -106,7 +106,7 @@
         <div class="meta">
           ${A.unreadTotal() ? `<button data-action="chat-next" class="unread">💬 ${A.unreadTotal()} message${A.unreadTotal() > 1 ? 's' : ''}</button>` : ''}
           ${A.session && A.session.startedAt === null ? '<button data-action="start-game" class="go">▶️ Démarrer la partie</button>' : ''}
-          ${A.session && A.session.startedAt && A.finale === null ? '<button data-action="launch-finale" class="go">🎬 Lancer la mission finale</button>' : ''}
+          ${A.session && A.session.startedAt && !A.finale ? `<button data-action="launch-finale" class="go">🎬 Lancer la mission finale (${infos.filter((i) => i.status === 'done').length}/${infos.length} arrivées)</button>` : ''}
           <button data-action="broadcast" title="Écrire à toutes les équipes">📣 Message à tous</button>
           <button data-action="export" title="Télécharger le bilan de la partie (CSV)">📊 Export</button>
           <button data-action="book" class="dark">🔑 Réponses</button>

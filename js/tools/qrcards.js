@@ -28,7 +28,7 @@
 
   function checkpointCards() {
     const cards = [];
-    Object.keys(GAME.zones).forEach((z) => ['A', 'B'].forEach((v) => (GAME.zones[z][v] || []).forEach((step, i) => {
+    Object.keys(GAME.zones).forEach((z) => ['A', 'B', 'C'].forEach((v) => (GAME.zones[z][v] || []).forEach((step, i) => {
       if (step.type !== 'qr' || !step.answers) return;
       const code = step.answers[0];
       cards.push(`
