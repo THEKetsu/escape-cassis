@@ -24,6 +24,7 @@
       const zone = game.zones[zoneId];
       const variant = variantFor(team, zoneId);
       if (!zone || !zone[variant]) throw new Error(`Zone ${zoneId} / variante ${variant} introuvable (équipe ${teamId})`);
+      let photo = ''; // l'image du lieu reste affichée sur les écrans suivants de la zone
       zone[variant].forEach((step, i) => {
         const built = Object.assign({}, step, {
           key: `z${zoneId}-${variant}-${i}`,
@@ -40,6 +41,7 @@
         const afterKey = zoneIndex === team.circuit.length - 1 ? 'final' : String(team.circuit[zoneIndex + 1]);
         if (step.after && step.after[afterKey]) Object.assign(built, step.after[afterKey], { afterOverride: afterKey });
         delete built.after;
+        if (built.photo) photo = built.photo; else if (photo) built.photo = photo;
         // {{zone}} : rang de la zone dans le circuit de l'équipe (« Mission 1 », « Mission 2 »…), pas son numéro dans contenu.js
         ['title', 'text'].forEach((f) => { if (typeof built[f] === 'string') built[f] = built[f].split('{{zone}}').join(String(zoneIndex + 1)); });
         steps.push(built);

@@ -76,7 +76,8 @@
     A.setTheme(A.zoneColor(step));
     $app.innerHTML = `
       ${A.header()}
-      <main class="card success zone-done anim">
+      ${next && next.photo ? `<div class="hero-photo"><img src="${esc(next.photo)}" alt=""></div>` : ''}
+      <main class="card success zone-done${next && next.photo ? ' over-photo' : ''} anim">
         <div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg></div>
         <h1 class="display">LIEU VALIDÉ</h1>
         <i class="rule"></i>

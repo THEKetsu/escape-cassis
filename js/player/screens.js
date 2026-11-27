@@ -38,7 +38,7 @@
         title: 'ÉQUIPE {{numero}}',
         text: `<p class="lead">Votre parcours vient d'être activé.</p>
           <p>Vous devez maintenant rejoindre votre premier lieu :</p>${A.destinationHtml(first, true)}
-          <p><b>${circuit.length} lieux à valider.</b></p><p class="mission-go">Votre temps commence maintenant.</p>`,
+          <p class="mission-go">Votre temps commence maintenant.</p>`,
         button: 'LANCER LA MISSION',
       },
     ].filter(Boolean);
@@ -303,7 +303,7 @@
     $app.innerHTML = `
       ${header()}
       ${A.SuccessScreen({
-        photo: s.photo,
+        photo: s.photo || step.photo || (GAME.zones[step.zoneId] || {}).photo,
         title: s.title ? s.title.replace(/^\s*✅\s*/u, '') : 'ÉTAPE VALIDÉE',
         text: tpl(s.text),
         extra: (step.type === 'zip' && state.zipLetters ? `<p class="zip-found">Lettres rencontrées : <b>${esc(state.zipLetters.split('').join(' '))}</b></p>` : '') +

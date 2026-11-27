@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-"Opération Cassis": a mobile web treasure-hunt game, one phone per team, with a live organiser dashboard. Plain HTML + vanilla JS, **no dependencies, no build step**. Hosted as static files on GitHub Pages. UI text, comments and docs are in French: keep them that way.
+"L'Inconnu de Cassis": a mobile web treasure-hunt game, one phone per team, with a live organiser dashboard. Plain HTML + vanilla JS, **no dependencies, no build step**. Hosted as static files on GitHub Pages. UI text, comments and docs are in French: keep them that way.
 
 ## Commands
 
