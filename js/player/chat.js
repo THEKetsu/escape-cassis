@@ -110,6 +110,14 @@
     button.disabled = false;
   }
 
+  // Appel d'urgence : un lien tel: vers le numéro de l'organisation (settings.emergency), un appui lance l'appel
+  function emergencyHtml() {
+    const e = A.S.emergency;
+    if (!e || !e.phone) return '';
+    return `<a class="btn emergency" href="tel:${esc(e.phone)}">${A.icon('phone')}<span>Appel d'urgence<small>${esc(e.name || '')} · ${esc(e.label || e.phone)}</small></span></a>
+      <p class="emergency-note">À utiliser seulement en cas de problème grave ou de blocage important.</p>`;
+  }
+
   function showChat() {
     chatSheet = A.sheet(`
       <h2>Organisation</h2>
@@ -119,6 +127,7 @@
         <button class="btn primary">Envoyer</button>
         <p class="feedback bad"></p>
       </form>
+      ${emergencyHtml()}
       <button class="btn" data-close>Fermer</button>`);
     const form = chatSheet.el.querySelector('form');
     form.addEventListener('submit', (e) => {

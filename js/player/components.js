@@ -34,6 +34,7 @@
     gps: '<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
     block: '<circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/>',
     map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
     stats: '<path d="M5 20V10M12 20V4M19 20v-7"/>',
   };
   function icon(name) {

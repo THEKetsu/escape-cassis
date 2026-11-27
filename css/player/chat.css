@@ -24,3 +24,9 @@
 }
 .chat-form textarea:focus { outline: none; border-color: var(--zone); }
 .chat-form .feedback { margin: 0; min-height: 0; }
+
+/* Appel d'urgence */
+.btn.emergency { background: var(--pink-faint); border: 1px solid var(--coral); color: var(--navy); text-decoration: none; margin-bottom: 6px; justify-content: center; text-align: left; }
+.btn.emergency span { display: grid; line-height: 1.2; }
+.btn.emergency small { color: var(--muted); font-weight: 600; font-size: 14px; }
+.emergency-note { margin: 0 0 12px; font-size: 13px; color: var(--muted); text-align: center; }

@@ -165,7 +165,9 @@
     const reveal = A.tpl(F.reveal || '<h1 class="display">MISSION ACCOMPLIE</h1>')
       .split('{{reponse}}').join(esc(A.state.finaleAnswer || ''));
     $app.innerHTML = `
-      <main class="card finished reveal anim">${reveal}</main>
+      ${F.revealPhoto
+        ? A.PuzzleCard({ photo: F.revealPhoto, className: 'finished reveal', body: reveal })
+        : `<main class="card finished reveal anim">${reveal}</main>`}
       <section class="card finished anim">
         <h2>Votre parcours en chiffres</h2>
         ${resultsHtml()}
