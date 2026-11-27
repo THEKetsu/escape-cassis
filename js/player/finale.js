@@ -146,7 +146,8 @@
 
   function renderRiddle() {
     $app.innerHTML = `
-      <main class="card finale-riddle anim">
+      ${F.revealPhoto ? `<div class="hero-photo blurred"><img src="${esc(F.revealPhoto)}" alt=""></div>` : ''}
+      <main class="card finale-riddle${F.revealPhoto ? ' over-photo' : ''} anim">
         <div class="kicker"><span>Mission finale</span></div>
         <h1>${esc(F.title || '')}</h1>
         <div class="text">${A.tpl(F.text || '')}</div>
@@ -165,9 +166,8 @@
     const reveal = A.tpl(F.reveal || '<h1 class="display">MISSION ACCOMPLIE</h1>')
       .split('{{reponse}}').join(esc(A.state.finaleAnswer || ''));
     $app.innerHTML = `
-      ${F.revealPhoto
-        ? A.PuzzleCard({ photo: F.revealPhoto, className: 'finished reveal', body: reveal })
-        : `<main class="card finished reveal anim">${reveal}</main>`}
+      ${F.revealPhoto ? `<div class="hero-photo unblur"><img src="${esc(F.revealPhoto)}" alt=""></div>` : ''}
+      <main class="card finished reveal${F.revealPhoto ? ' over-photo' : ''} anim">${CHECK}${reveal}</main>
       <section class="card finished anim">
         <h2>Votre parcours en chiffres</h2>
         ${resultsHtml()}

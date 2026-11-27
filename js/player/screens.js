@@ -177,7 +177,7 @@
           </div>
         </details>
         <label class="field">Nom de votre équipe
-          <input id="team-name" maxlength="30" autocomplete="off" placeholder="Les Calanques Express" value="${esc(state.teamName || '')}">
+          <input id="team-name" maxlength="30" autocomplete="off" placeholder="TROUVEZ UN NOM D\'ÉQUIPE !" value="${esc(state.teamName || '')}">
         </label>
         <div class="field">Votre emoji
           <div class="emoji-pick">${A.EMOJIS.map((e) => `<button type="button" class="emoji ${e === A.avatar(state.team) ? 'on' : ''}" data-action="emoji" data-emoji="${e}" aria-label="Choisir ${e}">${e}</button>`).join('')}</div>

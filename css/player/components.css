@@ -153,3 +153,13 @@
 .toast-icon .ico { width: 22px; height: 22px; }
 .pmap-pin b .ico { width: 18px; height: 18px; }
 .feedback.bad:empty { display: none; }
+
+/* ---------- finale : photo floutée pendant l'énigme, nette à la révélation ; titre sur une ligne ---------- */
+.card.finished.over-photo, .card.finale-riddle.over-photo { margin-top: -28px; position: relative; }
+.hero-photo.blurred img { filter: blur(16px); transform: scale(1.15); }
+.hero-photo.unblur img { animation: defloute 2.2s ease-out both; }
+@keyframes defloute { from { filter: blur(16px); transform: scale(1.15); } to { filter: blur(0); transform: scale(1); } }
+.reveal .destination { margin: 10px 0 14px; }
+.reveal .check { width: 84px; height: 84px; }
+.mission-kicker { white-space: nowrap; font-size: clamp(16px, 5.6vw, 24px); letter-spacing: .03em; }
+.card.welcome h1.display { white-space: nowrap; font-size: clamp(20px, 7vw, 30px); }
